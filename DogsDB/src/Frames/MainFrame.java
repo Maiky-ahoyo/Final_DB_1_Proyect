@@ -26,9 +26,11 @@ public class MainFrame extends JFrame implements ActionListener {
     protected JTable tTables;
     private static String panel, table;
     private Color backgroundGray = new Color(241, 245, 249);
+    private Color buttonGray = new Color(195, 205, 224);
     private Color orange = new Color(248, 127, 39);
     private Color black = new Color(15, 23, 42);
     private Color textGray = new Color(71, 85, 105);
+    private Color lockedGray = new Color(119, 141, 170);
     private Color borderGray = new Color(119, 141, 170);
     private Font titleFont = Inter_Semibold.deriveFont(30f);
     private Font subtitleFont = Inter_Semibold.deriveFont(24f);
@@ -197,6 +199,11 @@ public class MainFrame extends JFrame implements ActionListener {
 
             panel = "create";
 
+            bCreate.setBackground(buttonGray);
+            bRead.setBackground(Color.white);
+            bUpdate.setBackground(Color.white);
+            bDelete.setBackground(Color.white);
+
             pTables.setPreferredSize(new Dimension (642,700));
 
             pTables.removeAll();
@@ -227,6 +234,11 @@ public class MainFrame extends JFrame implements ActionListener {
             remove(lBrunoGif);
 
             panel = "read";
+
+            bCreate.setBackground(Color.white);
+            bRead.setBackground(buttonGray);
+            bUpdate.setBackground(Color.white);
+            bDelete.setBackground(Color.white);
 
             pTables.setPreferredSize(new Dimension (642,700));
 
@@ -264,6 +276,11 @@ public class MainFrame extends JFrame implements ActionListener {
 
             panel = "update";
 
+            bCreate.setBackground(Color.white);
+            bRead.setBackground(Color.white);
+            bUpdate.setBackground(buttonGray);
+            bDelete.setBackground(Color.white);
+
             pTables.setPreferredSize(new Dimension (642,700));
 
             pTables.removeAll();
@@ -296,6 +313,11 @@ public class MainFrame extends JFrame implements ActionListener {
             remove(lBrunoGif);
 
             panel = "delete";
+
+            bCreate.setBackground(Color.white);
+            bRead.setBackground(Color.white);
+            bUpdate.setBackground(Color.white);
+            bDelete.setBackground(buttonGray);
 
             pTables.setPreferredSize(new Dimension (642,700));
 
@@ -993,7 +1015,6 @@ public class MainFrame extends JFrame implements ActionListener {
                         }
                         break;
                     case "read":
-
                         break;
                     case "update":
                         switch (table) {
@@ -1042,9 +1063,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 JTextField t_vet_name = new JTextField();
                                 t_vet_name.setFont(bodyFont);
-                                t_vet_name.setForeground(black);
+                                t_vet_name.setForeground(lockedGray);
                                 t_vet_name.setBorder(border);
                                 t_vet_name.setBounds(353, 328, 265, 40);
+                                t_vet_name.setBackground(backgroundGray);
                                 t_vet_name.setEnabled(false);
                                 pTables.add(t_vet_name);
 
@@ -1057,9 +1079,10 @@ public class MainFrame extends JFrame implements ActionListener {
                                 JTextArea t_vet_other_details = new JTextArea();
                                 t_vet_other_details.setLineWrap(true);
                                 t_vet_other_details.setFont(bodyFont);
-                                t_vet_other_details.setForeground(black);
+                                t_vet_other_details.setForeground(lockedGray);
                                 t_vet_other_details.setBorder(border);
                                 t_vet_other_details.setBounds(64, 416, 554, 139);
+                                t_vet_other_details.setBackground(backgroundGray);
                                 t_vet_other_details.setEnabled(false);
                                 pTables.add(t_vet_other_details);
 
@@ -1146,9 +1169,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 JTextField t_dog_dogs_name = new JTextField();
                                 t_dog_dogs_name.setFont(bodyFont);
-                                t_dog_dogs_name.setForeground(black);
+                                t_dog_dogs_name.setForeground(lockedGray);
                                 t_dog_dogs_name.setBorder(border);
                                 t_dog_dogs_name.setBounds(353, 328, 265, 40);
+                                t_dog_dogs_name.setBackground(backgroundGray);
                                 t_dog_dogs_name.setEnabled(false);
                                 pTables.add(t_dog_dogs_name);
 
@@ -1160,9 +1184,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 JTextField t_dog_place_of_birth = new JTextField();
                                 t_dog_place_of_birth.setFont(bodyFont);
-                                t_dog_place_of_birth.setForeground(black);
+                                t_dog_place_of_birth.setForeground(lockedGray);
                                 t_dog_place_of_birth.setBorder(border);
                                 t_dog_place_of_birth.setBounds(64, 416, 265, 40);
+                                t_dog_place_of_birth.setBackground(backgroundGray);
                                 t_dog_place_of_birth.setEnabled(false);
                                 pTables.add(t_dog_place_of_birth);
 
@@ -1174,9 +1199,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 JTextField dc_dog_date_of_birth = new JTextField();
                                 dc_dog_date_of_birth.setFont(bodyFont);
-                                dc_dog_date_of_birth.setForeground(black);
+                                dc_dog_date_of_birth.setForeground(lockedGray);
                                 dc_dog_date_of_birth.setBorder(border);
                                 dc_dog_date_of_birth.setBounds(353, 416, 265, 40);
+                                dc_dog_date_of_birth.setBackground(backgroundGray);
                                 dc_dog_date_of_birth.setEnabled(false);
                                 pTables.add(dc_dog_date_of_birth);
 
@@ -1188,9 +1214,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 JTextField t_dog_born_in_litter = new JTextField();
                                 t_dog_born_in_litter.setFont(bodyFont);
-                                t_dog_born_in_litter.setForeground(black);
+                                t_dog_born_in_litter.setForeground(lockedGray);
                                 t_dog_born_in_litter.setBorder(border);
                                 t_dog_born_in_litter.setBounds(64,504,554,40);
+                                t_dog_born_in_litter.setBackground(backgroundGray);
                                 t_dog_born_in_litter.setEnabled(false);
                                 pTables.add(t_dog_born_in_litter);
 
@@ -1231,9 +1258,10 @@ public class MainFrame extends JFrame implements ActionListener {
                                 JTextArea t_dog_other_details = new JTextArea();
                                 t_dog_other_details.setLineWrap(true);
                                 t_dog_other_details.setFont(bodyFont);
-                                t_dog_other_details.setForeground(black);
+                                t_dog_other_details.setForeground(lockedGray);
                                 t_dog_other_details.setBorder(border);
                                 t_dog_other_details.setBounds(64, 664, 554, 139);
+                                t_dog_other_details.setBackground(backgroundGray);
                                 t_dog_other_details.setEnabled(false);
                                 pTables.add(t_dog_other_details);
 
@@ -1385,9 +1413,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 JTextField t_litter_sire_dog_id = new JTextField();
                                 t_litter_sire_dog_id.setFont(bodyFont);
-                                t_litter_sire_dog_id.setForeground(black);
+                                t_litter_sire_dog_id.setForeground(lockedGray);
                                 t_litter_sire_dog_id.setBorder(border);
                                 t_litter_sire_dog_id.setBounds(64,415,265,40);
+                                t_litter_sire_dog_id.setBackground(backgroundGray);
                                 t_litter_sire_dog_id.setEnabled(false);
                                 pTables.add(t_litter_sire_dog_id);
 
@@ -1399,9 +1428,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 JTextField t_litter_dam_dog_id = new JTextField();
                                 t_litter_dam_dog_id.setFont(bodyFont);
-                                t_litter_dam_dog_id.setForeground(black);
+                                t_litter_dam_dog_id.setForeground(lockedGray);
                                 t_litter_dam_dog_id.setBorder(border);
                                 t_litter_dam_dog_id.setBounds(353,415,265,40);
+                                t_litter_dam_dog_id.setBackground(backgroundGray);
                                 t_litter_dam_dog_id.setEnabled(false);
                                 pTables.add(t_litter_dam_dog_id);
 
@@ -1413,9 +1443,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 JTextField t_litter_place_of_birth = new JTextField();
                                 t_litter_place_of_birth.setFont(bodyFont);
-                                t_litter_place_of_birth.setForeground(black);
+                                t_litter_place_of_birth.setForeground(lockedGray);
                                 t_litter_place_of_birth.setBorder(border);
                                 t_litter_place_of_birth.setBounds(64, 503, 265, 40);
+                                t_litter_place_of_birth.setBackground(backgroundGray);
                                 t_litter_place_of_birth.setEnabled(false);
                                 pTables.add(t_litter_place_of_birth);
 
@@ -1427,9 +1458,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 JTextField t_litter_date_of_birth = new JTextField();
                                 t_litter_date_of_birth.setFont(bodyFont);
-                                t_litter_date_of_birth.setForeground(black);
+                                t_litter_date_of_birth.setForeground(lockedGray);
                                 t_litter_date_of_birth.setBorder(border);
                                 t_litter_date_of_birth.setBounds(353, 503, 265, 40);
+                                t_litter_date_of_birth.setBackground(backgroundGray);
                                 t_litter_date_of_birth.setEnabled(false);
                                 pTables.add(t_litter_date_of_birth);
 
@@ -1442,9 +1474,10 @@ public class MainFrame extends JFrame implements ActionListener {
                                 JTextArea t_litter_other_details = new JTextArea();
                                 t_litter_other_details.setLineWrap(true);
                                 t_litter_other_details.setFont(bodyFont);
-                                t_litter_other_details.setForeground(black);
+                                t_litter_other_details.setForeground(lockedGray);
                                 t_litter_other_details.setBorder(border);
                                 t_litter_other_details.setBounds(64, 591, 554, 139);
+                                t_litter_other_details.setBackground(backgroundGray);
                                 t_litter_other_details.setEnabled(false);
                                 pTables.add(t_litter_other_details);
 
@@ -1570,9 +1603,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 JTextField t_relationship_code = new JTextField();
                                 t_relationship_code.setFont(bodyFont);
-                                t_relationship_code.setForeground(black);
+                                t_relationship_code.setForeground(lockedGray);
                                 t_relationship_code.setBorder(border);
                                 t_relationship_code.setBounds(353, 328, 265, 40);
+                                t_relationship_code.setBackground(backgroundGray);
                                 t_relationship_code.setEnabled(false);
                                 pTables.add(t_relationship_code);
 
@@ -1584,9 +1618,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 JTextField t_relationship_sire_dog_id = new JTextField();
                                 t_relationship_sire_dog_id.setFont(bodyFont);
-                                t_relationship_sire_dog_id.setForeground(black);
+                                t_relationship_sire_dog_id.setForeground(lockedGray);
                                 t_relationship_sire_dog_id.setBorder(border);
                                 t_relationship_sire_dog_id.setBounds(64,416,265,40);
+                                t_relationship_sire_dog_id.setBackground(backgroundGray);
                                 t_relationship_sire_dog_id.setEnabled(false);
                                 pTables.add(t_relationship_sire_dog_id);
 
@@ -1598,9 +1633,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 JTextField t_relationship_dam_dog_id = new JTextField();
                                 t_relationship_dam_dog_id.setFont(bodyFont);
-                                t_relationship_dam_dog_id.setForeground(black);
+                                t_relationship_dam_dog_id.setForeground(lockedGray);
                                 t_relationship_dam_dog_id.setBorder(border);
                                 t_relationship_dam_dog_id.setBounds(353,416,265,40);
+                                t_relationship_dam_dog_id.setBackground(backgroundGray);
                                 t_relationship_dam_dog_id.setEnabled(false);
                                 pTables.add(t_relationship_dam_dog_id);
 
@@ -1613,9 +1649,10 @@ public class MainFrame extends JFrame implements ActionListener {
                                 JTextArea t_relationship_other_details = new JTextArea();
                                 t_relationship_other_details.setLineWrap(true);
                                 t_relationship_other_details.setFont(bodyFont);
-                                t_relationship_other_details.setForeground(black);
+                                t_relationship_other_details.setForeground(lockedGray);
                                 t_relationship_other_details.setBorder(border);
                                 t_relationship_other_details.setBounds(64, 504, 554, 139);
+                                t_relationship_other_details.setBackground(backgroundGray);
                                 t_relationship_other_details.setEnabled(false);
                                 pTables.add(t_relationship_other_details);
 
@@ -1729,9 +1766,10 @@ public class MainFrame extends JFrame implements ActionListener {
                                 JTextArea t_relationship_details = new JTextArea();
                                 t_relationship_details.setLineWrap(true);
                                 t_relationship_details.setFont(bodyFont);
-                                t_relationship_details.setForeground(black);
+                                t_relationship_details.setForeground(lockedGray);
                                 t_relationship_details.setBorder(border);
                                 t_relationship_details.setBounds(64, 416, 554, 139);
+                                t_relationship_details.setBackground(backgroundGray);
                                 t_relationship_details.setEnabled(false);
                                 pTables.add(t_relationship_details);
 
@@ -1805,9 +1843,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 JTextField t_health_record_vet_id = new JTextField();
                                 t_health_record_vet_id.setFont(bodyFont);
-                                t_health_record_vet_id.setForeground(black);
+                                t_health_record_vet_id.setForeground(lockedGray);
                                 t_health_record_vet_id.setBorder(border);
                                 t_health_record_vet_id.setBounds(353,328,265,40);
+                                t_health_record_vet_id.setBackground(backgroundGray);
                                 t_health_record_vet_id.setEnabled(false);
                                 pTables.add(t_health_record_vet_id);
 
@@ -1819,9 +1858,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 JTextField t_health_record_dog_id = new JTextField();
                                 t_health_record_dog_id.setFont(bodyFont);
-                                t_health_record_dog_id.setForeground(black);
+                                t_health_record_dog_id.setForeground(lockedGray);
                                 t_health_record_dog_id.setBorder(border);
                                 t_health_record_dog_id.setBounds(64,416,554,40);
+                                t_health_record_dog_id.setBackground(backgroundGray);
                                 t_health_record_dog_id.setEnabled(false);
                                 pTables.add(t_health_record_dog_id);
 
@@ -1834,9 +1874,10 @@ public class MainFrame extends JFrame implements ActionListener {
                                 JTextArea t_health_record_summary = new JTextArea();
                                 t_health_record_summary.setLineWrap(true);
                                 t_health_record_summary.setFont(bodyFont);
-                                t_health_record_summary.setForeground(black);
+                                t_health_record_summary.setForeground(lockedGray);
                                 t_health_record_summary.setBorder(border);
                                 t_health_record_summary.setBounds(64, 504, 554, 139);
+                                t_health_record_summary.setBackground(backgroundGray);
                                 t_health_record_summary.setEnabled(false);
                                 pTables.add(t_health_record_summary);
 
@@ -1849,9 +1890,10 @@ public class MainFrame extends JFrame implements ActionListener {
                                 JTextArea t_health_record_details = new JTextArea();
                                 t_health_record_details.setLineWrap(true);
                                 t_health_record_details.setFont(bodyFont);
-                                t_health_record_details.setForeground(black);
+                                t_health_record_details.setForeground(lockedGray);
                                 t_health_record_details.setBorder(border);
                                 t_health_record_details.setBounds(64, 680, 554, 139);
+                                t_health_record_details.setBackground(backgroundGray);
                                 t_health_record_details.setEnabled(false);
                                 pTables.add(t_health_record_details);
 
@@ -1966,9 +2008,10 @@ public class MainFrame extends JFrame implements ActionListener {
                                 JTextArea t_common_problem_description = new JTextArea();
                                 t_common_problem_description.setLineWrap(true);
                                 t_common_problem_description.setFont(bodyFont);
-                                t_common_problem_description.setForeground(black);
+                                t_common_problem_description.setForeground(lockedGray);
                                 t_common_problem_description.setBorder(border);
                                 t_common_problem_description.setBounds(64, 416, 554, 139);
+                                t_common_problem_description.setBackground(backgroundGray);
                                 t_common_problem_description.setEnabled(false);
                                 pTables.add(t_common_problem_description);
 
@@ -2042,9 +2085,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 JTextField t_dog_problem_health_record_id = new JTextField();
                                 t_dog_problem_health_record_id.setFont(bodyFont);
-                                t_dog_problem_health_record_id.setForeground(black);
+                                t_dog_problem_health_record_id.setForeground(lockedGray);
                                 t_dog_problem_health_record_id.setBorder(border);
                                 t_dog_problem_health_record_id.setBounds(353,328,265,40);
+                                t_dog_problem_health_record_id.setBackground(backgroundGray);
                                 t_dog_problem_health_record_id.setEnabled(false);
                                 pTables.add(t_dog_problem_health_record_id);
 
@@ -2057,9 +2101,10 @@ public class MainFrame extends JFrame implements ActionListener {
                                 JTextArea t_dog_problem_treatment = new JTextArea();
                                 t_dog_problem_treatment.setLineWrap(true);
                                 t_dog_problem_treatment.setFont(bodyFont);
-                                t_dog_problem_treatment.setForeground(black);
+                                t_dog_problem_treatment.setForeground(lockedGray);
                                 t_dog_problem_treatment.setBorder(border);
                                 t_dog_problem_treatment.setBounds(64, 416, 554, 139);
+                                t_dog_problem_treatment.setBackground(backgroundGray);
                                 t_dog_problem_treatment.setEnabled(false);
                                 pTables.add(t_dog_problem_treatment);
 
@@ -2072,9 +2117,10 @@ public class MainFrame extends JFrame implements ActionListener {
                                 JTextArea t_dog_problem_details = new JTextArea();
                                 t_dog_problem_details.setLineWrap(true);
                                 t_dog_problem_details.setFont(bodyFont);
-                                t_dog_problem_details.setForeground(black);
+                                t_dog_problem_details.setForeground(lockedGray);
                                 t_dog_problem_details.setBorder(border);
                                 t_dog_problem_details.setBounds(64, 592, 554, 139);
+                                t_dog_problem_details.setBackground(backgroundGray);
                                 t_dog_problem_details.setEnabled(false);
                                 pTables.add(t_dog_problem_details);
 

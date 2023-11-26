@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class Connect {
     public static java.sql.Connection connection;
-    private static String URL = "jdbc:postgresql://localhost:5432/Dog_Breeding";
+    private static String URL = "jdbc:postgresql://localhost:5432/Pawesome_Friends";
     private static String user, password;
 
     public static void setUser(String user) {
