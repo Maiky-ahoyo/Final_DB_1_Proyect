@@ -4,7 +4,6 @@ import Utileries.JPlaceholderTextArea;
 import Utileries.ModernScrollbar;
 import Utileries.RoundedBorder;
 import com.toedter.calendar.JDateChooser;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -12,6 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import CRUD.*;
 
 public class MainFrame extends JFrame implements ActionListener {
     private JPanel pMain, pTables;
@@ -44,8 +46,30 @@ public class MainFrame extends JFrame implements ActionListener {
     private Icon iUpdate = new ImageIcon("Icons/Update.png");
     private Icon iDelete = new ImageIcon("Icons/Delete.png");
     private ImageIcon iLogo = new ImageIcon("Icons/Logo.png");
-    private Icon brunoGif = new ImageIcon("Icons/bruno_happy_dance.gif");
+    private Icon brunoGif = new ImageIcon("Icons/Bruno_happy_dance.gif");
     private ImageIcon iMainLogo = new ImageIcon("Icons/MainLogo.png");
+    private JTextField t_vet_id, t_vet_name, t_dog_id, t_dog_name, t_dog_place_of_birth, t_litter_id,
+            t_litter_place_of_birth, t_relationship_id, t_relationship_code, t_health_record_id, t_problem_code,
+            t_vet_name_update, t_dog_born_in_litter, t_date_of_birth, t_dogs_name_update, t_dog_place_of_birth_update,
+            t_sire_dog_id, t_dam_dog_id, t_litter_place_of_birth_update;
+    private JPlaceholderTextArea pt_other_details, pt_relationships_description, pt_summary, pt_problem_description,
+            pt_other_details_update, pt_relationships_description_update, pt_summary_update, pt_details_update,
+            pt_problem_description_update, pt_problem_treatment_update, pt_problem_treatment;
+    private JTextArea t_other_details, t_relationships_description, t_summary, t_problem_description,
+            t_problem_treatment, t_problem_details;
+    private JDateChooser dc_date_of_birth, dc_date_of_problem, dc_date_of_birth_update;
+    private ButtonGroup bg_group, bg_group_update;
+    private JRadioButton rb_dog_female, rb_dog_male, rb_dog_female_update, rb_dog_male_update;
+    private JComboBox cb_dog_born_in_litter, cb_sire_dog_id, cb_dam_dog_id, cb_vet_id, cb_dog_id, cb_health_record_id,
+            cb_problem_code, cb_dog_born_in_litter_update, cb_litter_id, cb_sire_dog_id_update, cb_dam_dog_id_update,
+            cb_relationship_id, cb_relationship_code, cb_relationship_code_update, cb_vet_id_update, cb_dog_id_update,
+            cb_health_record_id_update;
+    private String dogs_name, place_of_birth, date_of_birth, dogs_gender, other_details, vet_name;
+    private ArrayList<String> cb_data;
+    private int dogs_id, litter_id, sire_dog_id, dam_dog_id, vet_id, health_record_id, problem_code, relationship_id,
+            relationship_code, dog_id_update, litter_id_update, sire_dog_id_update, dam_dog_id_update, vet_id_update,
+            health_record_id_update, problem_code_update, relationship_id_update, relationship_code_update;
+
 
     public static String getTable() {
         return table;
@@ -377,11 +401,12 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_vet_id.setBounds(64, 274, 80, 20);
                                 pTables.add(l_vet_id);
 
-                                JTextField t_vet_id = new JTextField();
+                                t_vet_id = new JTextField("" + Read.getMaxVetID());
                                 t_vet_id.setFont(bodyFont);
                                 t_vet_id.setForeground(black);
                                 t_vet_id.setBorder(border);
                                 t_vet_id.setBounds(64, 298, 265, 40);
+                                t_vet_id.setEditable(false);
                                 pTables.add(t_vet_id);
 
                                 JLabel l_vet_name = new JLabel("Vet's Name");
@@ -390,7 +415,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_vet_name.setBounds(353, 274, 80, 20);
                                 pTables.add(l_vet_name);
 
-                                JTextField t_vet_name = new JTextField();
+                                t_vet_name = new JTextField();
                                 t_vet_name.setFont(bodyFont);
                                 t_vet_name.setForeground(black);
                                 t_vet_name.setBorder(border);
@@ -403,15 +428,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_vet_other_details.setBounds(64, 362, 100, 20);
                                 pTables.add(l_vet_other_details);
 
-                                JPlaceholderTextArea t_vet_other_details = new JPlaceholderTextArea("e.g. Specializes on surgery");
-                                t_vet_other_details.setLineWrap(true);
-                                t_vet_other_details.setFont(bodyFont);
-                                t_vet_other_details.setForeground(black);
-                                t_vet_other_details.setBorder(border);
-                                t_vet_other_details.setBounds(64, 386, 554, 139);
-                                pTables.add(t_vet_other_details);
+                                pt_other_details = new JPlaceholderTextArea("e.g. Specializes on surgery");
+                                pt_other_details.setLineWrap(true);
+                                pt_other_details.setFont(bodyFont);
+                                pt_other_details.setForeground(black);
+                                pt_other_details.setBorder(border);
+                                pt_other_details.setBounds(64, 386, 554, 139);
+                                pTables.add(pt_other_details);
 
                                 b_submit.setBounds(62, 549, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -440,11 +466,12 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_id.setBounds(64, 248, 90, 20);
                                 pTables.add(l_dog_id);
 
-                                JTextField t_dog_id = new JTextField();
+                                t_dog_id = new JTextField("" + Read.getMaxDogID());
                                 t_dog_id.setFont(bodyFont);
                                 t_dog_id.setForeground(black);
                                 t_dog_id.setBorder(border);
                                 t_dog_id.setBounds(64, 272, 265, 40);
+                                t_dog_id.setEditable(false);
                                 pTables.add(t_dog_id);
 
                                 JLabel l_dog_dogs_name = new JLabel("Dog's Name");
@@ -453,12 +480,12 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_dogs_name.setBounds(353, 248, 90, 20);
                                 pTables.add(l_dog_dogs_name);
 
-                                JTextField t_dog_dogs_name = new JTextField();
-                                t_dog_dogs_name.setFont(bodyFont);
-                                t_dog_dogs_name.setForeground(black);
-                                t_dog_dogs_name.setBorder(border);
-                                t_dog_dogs_name.setBounds(353, 272, 265, 40);
-                                pTables.add(t_dog_dogs_name);
+                                t_dog_name = new JTextField();
+                                t_dog_name.setFont(bodyFont);
+                                t_dog_name.setForeground(black);
+                                t_dog_name.setBorder(border);
+                                t_dog_name.setBounds(353, 272, 265, 40);
+                                pTables.add(t_dog_name);
 
                                 JLabel l_dog_place_of_birth = new JLabel("Place of Birth");
                                 l_dog_place_of_birth.setFont(labelFont);
@@ -466,7 +493,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_place_of_birth.setBounds(64, 336, 275, 20);
                                 pTables.add(l_dog_place_of_birth);
 
-                                JTextField t_dog_place_of_birth = new JTextField();
+                                t_dog_place_of_birth = new JTextField();
                                 t_dog_place_of_birth.setFont(bodyFont);
                                 t_dog_place_of_birth.setForeground(black);
                                 t_dog_place_of_birth.setBorder(border);
@@ -479,11 +506,11 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_date_of_birth.setBounds(353, 336, 269, 20);
                                 pTables.add(l_dog_date_of_birth);
 
-                                JDateChooser dc_dog_date_of_birth = new JDateChooser("yyyy-MM-dd", "yyyy-MM-dd", '_');
-                                dc_dog_date_of_birth.setFont(bodyFont);
-                                dc_dog_date_of_birth.setForeground(black);
-                                dc_dog_date_of_birth.setBounds(353, 360, 265, 40);
-                                pTables.add(dc_dog_date_of_birth);
+                                dc_date_of_birth = new JDateChooser("yyyy-MM-dd", "yyyy-MM-dd", '_');
+                                dc_date_of_birth.setFont(bodyFont);
+                                dc_date_of_birth.setForeground(black);
+                                dc_date_of_birth.setBounds(353, 360, 265, 40);
+                                pTables.add(dc_date_of_birth);
 
                                 JLabel l_dog_born_in_litter = new JLabel("Born in Litter");
                                 l_dog_born_in_litter.setFont(labelFont);
@@ -491,11 +518,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_born_in_litter.setBounds(64, 424, 90, 20);
                                 pTables.add(l_dog_born_in_litter);
 
-                                JComboBox cb_dog_born_in_litter = new JComboBox();  // falta agregar las litters con la tabla litters
+                                cb_dog_born_in_litter = new JComboBox();
                                 cb_dog_born_in_litter.setFont(bodyFont);
                                 cb_dog_born_in_litter.setForeground(black);
                                 cb_dog_born_in_litter.setBounds(64,448,554,40);
                                 cb_dog_born_in_litter.setBackground(Color.WHITE);
+                                cb_data = Read.getLitterID();
+                                for (String item : cb_data) {
+                                    cb_dog_born_in_litter.addItem(item);
+                                }
                                 pTables.add(cb_dog_born_in_litter);
 
                                 JLabel l_dog_gender_mf = new JLabel("Dog's Gender");
@@ -504,25 +535,25 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_gender_mf.setBounds(64, 512, 130, 20);
                                 pTables.add(l_dog_gender_mf);
 
-                                ButtonGroup bg_dog_group = new ButtonGroup();
+                                bg_group = new ButtonGroup();
 
-                                JCheckBox c_dog_female = new JCheckBox();
-                                c_dog_female.setFont(bodyFont);
-                                c_dog_female.setForeground(black);
-                                c_dog_female.setBounds(64, 536, 90, 20);
-                                c_dog_female.setText("Female");
-                                c_dog_female.setBackground(null);
-                                bg_dog_group.add(c_dog_female);
-                                pTables.add(c_dog_female);
+                                rb_dog_female = new JRadioButton();
+                                rb_dog_female.setFont(bodyFont);
+                                rb_dog_female.setForeground(black);
+                                rb_dog_female.setBounds(64, 536, 90, 20);
+                                rb_dog_female.setText("Female");
+                                rb_dog_female.setBackground(null);
+                                bg_group.add(rb_dog_female);
+                                pTables.add(rb_dog_female);
 
-                                JCheckBox c_dog_male = new JCheckBox();
-                                c_dog_male.setFont(bodyFont);
-                                c_dog_male.setForeground(black);
-                                c_dog_male.setBounds(211, 536, 80, 20);
-                                c_dog_male.setText("Male");
-                                c_dog_male.setBackground(null);
-                                bg_dog_group.add(c_dog_male);
-                                pTables.add(c_dog_male);
+                                rb_dog_male = new JRadioButton();
+                                rb_dog_male.setFont(bodyFont);
+                                rb_dog_male.setForeground(black);
+                                rb_dog_male.setBounds(211, 536, 80, 20);
+                                rb_dog_male.setText("Male");
+                                rb_dog_male.setBackground(null);
+                                bg_group.add(rb_dog_male);
+                                pTables.add(rb_dog_male);
 
                                 JLabel l_dog_other_details = new JLabel("Other Details");
                                 l_dog_other_details.setFont(labelFont);
@@ -530,15 +561,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_other_details.setBounds(64, 584, 95, 20);
                                 pTables.add(l_dog_other_details);
 
-                                JPlaceholderTextArea t_dog_other_details = new JPlaceholderTextArea("e.g. Is very playful");
-                                t_dog_other_details.setLineWrap(true);
-                                t_dog_other_details.setFont(bodyFont);
-                                t_dog_other_details.setForeground(black);
-                                t_dog_other_details.setBorder(border);
-                                t_dog_other_details.setBounds(64, 608, 554, 139);
-                                pTables.add(t_dog_other_details);
+                                pt_other_details = new JPlaceholderTextArea("e.g. Is very playful");
+                                pt_other_details.setLineWrap(true);
+                                pt_other_details.setFont(bodyFont);
+                                pt_other_details.setForeground(black);
+                                pt_other_details.setBorder(border);
+                                pt_other_details.setBounds(64, 608, 554, 139);
+                                pTables.add(pt_other_details);
 
                                 b_submit.setBounds(64, 771, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -567,11 +599,12 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_id.setBounds(64, 228, 60, 20);
                                 pTables.add(l_litter_id);
 
-                                JTextField t_litter_id = new JTextField();
+                                t_litter_id = new JTextField("" + Read.getMaxLitterID());
                                 t_litter_id.setFont(bodyFont);
                                 t_litter_id.setForeground(black);
                                 t_litter_id.setBorder(border);
                                 t_litter_id.setBounds(64, 252, 554, 40);
+                                t_litter_id.setEditable(false);
                                 pTables.add(t_litter_id);
 
                                 JLabel l_litter_sire_dog_id = new JLabel("Sire Dog ID");
@@ -580,12 +613,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_sire_dog_id.setBounds(64, 316, 265, 20);
                                 pTables.add(l_litter_sire_dog_id);
 
-                                JComboBox cb_litter_sire_dog_id = new JComboBox();  // falta agregar las dogs con la tabla dogs
-                                cb_litter_sire_dog_id.setFont(bodyFont);
-                                cb_litter_sire_dog_id.setForeground(black);
-                                cb_litter_sire_dog_id.setBounds(64,340,265,40);
-                                cb_litter_sire_dog_id.setBackground(Color.WHITE);
-                                pTables.add(cb_litter_sire_dog_id);
+                                cb_sire_dog_id = new JComboBox();
+                                cb_sire_dog_id.setFont(bodyFont);
+                                cb_sire_dog_id.setForeground(black);
+                                cb_sire_dog_id.setBounds(64,340,265,40);
+                                cb_sire_dog_id.setBackground(Color.WHITE);
+                                cb_data = Read.getDogID();
+                                for (String item : cb_data) {
+                                    cb_sire_dog_id.addItem(item);
+                                }
+                                pTables.add(cb_sire_dog_id);
 
                                 JLabel l_litter_dam_dog_id = new JLabel("Dam Dog ID");
                                 l_litter_dam_dog_id.setFont(labelFont);
@@ -593,12 +630,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_dam_dog_id.setBounds(353, 316, 269, 20);
                                 pTables.add(l_litter_dam_dog_id);
 
-                                JComboBox cb_litter_dam_dog_id = new JComboBox();  // falta agregar las dogs con la tabla dogs
-                                cb_litter_dam_dog_id.setFont(bodyFont);
-                                cb_litter_dam_dog_id.setForeground(black);
-                                cb_litter_dam_dog_id.setBounds(353,340,265,40);
-                                cb_litter_dam_dog_id.setBackground(Color.WHITE);
-                                pTables.add(cb_litter_dam_dog_id);
+                                cb_dam_dog_id = new JComboBox();
+                                cb_dam_dog_id.setFont(bodyFont);
+                                cb_dam_dog_id.setForeground(black);
+                                cb_dam_dog_id.setBounds(353,340,265,40);
+                                cb_dam_dog_id.setBackground(Color.WHITE);
+                                cb_data = Read.getDogID();
+                                for (String item : cb_data) {
+                                    cb_dam_dog_id.addItem(item);
+                                }
+                                pTables.add(cb_dam_dog_id);
 
                                 JLabel l_litter_place_of_birth = new JLabel("Litter's Place of Birth");
                                 l_litter_place_of_birth.setFont(labelFont);
@@ -606,7 +647,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_place_of_birth.setBounds(64, 400, 275, 20);
                                 pTables.add(l_litter_place_of_birth);
 
-                                JTextField t_litter_place_of_birth = new JTextField();
+                                t_litter_place_of_birth = new JTextField();
                                 t_litter_place_of_birth.setFont(bodyFont);
                                 t_litter_place_of_birth.setForeground(black);
                                 t_litter_place_of_birth.setBorder(border);
@@ -619,11 +660,11 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_date_of_birth.setBounds(353, 400, 269, 20);
                                 pTables.add(l_litter_date_of_birth);
 
-                                JDateChooser dc_litter_date_of_birth = new JDateChooser("yyyy-MM-dd", "yyyy-MM-dd", '_');
-                                dc_litter_date_of_birth.setFont(bodyFont);
-                                dc_litter_date_of_birth.setForeground(black);
-                                dc_litter_date_of_birth.setBounds(353, 424, 265, 40);
-                                pTables.add(dc_litter_date_of_birth);
+                                dc_date_of_birth = new JDateChooser("yyyy-MM-dd", "yyyy-MM-dd", '_');
+                                dc_date_of_birth.setFont(bodyFont);
+                                dc_date_of_birth.setForeground(black);
+                                dc_date_of_birth.setBounds(353, 424, 265, 40);
+                                pTables.add(dc_date_of_birth);
 
                                 JLabel l_litter_other_details = new JLabel("Other Details");
                                 l_litter_other_details.setFont(labelFont);
@@ -631,13 +672,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_other_details.setBounds(64, 484, 100, 20);
                                 pTables.add(l_litter_other_details);
 
-                                JPlaceholderTextArea t_litter_other_details = new JPlaceholderTextArea("e.g. All puppies are healthy, Five puppies in total");
-                                t_litter_other_details.setLineWrap(true);
-                                t_litter_other_details.setFont(bodyFont);
-                                t_litter_other_details.setForeground(black);
-                                t_litter_other_details.setBorder(border);
-                                t_litter_other_details.setBounds(64, 512, 554, 139);
-                                pTables.add(t_litter_other_details);
+                                pt_other_details = new JPlaceholderTextArea("e.g. All puppies are healthy, Five puppies in total");
+                                pt_other_details.setLineWrap(true);
+                                pt_other_details.setFont(bodyFont);
+                                pt_other_details.setForeground(black);
+                                pt_other_details.setBorder(border);
+                                pt_other_details.setBounds(64, 512, 554, 139);
+                                pTables.add(pt_other_details);
 
                                 b_submit.setBounds(64, 685, 554, 40);
                                 pTables.add(b_submit);
@@ -668,11 +709,12 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_id.setBounds(64, 224, 110, 20);
                                 pTables.add(l_relationship_id);
 
-                                JTextField t_relationship_id = new JTextField();
+                                t_relationship_id = new JTextField("" + Read.getMaxRelationshipID());
                                 t_relationship_id.setFont(bodyFont);
                                 t_relationship_id.setForeground(black);
                                 t_relationship_id.setBorder(border);
                                 t_relationship_id.setBounds(64, 248, 265, 40);
+                                t_relationship_id.setEditable(false);
                                 pTables.add(t_relationship_id);
 
                                 JLabel l_relationship_code = new JLabel("Relationship Code");
@@ -681,7 +723,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_code.setBounds(353, 224, 130, 20);
                                 pTables.add(l_relationship_code);
 
-                                JTextField t_relationship_code = new JTextField();
+                                t_relationship_code = new JTextField();
                                 t_relationship_code.setFont(bodyFont);
                                 t_relationship_code.setForeground(black);
                                 t_relationship_code.setBorder(border);
@@ -694,12 +736,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_sire_dog_id.setBounds(64, 312, 265, 20);
                                 pTables.add(l_relationship_sire_dog_id);
 
-                                JComboBox cb_relationship_sire_dog_id = new JComboBox();  // falta agregar las dogs con la tabla dogs
-                                cb_relationship_sire_dog_id.setFont(bodyFont);
-                                cb_relationship_sire_dog_id.setForeground(black);
-                                cb_relationship_sire_dog_id.setBounds(64,336,265,40);
-                                cb_relationship_sire_dog_id.setBackground(Color.WHITE);
-                                pTables.add(cb_relationship_sire_dog_id);
+                                cb_sire_dog_id = new JComboBox();
+                                cb_sire_dog_id.setFont(bodyFont);
+                                cb_sire_dog_id.setForeground(black);
+                                cb_sire_dog_id.setBounds(64,336,265,40);
+                                cb_sire_dog_id.setBackground(Color.WHITE);
+                                cb_data = Read.getDogID();
+                                for (String item : cb_data) {
+                                    cb_sire_dog_id.addItem(item);
+                                }
+                                pTables.add(cb_sire_dog_id);
 
                                 JLabel l_relationship_dam_dog_id = new JLabel("Dog 2 ID");
                                 l_relationship_dam_dog_id.setFont(labelFont);
@@ -707,12 +753,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_dam_dog_id.setBounds(353, 312, 269, 20);
                                 pTables.add(l_relationship_dam_dog_id);
 
-                                JComboBox cb_relationship_dam_dog_id = new JComboBox();  // falta agregar las dogs con la tabla dogs
-                                cb_relationship_dam_dog_id.setFont(bodyFont);
-                                cb_relationship_dam_dog_id.setForeground(black);
-                                cb_relationship_dam_dog_id.setBounds(353,336,265,40);
-                                cb_relationship_dam_dog_id.setBackground(Color.WHITE);
-                                pTables.add(cb_relationship_dam_dog_id);
+                                cb_dam_dog_id = new JComboBox();
+                                cb_dam_dog_id.setFont(bodyFont);
+                                cb_dam_dog_id.setForeground(black);
+                                cb_dam_dog_id.setBounds(353,336,265,40);
+                                cb_dam_dog_id.setBackground(Color.WHITE);
+                                cb_data = Read.getDogID();
+                                for (String item : cb_data) {
+                                    cb_dam_dog_id.addItem(item);
+                                }
+                                pTables.add(cb_dam_dog_id);
 
                                 JLabel l_relationship_other_details = new JLabel("Other Details");
                                 l_relationship_other_details.setFont(labelFont);
@@ -720,13 +770,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_other_details.setBounds(64, 400, 100, 20);
                                 pTables.add(l_relationship_other_details);
 
-                                JPlaceholderTextArea t_relationship_other_details = new JPlaceholderTextArea("e.g. The dogs are siblings");
-                                t_relationship_other_details.setLineWrap(true);
-                                t_relationship_other_details.setFont(bodyFont);
-                                t_relationship_other_details.setForeground(black);
-                                t_relationship_other_details.setBorder(border);
-                                t_relationship_other_details.setBounds(64, 424, 554, 139);
-                                pTables.add(t_relationship_other_details);
+                                pt_other_details = new JPlaceholderTextArea("e.g. The dogs are siblings");
+                                pt_other_details.setLineWrap(true);
+                                pt_other_details.setFont(bodyFont);
+                                pt_other_details.setForeground(black);
+                                pt_other_details.setBorder(border);
+                                pt_other_details.setBounds(64, 424, 554, 139);
+                                pTables.add(pt_other_details);
 
                                 b_submit.setBounds(64, 587, 554, 40);
                                 pTables.add(b_submit);
@@ -757,12 +807,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationships_code.setBounds(64, 274, 130, 20);
                                 pTables.add(l_relationships_code);
 
-                                JTextField t_relationships_code = new JTextField();
-                                t_relationships_code.setFont(bodyFont);
-                                t_relationships_code.setForeground(black);
-                                t_relationships_code.setBorder(border);
-                                t_relationships_code.setBounds(64, 298, 554, 40);
-                                pTables.add(t_relationships_code);
+                                t_relationship_code = new JTextField("" + Read.getMaxRelationshipCode());
+                                t_relationship_code.setFont(bodyFont);
+                                t_relationship_code.setForeground(black);
+                                t_relationship_code.setBorder(border);
+                                t_relationship_code.setBounds(64, 298, 554, 40);
+                                t_relationship_code.setEditable(false);
+                                pTables.add(t_relationship_code);
 
                                 JLabel l_relationships_description = new JLabel("Relationship Description");
                                 l_relationships_description.setFont(labelFont);
@@ -770,13 +821,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationships_description.setBounds(64, 362, 200, 20);
                                 pTables.add(l_relationships_description);
 
-                                JPlaceholderTextArea t_relationships_description = new JPlaceholderTextArea("e.g. Siblings");
-                                t_relationships_description.setLineWrap(true);
-                                t_relationships_description.setFont(bodyFont);
-                                t_relationships_description.setForeground(black);
-                                t_relationships_description.setBorder(border);
-                                t_relationships_description.setBounds(64, 386, 554, 139);
-                                pTables.add(t_relationships_description);
+                                pt_relationships_description = new JPlaceholderTextArea("e.g. Siblings");
+                                pt_relationships_description.setLineWrap(true);
+                                pt_relationships_description.setFont(bodyFont);
+                                pt_relationships_description.setForeground(black);
+                                pt_relationships_description.setBorder(border);
+                                pt_relationships_description.setBounds(64, 386, 554, 139);
+                                pTables.add(pt_relationships_description);
 
                                 b_submit.setBounds(64, 549, 554, 40);
                                 pTables.add(b_submit);
@@ -807,11 +858,12 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_health_record_id.setBounds(64, 248, 130, 20);
                                 pTables.add(l_health_record_id);
 
-                                JTextField t_health_record_id = new JTextField();
+                                t_health_record_id = new JTextField("" + Read.getMaxHealthRecordID());
                                 t_health_record_id.setFont(bodyFont);
                                 t_health_record_id.setForeground(black);
                                 t_health_record_id.setBorder(border);
                                 t_health_record_id.setBounds(64, 272, 265, 40);
+                                t_health_record_id.setEditable(false);
                                 pTables.add(t_health_record_id);
 
                                 JLabel l_health_record_vet_id = new JLabel("Vet ID");
@@ -820,12 +872,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_health_record_vet_id.setBounds(353, 248, 130, 20);
                                 pTables.add(l_health_record_vet_id);
 
-                                JComboBox cb_health_record_vet_id = new JComboBox();  // falta agregar las vets con la tabla vets
-                                cb_health_record_vet_id.setFont(bodyFont);
-                                cb_health_record_vet_id.setForeground(black);
-                                cb_health_record_vet_id.setBounds(353,272,265,40);
-                                cb_health_record_vet_id.setBackground(Color.WHITE);
-                                pTables.add(cb_health_record_vet_id);
+                                cb_vet_id = new JComboBox();
+                                cb_vet_id.setFont(bodyFont);
+                                cb_vet_id.setForeground(black);
+                                cb_vet_id.setBounds(353,272,265,40);
+                                cb_vet_id.setBackground(Color.WHITE);
+                                cb_data = Read.getVetID();
+                                for (String item : cb_data) {
+                                    cb_vet_id.addItem(item);
+                                }
+                                pTables.add(cb_vet_id);
 
                                 JLabel l_health_record_dog_id = new JLabel("Dog ID");
                                 l_health_record_dog_id.setFont(labelFont);
@@ -833,12 +889,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_health_record_dog_id.setBounds(64, 336, 130, 20);
                                 pTables.add(l_health_record_dog_id);
 
-                                JComboBox cb_health_record_dog_id = new JComboBox();  // falta agregar las dogs con la tabla dogs
-                                cb_health_record_dog_id.setFont(bodyFont);
-                                cb_health_record_dog_id.setForeground(black);
-                                cb_health_record_dog_id.setBounds(64,360,554,40);
-                                cb_health_record_dog_id.setBackground(Color.WHITE);
-                                pTables.add(cb_health_record_dog_id);
+                                cb_dog_id = new JComboBox();
+                                cb_dog_id.setFont(bodyFont);
+                                cb_dog_id.setForeground(black);
+                                cb_dog_id.setBounds(64,360,554,40);
+                                cb_dog_id.setBackground(Color.WHITE);
+                                cb_data = Read.getDogID();
+                                for (String item : cb_data) {
+                                    cb_dog_id.addItem(item);
+                                }
+                                pTables.add(cb_dog_id);
 
                                 JLabel l_health_record_summary = new JLabel("Summary");
                                 l_health_record_summary.setFont(labelFont);
@@ -846,13 +906,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_health_record_summary.setBounds(64, 424, 200, 20);
                                 pTables.add(l_health_record_summary);
 
-                                JPlaceholderTextArea t_health_record_summary = new JPlaceholderTextArea("e.g. The dog was administered the vaccines");
-                                t_health_record_summary.setLineWrap(true);
-                                t_health_record_summary.setFont(bodyFont);
-                                t_health_record_summary.setForeground(black);
-                                t_health_record_summary.setBorder(border);
-                                t_health_record_summary.setBounds(64, 448, 554, 139);
-                                pTables.add(t_health_record_summary);
+                                pt_summary = new JPlaceholderTextArea("e.g. The dog was administered the vaccines");
+                                pt_summary.setLineWrap(true);
+                                pt_summary.setFont(bodyFont);
+                                pt_summary.setForeground(black);
+                                pt_summary.setBorder(border);
+                                pt_summary.setBounds(64, 448, 554, 139);
+                                pTables.add(pt_summary);
 
                                 JLabel l_health_record_other_details = new JLabel("Details");
                                 l_health_record_other_details.setFont(labelFont);
@@ -860,13 +920,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_health_record_other_details.setBounds(64, 611, 100, 20);
                                 pTables.add(l_health_record_other_details);
 
-                                JPlaceholderTextArea t_health_record_other_details = new JPlaceholderTextArea("e.g. The dog is healthy");
-                                t_health_record_other_details.setLineWrap(true);
-                                t_health_record_other_details.setFont(bodyFont);
-                                t_health_record_other_details.setForeground(black);
-                                t_health_record_other_details.setBorder(border);
-                                t_health_record_other_details.setBounds(64, 635, 554, 139);
-                                pTables.add(t_health_record_other_details);
+                                pt_other_details = new JPlaceholderTextArea("e.g. The dog is healthy");
+                                pt_other_details.setLineWrap(true);
+                                pt_other_details.setFont(bodyFont);
+                                pt_other_details.setForeground(black);
+                                pt_other_details.setBorder(border);
+                                pt_other_details.setBounds(64, 635, 554, 139);
+                                pTables.add(pt_other_details);
 
                                 b_submit.setBounds(64, 798, 554, 40);
                                 pTables.add(b_submit);
@@ -897,12 +957,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_common_problem_code.setBounds(64, 274, 130, 20);
                                 pTables.add(l_common_problem_code);
 
-                                JTextField t_common_problem_code = new JTextField();
-                                t_common_problem_code.setFont(bodyFont);
-                                t_common_problem_code.setForeground(black);
-                                t_common_problem_code.setBorder(border);
-                                t_common_problem_code.setBounds(64, 298, 554, 40);
-                                pTables.add(t_common_problem_code);
+                                t_problem_code = new JTextField("" + Read.getMaxProblemCode());
+                                t_problem_code.setFont(bodyFont);
+                                t_problem_code.setForeground(black);
+                                t_problem_code.setBorder(border);
+                                t_problem_code.setBounds(64, 298, 554, 40);
+                                t_problem_code.setEditable(false);
+                                pTables.add(t_problem_code);
 
                                 JLabel l_common_problem_description = new JLabel("Problem Description");
                                 l_common_problem_description.setFont(labelFont);
@@ -910,13 +971,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_common_problem_description.setBounds(64, 362, 200, 20);
                                 pTables.add(l_common_problem_description);
 
-                                JPlaceholderTextArea t_common_problem_description = new JPlaceholderTextArea("e.g. Fever: The dog has high temperature, coughing, and runny nose");
-                                t_common_problem_description.setLineWrap(true);
-                                t_common_problem_description.setFont(bodyFont);
-                                t_common_problem_description.setForeground(black);
-                                t_common_problem_description.setBorder(border);
-                                t_common_problem_description.setBounds(64, 386, 554, 139);
-                                pTables.add(t_common_problem_description);
+                                pt_problem_description = new JPlaceholderTextArea("e.g. Fever: The dog has high temperature, coughing, and runny nose");
+                                pt_problem_description.setLineWrap(true);
+                                pt_problem_description.setFont(bodyFont);
+                                pt_problem_description.setForeground(black);
+                                pt_problem_description.setBorder(border);
+                                pt_problem_description.setBounds(64, 386, 554, 139);
+                                pTables.add(pt_problem_description);
 
                                 b_submit.setBounds(64, 549, 554, 40);
                                 pTables.add(b_submit);
@@ -947,12 +1008,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_problem_code.setBounds(64, 248, 164, 20);
                                 pTables.add(l_dog_problem_code);
 
-                                JComboBox t_dog_problem_code = new JComboBox(); // falta agregar las common_problems con la tabla common_problems
-                                t_dog_problem_code.setFont(bodyFont);
-                                t_dog_problem_code.setForeground(black);
-                                t_dog_problem_code.setBounds(64, 272, 164, 40);
-                                t_dog_problem_code.setBackground(Color.WHITE);
-                                pTables.add(t_dog_problem_code);
+                                cb_problem_code = new JComboBox();
+                                cb_problem_code.setFont(bodyFont);
+                                cb_problem_code.setForeground(black);
+                                cb_problem_code.setBounds(64, 272, 164, 40);
+                                cb_problem_code.setBackground(Color.WHITE);
+                                cb_data = Read.getProblemCode();
+                                for (String item : cb_data) {
+                                    cb_problem_code.addItem(item);
+                                }
+                                pTables.add(cb_problem_code);
 
                                 JLabel l_dog_problem_health_record_id = new JLabel("Health Record ID");
                                 l_dog_problem_health_record_id.setFont(labelFont);
@@ -960,12 +1025,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_problem_health_record_id.setBounds(256, 248, 164, 20);
                                 pTables.add(l_dog_problem_health_record_id);
 
-                                JComboBox cb_dog_problem_health_record_id = new JComboBox();  // falta agregar las health_records con la tabla health_records
-                                cb_dog_problem_health_record_id.setFont(bodyFont);
-                                cb_dog_problem_health_record_id.setForeground(black);
-                                cb_dog_problem_health_record_id.setBounds(256,272,164,40);
-                                cb_dog_problem_health_record_id.setBackground(Color.WHITE);
-                                pTables.add(cb_dog_problem_health_record_id);
+                                cb_health_record_id = new JComboBox();
+                                cb_health_record_id.setFont(bodyFont);
+                                cb_health_record_id.setForeground(black);
+                                cb_health_record_id.setBounds(256,272,164,40);
+                                cb_health_record_id.setBackground(Color.WHITE);
+                                cb_data = Read.getHealthRecordID();
+                                for (String item : cb_data) {
+                                    cb_health_record_id.addItem(item);
+                                }
+                                pTables.add(cb_health_record_id);
 
                                 JLabel l_dog_problem_date_of_problem = new JLabel("Date of Problem");
                                 l_dog_problem_date_of_problem.setFont(labelFont);
@@ -973,11 +1042,11 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_problem_date_of_problem.setBounds(449, 248, 164, 20);
                                 pTables.add(l_dog_problem_date_of_problem);
 
-                                JDateChooser dc_dog_problem_date_of_problem = new JDateChooser("yyyy-MM-dd", "yyyy-MM-dd", '_');
-                                dc_dog_problem_date_of_problem.setFont(bodyFont);
-                                dc_dog_problem_date_of_problem.setForeground(black);
-                                dc_dog_problem_date_of_problem.setBounds(449, 272, 165, 40);
-                                pTables.add(dc_dog_problem_date_of_problem);
+                                dc_date_of_problem = new JDateChooser("yyyy-MM-dd", "yyyy-MM-dd", '_');
+                                dc_date_of_problem.setFont(bodyFont);
+                                dc_date_of_problem.setForeground(black);
+                                dc_date_of_problem.setBounds(449, 272, 165, 40);
+                                pTables.add(dc_date_of_problem);
 
                                 JLabel l_dog_problem_treatment = new JLabel("Treatment");
                                 l_dog_problem_treatment.setFont(labelFont);
@@ -985,13 +1054,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_problem_treatment.setBounds(64, 336, 200, 20);
                                 pTables.add(l_dog_problem_treatment);
 
-                                JPlaceholderTextArea t_dog_problem_treatment = new JPlaceholderTextArea("e.g. The dog was given antibiotics");
-                                t_dog_problem_treatment.setLineWrap(true);
-                                t_dog_problem_treatment.setFont(bodyFont);
-                                t_dog_problem_treatment.setForeground(black);
-                                t_dog_problem_treatment.setBorder(border);
-                                t_dog_problem_treatment.setBounds(64, 360, 554, 139);
-                                pTables.add(t_dog_problem_treatment);
+                                pt_problem_treatment = new JPlaceholderTextArea("e.g. The dog was given antibiotics");
+                                pt_problem_treatment.setLineWrap(true);
+                                pt_problem_treatment.setFont(bodyFont);
+                                pt_problem_treatment.setForeground(black);
+                                pt_problem_treatment.setBorder(border);
+                                pt_problem_treatment.setBounds(64, 360, 554, 139);
+                                pTables.add(pt_problem_treatment);
 
                                 JLabel l_dog_problem_other_details = new JLabel("Other Details");
                                 l_dog_problem_other_details.setFont(labelFont);
@@ -999,13 +1068,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_problem_other_details.setBounds(64, 523, 100, 20);
                                 pTables.add(l_dog_problem_other_details);
 
-                                JPlaceholderTextArea t_dog_problem_other_details = new JPlaceholderTextArea("e.g. The dog is healthy");
-                                t_dog_problem_other_details.setLineWrap(true);
-                                t_dog_problem_other_details.setFont(bodyFont);
-                                t_dog_problem_other_details.setForeground(black);
-                                t_dog_problem_other_details.setBorder(border);
-                                t_dog_problem_other_details.setBounds(64, 547, 554, 139);
-                                pTables.add(t_dog_problem_other_details);
+                                pt_other_details = new JPlaceholderTextArea("e.g. The dog is healthy");
+                                pt_other_details.setLineWrap(true);
+                                pt_other_details.setFont(bodyFont);
+                                pt_other_details.setForeground(black);
+                                pt_other_details.setBorder(border);
+                                pt_other_details.setBounds(64, 547, 554, 139);
+                                pTables.add(pt_other_details);
 
                                 b_submit.setBounds(64, 710, 554, 40);
                                 pTables.add(b_submit);
@@ -1048,11 +1117,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_vet_id.setBounds(64, 304, 100, 20);
                                 pTables.add(l_vet_id);
 
-                                JComboBox cb_vet_id = new JComboBox();  // falta agregar las vets con la tabla vets
+                                cb_vet_id = new JComboBox();
                                 cb_vet_id.setFont(bodyFont);
                                 cb_vet_id.setForeground(black);
                                 cb_vet_id.setBounds(64, 328, 265, 40);
                                 cb_vet_id.setBackground(Color.WHITE);
+                                cb_data = Read.getVetID();
+                                for (String item : cb_data) {
+                                    cb_vet_id.addItem(item);
+                                }
                                 pTables.add(cb_vet_id);
 
                                 JLabel l_vet_name = new JLabel("Current Vet's Name");
@@ -1061,7 +1134,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_vet_name.setBounds(353, 304, 160, 20);
                                 pTables.add(l_vet_name);
 
-                                JTextField t_vet_name = new JTextField();
+                                t_vet_name = new JTextField();
                                 t_vet_name.setFont(bodyFont);
                                 t_vet_name.setForeground(lockedGray);
                                 t_vet_name.setBorder(border);
@@ -1076,15 +1149,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_vet_other_details.setBounds(64, 392, 150, 20);
                                 pTables.add(l_vet_other_details);
 
-                                JTextArea t_vet_other_details = new JTextArea();
-                                t_vet_other_details.setLineWrap(true);
-                                t_vet_other_details.setFont(bodyFont);
-                                t_vet_other_details.setForeground(lockedGray);
-                                t_vet_other_details.setBorder(border);
-                                t_vet_other_details.setBounds(64, 416, 554, 139);
-                                t_vet_other_details.setBackground(backgroundGray);
-                                t_vet_other_details.setEnabled(false);
-                                pTables.add(t_vet_other_details);
+                                t_other_details = new JTextArea();
+                                t_other_details.setLineWrap(true);
+                                t_other_details.setFont(bodyFont);
+                                t_other_details.setForeground(lockedGray);
+                                t_other_details.setBorder(border);
+                                t_other_details.setBounds(64, 416, 554, 139);
+                                t_other_details.setBackground(backgroundGray);
+                                t_other_details.setEnabled(false);
+                                pTables.add(t_other_details);
 
                                 JLabel l_vet_update = new JLabel("New Information");
                                 l_vet_update.setFont(subtitleFont);
@@ -1098,7 +1171,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_vet_name_update.setBounds(64, 635, 120, 20);
                                 pTables.add(l_vet_name_update);
 
-                                JTextField t_vet_name_update = new JTextField();
+                                t_vet_name_update = new JTextField();
                                 t_vet_name_update.setFont(bodyFont);
                                 t_vet_name_update.setForeground(black);
                                 t_vet_name_update.setBorder(border);
@@ -1111,13 +1184,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_vet_other_details_update.setBounds(64, 723, 100, 20);
                                 pTables.add(l_vet_other_details_update);
 
-                                JPlaceholderTextArea t_vet_other_details_update = new JPlaceholderTextArea("e.g. Specializes on surgery");
-                                t_vet_other_details_update.setLineWrap(true);
-                                t_vet_other_details_update.setFont(bodyFont);
-                                t_vet_other_details_update.setForeground(black);
-                                t_vet_other_details_update.setBorder(border);
-                                t_vet_other_details_update.setBounds(64, 747, 554, 139);
-                                pTables.add(t_vet_other_details_update);
+                                pt_other_details_update = new JPlaceholderTextArea("e.g. Specializes on surgery");
+                                pt_other_details_update.setLineWrap(true);
+                                pt_other_details_update.setFont(bodyFont);
+                                pt_other_details_update.setForeground(black);
+                                pt_other_details_update.setBorder(border);
+                                pt_other_details_update.setBounds(64, 747, 554, 139);
+                                pTables.add(pt_other_details_update);
 
                                 b_submit.setBounds(62, 910, 554, 40);
                                 pTables.add(b_submit);
@@ -1154,11 +1227,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_id.setBounds(64, 304, 265, 20);
                                 pTables.add(l_dog_id);
 
-                                JComboBox cb_dog_id = new JComboBox(); // falta agregar las dogs con la tabla dogs
+                                cb_dog_id = new JComboBox();
                                 cb_dog_id.setFont(bodyFont);
                                 cb_dog_id.setForeground(black);
                                 cb_dog_id.setBounds(64, 328, 265, 40);
                                 cb_dog_id.setBackground(Color.WHITE);
+                                cb_data = Read.getDogID();
+                                for (String item : cb_data) {
+                                    cb_dog_id.addItem(item);
+                                }
                                 pTables.add(cb_dog_id);
 
                                 JLabel l_dog_dogs_name = new JLabel("Current Dog's Name");
@@ -1167,14 +1244,14 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_dogs_name.setBounds(353, 304, 265, 20);
                                 pTables.add(l_dog_dogs_name);
 
-                                JTextField t_dog_dogs_name = new JTextField();
-                                t_dog_dogs_name.setFont(bodyFont);
-                                t_dog_dogs_name.setForeground(lockedGray);
-                                t_dog_dogs_name.setBorder(border);
-                                t_dog_dogs_name.setBounds(353, 328, 265, 40);
-                                t_dog_dogs_name.setBackground(backgroundGray);
-                                t_dog_dogs_name.setEnabled(false);
-                                pTables.add(t_dog_dogs_name);
+                                t_dog_name = new JTextField();
+                                t_dog_name.setFont(bodyFont);
+                                t_dog_name.setForeground(lockedGray);
+                                t_dog_name.setBorder(border);
+                                t_dog_name.setBounds(353, 328, 265, 40);
+                                t_dog_name.setBackground(backgroundGray);
+                                t_dog_name.setEnabled(false);
+                                pTables.add(t_dog_name);
 
                                 JLabel l_dog_place_of_birth = new JLabel("Current Place of Birth");
                                 l_dog_place_of_birth.setFont(labelFont);
@@ -1182,7 +1259,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_place_of_birth.setBounds(64, 392, 265, 20);
                                 pTables.add(l_dog_place_of_birth);
 
-                                JTextField t_dog_place_of_birth = new JTextField();
+                                t_dog_place_of_birth = new JTextField();
                                 t_dog_place_of_birth.setFont(bodyFont);
                                 t_dog_place_of_birth.setForeground(lockedGray);
                                 t_dog_place_of_birth.setBorder(border);
@@ -1197,14 +1274,14 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_date_of_birth.setBounds(353, 392, 265, 20);
                                 pTables.add(l_dog_date_of_birth);
 
-                                JTextField dc_dog_date_of_birth = new JTextField();
-                                dc_dog_date_of_birth.setFont(bodyFont);
-                                dc_dog_date_of_birth.setForeground(lockedGray);
-                                dc_dog_date_of_birth.setBorder(border);
-                                dc_dog_date_of_birth.setBounds(353, 416, 265, 40);
-                                dc_dog_date_of_birth.setBackground(backgroundGray);
-                                dc_dog_date_of_birth.setEnabled(false);
-                                pTables.add(dc_dog_date_of_birth);
+                                t_date_of_birth = new JTextField();
+                                t_date_of_birth.setFont(bodyFont);
+                                t_date_of_birth.setForeground(lockedGray);
+                                t_date_of_birth.setBorder(border);
+                                t_date_of_birth.setBounds(353, 416, 265, 40);
+                                t_date_of_birth.setBackground(backgroundGray);
+                                t_date_of_birth.setEnabled(false);
+                                pTables.add(t_date_of_birth);
 
                                 JLabel l_dog_born_in_litter = new JLabel("Current Born in Litter");
                                 l_dog_born_in_litter.setFont(labelFont);
@@ -1212,7 +1289,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_born_in_litter.setBounds(64, 480, 265, 20);
                                 pTables.add(l_dog_born_in_litter);
 
-                                JTextField t_dog_born_in_litter = new JTextField();
+                                t_dog_born_in_litter = new JTextField();
                                 t_dog_born_in_litter.setFont(bodyFont);
                                 t_dog_born_in_litter.setForeground(lockedGray);
                                 t_dog_born_in_litter.setBorder(border);
@@ -1227,27 +1304,27 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_gender_mf.setBounds(64, 566, 265, 20);
                                 pTables.add(l_dog_gender_mf);
 
-                                ButtonGroup bg_dog_group = new ButtonGroup();
+                                bg_group = new ButtonGroup();
 
-                                JCheckBox c_dog_female = new JCheckBox();
-                                c_dog_female.setFont(bodyFont);
-                                c_dog_female.setForeground(black);
-                                c_dog_female.setBounds(64, 592, 90, 20);
-                                c_dog_female.setText("Female");
-                                c_dog_female.setBackground(null);
-                                c_dog_female.setEnabled(false);
-                                bg_dog_group.add(c_dog_female);
-                                pTables.add(c_dog_female);
+                                rb_dog_female = new JRadioButton();
+                                rb_dog_female.setFont(bodyFont);
+                                rb_dog_female.setForeground(black);
+                                rb_dog_female.setBounds(64, 592, 90, 20);
+                                rb_dog_female.setText("Female");
+                                rb_dog_female.setBackground(null);
+                                rb_dog_female.setEnabled(false);
+                                bg_group.add(rb_dog_female);
+                                pTables.add(rb_dog_female);
 
-                                JCheckBox c_dog_male = new JCheckBox();
-                                c_dog_male.setFont(bodyFont);
-                                c_dog_male.setForeground(black);
-                                c_dog_male.setBounds(211, 592, 80, 20);
-                                c_dog_male.setText("Male");
-                                c_dog_male.setBackground(null);
-                                c_dog_male.setEnabled(false);
-                                bg_dog_group.add(c_dog_male);
-                                pTables.add(c_dog_male);
+                                rb_dog_male = new JRadioButton();
+                                rb_dog_male.setFont(bodyFont);
+                                rb_dog_male.setForeground(black);
+                                rb_dog_male.setBounds(211, 592, 80, 20);
+                                rb_dog_male.setText("Male");
+                                rb_dog_male.setBackground(null);
+                                rb_dog_male.setEnabled(false);
+                                bg_group.add(rb_dog_male);
+                                pTables.add(rb_dog_male);
 
                                 JLabel l_dog_other_details = new JLabel("Current Details");
                                 l_dog_other_details.setFont(labelFont);
@@ -1255,15 +1332,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_other_details.setBounds(64, 640, 265, 20);
                                 pTables.add(l_dog_other_details);
 
-                                JTextArea t_dog_other_details = new JTextArea();
-                                t_dog_other_details.setLineWrap(true);
-                                t_dog_other_details.setFont(bodyFont);
-                                t_dog_other_details.setForeground(lockedGray);
-                                t_dog_other_details.setBorder(border);
-                                t_dog_other_details.setBounds(64, 664, 554, 139);
-                                t_dog_other_details.setBackground(backgroundGray);
-                                t_dog_other_details.setEnabled(false);
-                                pTables.add(t_dog_other_details);
+                                t_other_details = new JTextArea();
+                                t_other_details.setLineWrap(true);
+                                t_other_details.setFont(bodyFont);
+                                t_other_details.setForeground(lockedGray);
+                                t_other_details.setBorder(border);
+                                t_other_details.setBounds(64, 664, 554, 139);
+                                t_other_details.setBackground(backgroundGray);
+                                t_other_details.setEnabled(false);
+                                pTables.add(t_other_details);
 
                                 JLabel l_dog_update = new JLabel("New Information");
                                 l_dog_update.setFont(subtitleFont);
@@ -1277,12 +1354,12 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_name_update.setBounds(64, 883, 200, 20);
                                 pTables.add(l_dog_name_update);
 
-                                JTextField t_dog_name_update = new JTextField();
-                                t_dog_name_update.setFont(bodyFont);
-                                t_dog_name_update.setForeground(black);
-                                t_dog_name_update.setBorder(border);
-                                t_dog_name_update.setBounds(64, 907, 265, 40);
-                                pTables.add(t_dog_name_update);
+                                t_dogs_name_update = new JTextField();
+                                t_dogs_name_update.setFont(bodyFont);
+                                t_dogs_name_update.setForeground(black);
+                                t_dogs_name_update.setBorder(border);
+                                t_dogs_name_update.setBounds(64, 907, 265, 40);
+                                pTables.add(t_dogs_name_update);
 
                                 JLabel l_dog_place_of_birth_update = new JLabel("New Place of Birth");
                                 l_dog_place_of_birth_update.setFont(labelFont);
@@ -1290,7 +1367,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_place_of_birth_update.setBounds(353, 883, 200, 20);
                                 pTables.add(l_dog_place_of_birth_update);
 
-                                JTextField t_dog_place_of_birth_update = new JTextField();
+                                t_dog_place_of_birth_update = new JTextField();
                                 t_dog_place_of_birth_update.setFont(bodyFont);
                                 t_dog_place_of_birth_update.setForeground(black);
                                 t_dog_place_of_birth_update.setBorder(border);
@@ -1303,11 +1380,11 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_date_of_birth_update.setBounds(64, 971, 200, 20);
                                 pTables.add(l_dog_date_of_birth_update);
 
-                                JDateChooser dc_dog_date_of_birth_update = new JDateChooser("yyyy-MM-dd", "yyyy-MM-dd", '_');
-                                dc_dog_date_of_birth_update.setFont(bodyFont);
-                                dc_dog_date_of_birth_update.setForeground(black);
-                                dc_dog_date_of_birth_update.setBounds(64, 995, 265, 40);
-                                pTables.add(dc_dog_date_of_birth_update);
+                                dc_date_of_birth_update = new JDateChooser("yyyy-MM-dd", "yyyy-MM-dd", '_');
+                                dc_date_of_birth_update.setFont(bodyFont);
+                                dc_date_of_birth_update.setForeground(black);
+                                dc_date_of_birth_update.setBounds(64, 995, 265, 40);
+                                pTables.add(dc_date_of_birth_update);
 
                                 JLabel l_dog_born_in_litter_update = new JLabel("New Born in Litter");
                                 l_dog_born_in_litter_update.setFont(labelFont);
@@ -1315,11 +1392,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_born_in_litter_update.setBounds(353, 971, 200, 20);
                                 pTables.add(l_dog_born_in_litter_update);
 
-                                JComboBox cb_dog_born_in_litter_update = new JComboBox();  // falta agregar las litters con la tabla litters
+                                cb_dog_born_in_litter_update = new JComboBox();
                                 cb_dog_born_in_litter_update.setFont(bodyFont);
                                 cb_dog_born_in_litter_update.setForeground(black);
                                 cb_dog_born_in_litter_update.setBounds(353,995,265,40);
                                 cb_dog_born_in_litter_update.setBackground(Color.WHITE);
+                                cb_data = Read.getLitterID();
+                                for (String item : cb_data) {
+                                    cb_dog_born_in_litter_update.addItem(item);
+                                }
                                 pTables.add(cb_dog_born_in_litter_update);
 
                                 JLabel l_dog_gender_mf_update = new JLabel("New Dog's Gender");
@@ -1328,25 +1409,25 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_gender_mf_update.setBounds(64, 1059, 130, 20);
                                 pTables.add(l_dog_gender_mf_update);
 
-                                ButtonGroup bg_dog_group_update = new ButtonGroup();
+                                bg_group_update = new ButtonGroup();
 
-                                JCheckBox c_dog_female_update = new JCheckBox();
-                                c_dog_female_update.setFont(bodyFont);
-                                c_dog_female_update.setForeground(black);
-                                c_dog_female_update.setBounds(64,1083,80,20);
-                                c_dog_female_update.setText("Female");
-                                c_dog_female_update.setBackground(null);
-                                bg_dog_group_update.add(c_dog_female_update);
-                                pTables.add(c_dog_female_update);
+                                rb_dog_female_update = new JRadioButton();
+                                rb_dog_female_update.setFont(bodyFont);
+                                rb_dog_female_update.setForeground(black);
+                                rb_dog_female_update.setBounds(64,1083,80,20);
+                                rb_dog_female_update.setText("Female");
+                                rb_dog_female_update.setBackground(null);
+                                bg_group_update.add(rb_dog_female_update);
+                                pTables.add(rb_dog_female_update);
 
-                                JCheckBox c_dog_male_update = new JCheckBox();
-                                c_dog_male_update.setFont(bodyFont);
-                                c_dog_male_update.setForeground(black);
-                                c_dog_male_update.setBounds(211, 1083, 80, 20);
-                                c_dog_male_update.setText("Male");
-                                c_dog_male_update.setBackground(null);
-                                bg_dog_group_update.add(c_dog_male_update);
-                                pTables.add(c_dog_male_update);
+                                rb_dog_male_update = new JRadioButton();
+                                rb_dog_male_update.setFont(bodyFont);
+                                rb_dog_male_update.setForeground(black);
+                                rb_dog_male_update.setBounds(211, 1083, 80, 20);
+                                rb_dog_male_update.setText("Male");
+                                rb_dog_male_update.setBackground(null);
+                                bg_group_update.add(rb_dog_male_update);
+                                pTables.add(rb_dog_male_update);
 
                                 JLabel l_dog_other_details_update = new JLabel("New Details");
                                 l_dog_other_details_update.setFont(labelFont);
@@ -1354,14 +1435,14 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_other_details_update.setBounds(64, 1127, 95, 20);
                                 pTables.add(l_dog_other_details_update);
 
-                                JPlaceholderTextArea t_dog_other_details_update = new JPlaceholderTextArea("e.g. Is very playful");
-                                t_dog_other_details_update.setLineWrap(true);
-                                t_dog_other_details_update.setFont(bodyFont);
-                                t_dog_other_details_update.setForeground(black);
-                                t_dog_other_details_update.setBorder(border);
-                                t_dog_other_details_update.setBounds(64, 1151, 554, 139);
-                                t_dog_other_details_update.setEnabled(false);
-                                pTables.add(t_dog_other_details_update);
+                                pt_other_details_update = new JPlaceholderTextArea("e.g. Is very playful");
+                                pt_other_details_update.setLineWrap(true);
+                                pt_other_details_update.setFont(bodyFont);
+                                pt_other_details_update.setForeground(black);
+                                pt_other_details_update.setBorder(border);
+                                pt_other_details_update.setBounds(64, 1151, 554, 139);
+                                pt_other_details_update.setEnabled(false);
+                                pTables.add(pt_other_details_update);
 
                                 b_submit.setBounds(64, 1314, 554, 40);
                                 pTables.add(b_submit);
@@ -1398,11 +1479,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_id.setBounds(64, 304, 200, 20);
                                 pTables.add(l_litter_id);
 
-                                JComboBox cb_litter_id = new JComboBox();
+                                cb_litter_id = new JComboBox();
                                 cb_litter_id.setFont(bodyFont);
                                 cb_litter_id.setForeground(black);
                                 cb_litter_id.setBounds(64, 328, 554, 40);
                                 cb_litter_id.setBackground(Color.WHITE);
+                                cb_data = Read.getLitterID();
+                                for (String item : cb_data) {
+                                    cb_litter_id.addItem(item);
+                                }
                                 pTables.add(cb_litter_id);
 
                                 JLabel l_litter_sire_dog_id = new JLabel("Current Sire Dog ID");
@@ -1411,14 +1496,14 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_sire_dog_id.setBounds(64, 392, 265, 20);
                                 pTables.add(l_litter_sire_dog_id);
 
-                                JTextField t_litter_sire_dog_id = new JTextField();
-                                t_litter_sire_dog_id.setFont(bodyFont);
-                                t_litter_sire_dog_id.setForeground(lockedGray);
-                                t_litter_sire_dog_id.setBorder(border);
-                                t_litter_sire_dog_id.setBounds(64,415,265,40);
-                                t_litter_sire_dog_id.setBackground(backgroundGray);
-                                t_litter_sire_dog_id.setEnabled(false);
-                                pTables.add(t_litter_sire_dog_id);
+                                t_sire_dog_id = new JTextField();
+                                t_sire_dog_id.setFont(bodyFont);
+                                t_sire_dog_id.setForeground(lockedGray);
+                                t_sire_dog_id.setBorder(border);
+                                t_sire_dog_id.setBounds(64,415,265,40);
+                                t_sire_dog_id.setBackground(backgroundGray);
+                                t_sire_dog_id.setEnabled(false);
+                                pTables.add(t_sire_dog_id);
 
                                 JLabel l_litter_dam_dog_id = new JLabel("Current Dam Dog ID");
                                 l_litter_dam_dog_id.setFont(labelFont);
@@ -1426,14 +1511,14 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_dam_dog_id.setBounds(353, 392, 265, 20);
                                 pTables.add(l_litter_dam_dog_id);
 
-                                JTextField t_litter_dam_dog_id = new JTextField();
-                                t_litter_dam_dog_id.setFont(bodyFont);
-                                t_litter_dam_dog_id.setForeground(lockedGray);
-                                t_litter_dam_dog_id.setBorder(border);
-                                t_litter_dam_dog_id.setBounds(353,415,265,40);
-                                t_litter_dam_dog_id.setBackground(backgroundGray);
-                                t_litter_dam_dog_id.setEnabled(false);
-                                pTables.add(t_litter_dam_dog_id);
+                                t_dam_dog_id = new JTextField();
+                                t_dam_dog_id.setFont(bodyFont);
+                                t_dam_dog_id.setForeground(lockedGray);
+                                t_dam_dog_id.setBorder(border);
+                                t_dam_dog_id.setBounds(353,415,265,40);
+                                t_dam_dog_id.setBackground(backgroundGray);
+                                t_dam_dog_id.setEnabled(false);
+                                pTables.add(t_dam_dog_id);
 
                                 JLabel l_litter_place_of_birth = new JLabel("Current Litter's Place of Birth");
                                 l_litter_place_of_birth.setFont(labelFont);
@@ -1441,7 +1526,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_place_of_birth.setBounds(64, 479, 265, 20);
                                 pTables.add(l_litter_place_of_birth);
 
-                                JTextField t_litter_place_of_birth = new JTextField();
+                                t_litter_place_of_birth = new JTextField();
                                 t_litter_place_of_birth.setFont(bodyFont);
                                 t_litter_place_of_birth.setForeground(lockedGray);
                                 t_litter_place_of_birth.setBorder(border);
@@ -1456,14 +1541,14 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_date_of_birth.setBounds(353, 479, 265, 20);
                                 pTables.add(l_litter_date_of_birth);
 
-                                JTextField t_litter_date_of_birth = new JTextField();
-                                t_litter_date_of_birth.setFont(bodyFont);
-                                t_litter_date_of_birth.setForeground(lockedGray);
-                                t_litter_date_of_birth.setBorder(border);
-                                t_litter_date_of_birth.setBounds(353, 503, 265, 40);
-                                t_litter_date_of_birth.setBackground(backgroundGray);
-                                t_litter_date_of_birth.setEnabled(false);
-                                pTables.add(t_litter_date_of_birth);
+                                t_date_of_birth = new JTextField();
+                                t_date_of_birth.setFont(bodyFont);
+                                t_date_of_birth.setForeground(lockedGray);
+                                t_date_of_birth.setBorder(border);
+                                t_date_of_birth.setBounds(353, 503, 265, 40);
+                                t_date_of_birth.setBackground(backgroundGray);
+                                t_date_of_birth.setEnabled(false);
+                                pTables.add(t_date_of_birth);
 
                                 JLabel l_litter_other_details = new JLabel("Current Details");
                                 l_litter_other_details.setFont(labelFont);
@@ -1471,15 +1556,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_other_details.setBounds(64, 567, 265, 20);
                                 pTables.add(l_litter_other_details);
 
-                                JTextArea t_litter_other_details = new JTextArea();
-                                t_litter_other_details.setLineWrap(true);
-                                t_litter_other_details.setFont(bodyFont);
-                                t_litter_other_details.setForeground(lockedGray);
-                                t_litter_other_details.setBorder(border);
-                                t_litter_other_details.setBounds(64, 591, 554, 139);
-                                t_litter_other_details.setBackground(backgroundGray);
-                                t_litter_other_details.setEnabled(false);
-                                pTables.add(t_litter_other_details);
+                                t_other_details = new JTextArea();
+                                t_other_details.setLineWrap(true);
+                                t_other_details.setFont(bodyFont);
+                                t_other_details.setForeground(lockedGray);
+                                t_other_details.setBorder(border);
+                                t_other_details.setBounds(64, 591, 554, 139);
+                                t_other_details.setBackground(backgroundGray);
+                                t_other_details.setEnabled(false);
+                                pTables.add(t_other_details);
 
                                 JLabel l_litter_update = new JLabel("New Information");
                                 l_litter_update.setFont(subtitleFont);
@@ -1493,12 +1578,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_sire_dog_id_update.setBounds(64, 810, 265, 20);
                                 pTables.add(l_litter_sire_dog_id_update);
 
-                                JComboBox cb_litter_sire_dog_id_update = new JComboBox();  // falta agregar las dogs con la tabla dogs
-                                cb_litter_sire_dog_id_update.setFont(bodyFont);
-                                cb_litter_sire_dog_id_update.setForeground(black);
-                                cb_litter_sire_dog_id_update.setBounds(64,834,265,40);
-                                cb_litter_sire_dog_id_update.setBackground(Color.WHITE);
-                                pTables.add(cb_litter_sire_dog_id_update);
+                                cb_sire_dog_id_update = new JComboBox();
+                                cb_sire_dog_id_update.setFont(bodyFont);
+                                cb_sire_dog_id_update.setForeground(black);
+                                cb_sire_dog_id_update.setBounds(64,834,265,40);
+                                cb_sire_dog_id_update.setBackground(Color.WHITE);
+                                cb_data = Read.getDogID();
+                                for (String item : cb_data) {
+                                    cb_sire_dog_id_update.addItem(item);
+                                }
+                                pTables.add(cb_sire_dog_id_update);
 
                                 JLabel l_litter_dam_dog_id_update = new JLabel("New Dam Dog ID");
                                 l_litter_dam_dog_id_update.setFont(labelFont);
@@ -1506,12 +1595,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_dam_dog_id_update.setBounds(353, 810, 265, 20);
                                 pTables.add(l_litter_dam_dog_id_update);
 
-                                JComboBox cb_litter_dam_dog_id_update = new JComboBox();  // falta agregar las dogs con la tabla dogs
-                                cb_litter_dam_dog_id_update.setFont(bodyFont);
-                                cb_litter_dam_dog_id_update.setForeground(black);
-                                cb_litter_dam_dog_id_update.setBounds(353,834,265,40);
-                                cb_litter_dam_dog_id_update.setBackground(Color.WHITE);
-                                pTables.add(cb_litter_dam_dog_id_update);
+                                cb_dam_dog_id_update = new JComboBox();
+                                cb_dam_dog_id_update.setFont(bodyFont);
+                                cb_dam_dog_id_update.setForeground(black);
+                                cb_dam_dog_id_update.setBounds(353,834,265,40);
+                                cb_dam_dog_id_update.setBackground(Color.WHITE);
+                                cb_data = Read.getDogID();
+                                for (String item : cb_data) {
+                                    cb_dam_dog_id_update.addItem(item);
+                                }
+                                pTables.add(cb_dam_dog_id_update);
 
                                 JLabel l_litter_place_of_birth_update = new JLabel("New Place of Birth");
                                 l_litter_place_of_birth_update.setFont(labelFont);
@@ -1519,7 +1612,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_place_of_birth_update.setBounds(64, 890, 265, 20);
                                 pTables.add(l_litter_place_of_birth_update);
 
-                                JTextField t_litter_place_of_birth_update = new JTextField();
+                                t_litter_place_of_birth_update = new JTextField();
                                 t_litter_place_of_birth_update.setFont(bodyFont);
                                 t_litter_place_of_birth_update.setForeground(black);
                                 t_litter_place_of_birth_update.setBorder(border);
@@ -1532,12 +1625,12 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_litter_date_of_birth_update.setBounds(353, 890, 265, 20);
                                 pTables.add(l_litter_date_of_birth_update);
 
-                                JDateChooser t_litter_date_of_birth_update = new JDateChooser("yyyy-MM-dd", "yyyy-MM-dd", '_');
-                                t_litter_date_of_birth_update.setFont(bodyFont);
-                                t_litter_date_of_birth_update.setForeground(black);
-                                t_litter_date_of_birth_update.setBounds(353,914,265,40);
-                                t_litter_date_of_birth_update.setBackground(Color.WHITE);
-                                pTables.add(t_litter_date_of_birth_update);
+                                dc_date_of_birth_update = new JDateChooser("yyyy-MM-dd", "yyyy-MM-dd", '_');
+                                dc_date_of_birth_update.setFont(bodyFont);
+                                dc_date_of_birth_update.setForeground(black);
+                                dc_date_of_birth_update.setBounds(353,914,265,40);
+                                dc_date_of_birth_update.setBackground(Color.WHITE);
+                                pTables.add(dc_date_of_birth_update);
 
                                 JLabel l_litter_other_details_update = new JLabel("New Details");
                                 l_litter_other_details_update.setFont(labelFont);
@@ -1588,11 +1681,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_id.setBounds(64, 304, 200, 20);
                                 pTables.add(l_relationship_id);
 
-                                JComboBox cb_relationship_id = new JComboBox();  // falta agregar las relationships con la tabla relationships
+                                cb_relationship_id = new JComboBox();
                                 cb_relationship_id.setFont(bodyFont);
                                 cb_relationship_id.setForeground(black);
                                 cb_relationship_id.setBounds(64,328,265,40);
                                 cb_relationship_id.setBackground(Color.WHITE);
+                                cb_data = Read.getRelationshipID();
+                                for (String item : cb_data) {
+                                    cb_relationship_id.addItem(item);
+                                }
                                 pTables.add(cb_relationship_id);
 
                                 JLabel l_relationship_code = new JLabel("Current Relationship Code");
@@ -1601,7 +1698,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_code.setBounds(353, 304, 265, 20);
                                 pTables.add(l_relationship_code);
 
-                                JTextField t_relationship_code = new JTextField();
+                                t_relationship_code = new JTextField();
                                 t_relationship_code.setFont(bodyFont);
                                 t_relationship_code.setForeground(lockedGray);
                                 t_relationship_code.setBorder(border);
@@ -1616,14 +1713,14 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_sire_dog_id.setBounds(64, 392, 265, 20);
                                 pTables.add(l_relationship_sire_dog_id);
 
-                                JTextField t_relationship_sire_dog_id = new JTextField();
-                                t_relationship_sire_dog_id.setFont(bodyFont);
-                                t_relationship_sire_dog_id.setForeground(lockedGray);
-                                t_relationship_sire_dog_id.setBorder(border);
-                                t_relationship_sire_dog_id.setBounds(64,416,265,40);
-                                t_relationship_sire_dog_id.setBackground(backgroundGray);
-                                t_relationship_sire_dog_id.setEnabled(false);
-                                pTables.add(t_relationship_sire_dog_id);
+                                t_sire_dog_id = new JTextField();
+                                t_sire_dog_id.setFont(bodyFont);
+                                t_sire_dog_id.setForeground(lockedGray);
+                                t_sire_dog_id.setBorder(border);
+                                t_sire_dog_id.setBounds(64,416,265,40);
+                                t_sire_dog_id.setBackground(backgroundGray);
+                                t_sire_dog_id.setEnabled(false);
+                                pTables.add(t_sire_dog_id);
 
                                 JLabel l_relationship_dam_dog_id = new JLabel("Current Dog 2 ID");
                                 l_relationship_dam_dog_id.setFont(labelFont);
@@ -1631,14 +1728,14 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_dam_dog_id.setBounds(353, 392, 265, 20);
                                 pTables.add(l_relationship_dam_dog_id);
 
-                                JTextField t_relationship_dam_dog_id = new JTextField();
-                                t_relationship_dam_dog_id.setFont(bodyFont);
-                                t_relationship_dam_dog_id.setForeground(lockedGray);
-                                t_relationship_dam_dog_id.setBorder(border);
-                                t_relationship_dam_dog_id.setBounds(353,416,265,40);
-                                t_relationship_dam_dog_id.setBackground(backgroundGray);
-                                t_relationship_dam_dog_id.setEnabled(false);
-                                pTables.add(t_relationship_dam_dog_id);
+                                t_dam_dog_id = new JTextField();
+                                t_dam_dog_id.setFont(bodyFont);
+                                t_dam_dog_id.setForeground(lockedGray);
+                                t_dam_dog_id.setBorder(border);
+                                t_dam_dog_id.setBounds(353,416,265,40);
+                                t_dam_dog_id.setBackground(backgroundGray);
+                                t_dam_dog_id.setEnabled(false);
+                                pTables.add(t_dam_dog_id);
 
                                 JLabel l_relationship_other_details = new JLabel("Current Details");
                                 l_relationship_other_details.setFont(labelFont);
@@ -1646,15 +1743,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_other_details.setBounds(64, 480, 265, 20);
                                 pTables.add(l_relationship_other_details);
 
-                                JTextArea t_relationship_other_details = new JTextArea();
-                                t_relationship_other_details.setLineWrap(true);
-                                t_relationship_other_details.setFont(bodyFont);
-                                t_relationship_other_details.setForeground(lockedGray);
-                                t_relationship_other_details.setBorder(border);
-                                t_relationship_other_details.setBounds(64, 504, 554, 139);
-                                t_relationship_other_details.setBackground(backgroundGray);
-                                t_relationship_other_details.setEnabled(false);
-                                pTables.add(t_relationship_other_details);
+                                t_other_details = new JTextArea();
+                                t_other_details.setLineWrap(true);
+                                t_other_details.setFont(bodyFont);
+                                t_other_details.setForeground(lockedGray);
+                                t_other_details.setBorder(border);
+                                t_other_details.setBounds(64, 504, 554, 139);
+                                t_other_details.setBackground(backgroundGray);
+                                t_other_details.setEnabled(false);
+                                pTables.add(t_other_details);
 
                                 JLabel l_relationship_update = new JLabel("New Information");
                                 l_relationship_update.setFont(subtitleFont);
@@ -1668,12 +1765,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_code_update.setBounds(64, 723, 265, 20);
                                 pTables.add(l_relationship_code_update);
 
-                                JComboBox t_relationship_code_update = new JComboBox();  // falta agregar las relationship_types con la tabla relationship_types
-                                t_relationship_code_update.setFont(bodyFont);
-                                t_relationship_code_update.setForeground(black);
-                                t_relationship_code_update.setBounds(64,747,554,40);
-                                t_relationship_code_update.setBackground(Color.WHITE);
-                                pTables.add(t_relationship_code_update);
+                                cb_relationship_code_update = new JComboBox();
+                                cb_relationship_code_update.setFont(bodyFont);
+                                cb_relationship_code_update.setForeground(black);
+                                cb_relationship_code_update.setBounds(64,747,554,40);
+                                cb_relationship_code_update.setBackground(Color.WHITE);
+                                cb_data = Read.getRelationshipCode();
+                                for (String item : cb_data) {
+                                    cb_relationship_code_update.addItem(item);
+                                }
+                                pTables.add(cb_relationship_code_update);
 
                                 JLabel l_relationship_sire_dog_id_update = new JLabel("New Dog 1 ID");
                                 l_relationship_sire_dog_id_update.setFont(labelFont);
@@ -1681,12 +1782,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_sire_dog_id_update.setBounds(64, 803, 265, 20);
                                 pTables.add(l_relationship_sire_dog_id_update);
 
-                                JComboBox cb_relationship_sire_dog_id_update = new JComboBox();  // falta agregar las dogs con la tabla dogs
-                                cb_relationship_sire_dog_id_update.setFont(bodyFont);
-                                cb_relationship_sire_dog_id_update.setForeground(black);
-                                cb_relationship_sire_dog_id_update.setBounds(64,827,265,40);
-                                cb_relationship_sire_dog_id_update.setBackground(Color.WHITE);
-                                pTables.add(cb_relationship_sire_dog_id_update);
+                                cb_sire_dog_id_update = new JComboBox();
+                                cb_sire_dog_id_update.setFont(bodyFont);
+                                cb_sire_dog_id_update.setForeground(black);
+                                cb_sire_dog_id_update.setBounds(64,827,265,40);
+                                cb_sire_dog_id_update.setBackground(Color.WHITE);
+                                cb_data = Read.getDogID();
+                                for (String item : cb_data) {
+                                    cb_sire_dog_id_update.addItem(item);
+                                }
+                                pTables.add(cb_sire_dog_id_update);
 
                                 JLabel l_relationship_dam_dog_id_update = new JLabel("New Dog 2 ID");
                                 l_relationship_dam_dog_id_update.setFont(labelFont);
@@ -1694,12 +1799,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_dam_dog_id_update.setBounds(353, 803, 265, 20);
                                 pTables.add(l_relationship_dam_dog_id_update);
 
-                                JComboBox cb_relationship_dam_dog_id_update = new JComboBox();  // falta agregar las dogs con la tabla dogs
-                                cb_relationship_dam_dog_id_update.setFont(bodyFont);
-                                cb_relationship_dam_dog_id_update.setForeground(black);
-                                cb_relationship_dam_dog_id_update.setBounds(353,827,265,40);
-                                cb_relationship_dam_dog_id_update.setBackground(Color.WHITE);
-                                pTables.add(cb_relationship_dam_dog_id_update);
+                                cb_dam_dog_id_update = new JComboBox();  // falta agregar las dogs con la tabla dogs
+                                cb_dam_dog_id_update.setFont(bodyFont);
+                                cb_dam_dog_id_update.setForeground(black);
+                                cb_dam_dog_id_update.setBounds(353,827,265,40);
+                                cb_dam_dog_id_update.setBackground(Color.WHITE);
+                                cb_data = Read.getDogID();
+                                for (String item : cb_data) {
+                                    cb_dam_dog_id_update.addItem(item);
+                                }
+                                pTables.add(cb_dam_dog_id_update);
 
                                 JLabel l_relationship_other_details_update = new JLabel("New Details");
                                 l_relationship_other_details_update.setFont(labelFont);
@@ -1707,13 +1816,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_other_details_update.setBounds(64, 881, 265, 20);
                                 pTables.add(l_relationship_other_details_update);
 
-                                JPlaceholderTextArea t_relationship_other_details_update = new JPlaceholderTextArea("e.g. The dogs are siblings");
-                                t_relationship_other_details_update.setLineWrap(true);
-                                t_relationship_other_details_update.setFont(bodyFont);
-                                t_relationship_other_details_update.setForeground(black);
-                                t_relationship_other_details_update.setBorder(border);
-                                t_relationship_other_details_update.setBounds(64,905,554,139);
-                                pTables.add(t_relationship_other_details_update);
+                                pt_other_details_update = new JPlaceholderTextArea("e.g. The dogs are siblings");
+                                pt_other_details_update.setLineWrap(true);
+                                pt_other_details_update.setFont(bodyFont);
+                                pt_other_details_update.setForeground(black);
+                                pt_other_details_update.setBorder(border);
+                                pt_other_details_update.setBounds(64,905,554,139);
+                                pTables.add(pt_other_details_update);
 
                                 b_submit.setBounds(64, 1072, 554, 40);
                                 pTables.add(b_submit);
@@ -1750,12 +1859,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_type_id.setBounds(64, 304, 200, 20);
                                 pTables.add(l_relationship_type_id);
 
-                                JComboBox cb_relationship_type_id = new JComboBox();  // falta agregar las relationship_types con la tabla relationship_types
-                                cb_relationship_type_id.setFont(bodyFont);
-                                cb_relationship_type_id.setForeground(black);
-                                cb_relationship_type_id.setBounds(64,328,554,40);
-                                cb_relationship_type_id.setBackground(Color.WHITE);
-                                pTables.add(cb_relationship_type_id);
+                                cb_relationship_code = new JComboBox();
+                                cb_relationship_code.setFont(bodyFont);
+                                cb_relationship_code.setForeground(black);
+                                cb_relationship_code.setBounds(64,328,554,40);
+                                cb_relationship_code.setBackground(Color.WHITE);
+                                cb_data = Read.getRelationshipCode();
+                                for (String item : cb_data) {
+                                    cb_relationship_code.addItem(item);
+                                }
+                                pTables.add(cb_relationship_code);
 
                                 JLabel l_relationship_details = new JLabel("Current Details");
                                 l_relationship_details.setFont(labelFont);
@@ -1763,15 +1876,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_details.setBounds(64, 392, 265, 20);
                                 pTables.add(l_relationship_details);
 
-                                JTextArea t_relationship_details = new JTextArea();
-                                t_relationship_details.setLineWrap(true);
-                                t_relationship_details.setFont(bodyFont);
-                                t_relationship_details.setForeground(lockedGray);
-                                t_relationship_details.setBorder(border);
-                                t_relationship_details.setBounds(64, 416, 554, 139);
-                                t_relationship_details.setBackground(backgroundGray);
-                                t_relationship_details.setEnabled(false);
-                                pTables.add(t_relationship_details);
+                                t_relationships_description = new JTextArea();
+                                t_relationships_description.setLineWrap(true);
+                                t_relationships_description.setFont(bodyFont);
+                                t_relationships_description.setForeground(lockedGray);
+                                t_relationships_description.setBorder(border);
+                                t_relationships_description.setBounds(64, 416, 554, 139);
+                                t_relationships_description.setBackground(backgroundGray);
+                                t_relationships_description.setEnabled(false);
+                                pTables.add(t_relationships_description);
 
                                 JLabel l_relationship_type_update = new JLabel("New Information");
                                 l_relationship_type_update.setFont(subtitleFont);
@@ -1785,13 +1898,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_details_update.setBounds(64, 635, 265, 20);
                                 pTables.add(l_relationship_details_update);
 
-                                JPlaceholderTextArea t_relationship_details_update = new JPlaceholderTextArea("e.g. Siblings");
-                                t_relationship_details_update.setLineWrap(true);
-                                t_relationship_details_update.setFont(bodyFont);
-                                t_relationship_details_update.setForeground(black);
-                                t_relationship_details_update.setBorder(border);
-                                t_relationship_details_update.setBounds(64,659,554,139);
-                                pTables.add(t_relationship_details_update);
+                                pt_relationships_description_update = new JPlaceholderTextArea("e.g. Siblings");
+                                pt_relationships_description_update.setLineWrap(true);
+                                pt_relationships_description_update.setFont(bodyFont);
+                                pt_relationships_description_update.setForeground(black);
+                                pt_relationships_description_update.setBorder(border);
+                                pt_relationships_description_update.setBounds(64,659,554,139);
+                                pTables.add(pt_relationships_description_update);
 
                                 b_submit.setBounds(64, 822, 554, 40);
                                 pTables.add(b_submit);
@@ -1828,11 +1941,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_health_record_id.setBounds(64, 304, 200, 20);
                                 pTables.add(l_health_record_id);
 
-                                JComboBox cb_health_record_id = new JComboBox();  // falta agregar las health_records con la tabla health_records
+                                cb_health_record_id = new JComboBox();
                                 cb_health_record_id.setFont(bodyFont);
                                 cb_health_record_id.setForeground(black);
                                 cb_health_record_id.setBounds(64,328,265,40);
                                 cb_health_record_id.setBackground(Color.WHITE);
+                                cb_data = Read.getHealthRecordID();
+                                for (String item : cb_data) {
+                                    cb_health_record_id.addItem(item);
+                                }
                                 pTables.add(cb_health_record_id);
 
                                 JLabel l_health_record_vet_id = new JLabel("Current Vet ID");
@@ -1841,14 +1958,14 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_health_record_vet_id.setBounds(353, 304, 265, 20);
                                 pTables.add(l_health_record_vet_id);
 
-                                JTextField t_health_record_vet_id = new JTextField();
-                                t_health_record_vet_id.setFont(bodyFont);
-                                t_health_record_vet_id.setForeground(lockedGray);
-                                t_health_record_vet_id.setBorder(border);
-                                t_health_record_vet_id.setBounds(353,328,265,40);
-                                t_health_record_vet_id.setBackground(backgroundGray);
-                                t_health_record_vet_id.setEnabled(false);
-                                pTables.add(t_health_record_vet_id);
+                                t_vet_id = new JTextField();
+                                t_vet_id.setFont(bodyFont);
+                                t_vet_id.setForeground(lockedGray);
+                                t_vet_id.setBorder(border);
+                                t_vet_id.setBounds(353,328,265,40);
+                                t_vet_id.setBackground(backgroundGray);
+                                t_vet_id.setEnabled(false);
+                                pTables.add(t_vet_id);
 
                                 JLabel l_health_record_dog_id = new JLabel("Current Dog ID");
                                 l_health_record_dog_id.setFont(labelFont);
@@ -1856,14 +1973,14 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_health_record_dog_id.setBounds(64, 392, 265, 20);
                                 pTables.add(l_health_record_dog_id);
 
-                                JTextField t_health_record_dog_id = new JTextField();
-                                t_health_record_dog_id.setFont(bodyFont);
-                                t_health_record_dog_id.setForeground(lockedGray);
-                                t_health_record_dog_id.setBorder(border);
-                                t_health_record_dog_id.setBounds(64,416,554,40);
-                                t_health_record_dog_id.setBackground(backgroundGray);
-                                t_health_record_dog_id.setEnabled(false);
-                                pTables.add(t_health_record_dog_id);
+                                t_dog_id = new JTextField();
+                                t_dog_id.setFont(bodyFont);
+                                t_dog_id.setForeground(lockedGray);
+                                t_dog_id.setBorder(border);
+                                t_dog_id.setBounds(64,416,554,40);
+                                t_dog_id.setBackground(backgroundGray);
+                                t_dog_id.setEnabled(false);
+                                pTables.add(t_dog_id);
 
                                 JLabel l_health_record_summary = new JLabel("Current Summary");
                                 l_health_record_summary.setFont(labelFont);
@@ -1871,15 +1988,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_health_record_summary.setBounds(64, 480, 265, 20);
                                 pTables.add(l_health_record_summary);
 
-                                JTextArea t_health_record_summary = new JTextArea();
-                                t_health_record_summary.setLineWrap(true);
-                                t_health_record_summary.setFont(bodyFont);
-                                t_health_record_summary.setForeground(lockedGray);
-                                t_health_record_summary.setBorder(border);
-                                t_health_record_summary.setBounds(64, 504, 554, 139);
-                                t_health_record_summary.setBackground(backgroundGray);
-                                t_health_record_summary.setEnabled(false);
-                                pTables.add(t_health_record_summary);
+                                t_summary = new JTextArea();
+                                t_summary.setLineWrap(true);
+                                t_summary.setFont(bodyFont);
+                                t_summary.setForeground(lockedGray);
+                                t_summary.setBorder(border);
+                                t_summary.setBounds(64, 504, 554, 139);
+                                t_summary.setBackground(backgroundGray);
+                                t_summary.setEnabled(false);
+                                pTables.add(t_summary);
 
                                 JLabel l_health_record_details = new JLabel("Current Details");
                                 l_health_record_details.setFont(labelFont);
@@ -1887,15 +2004,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_health_record_details.setBounds(64, 658, 265, 20);
                                 pTables.add(l_health_record_details);
 
-                                JTextArea t_health_record_details = new JTextArea();
-                                t_health_record_details.setLineWrap(true);
-                                t_health_record_details.setFont(bodyFont);
-                                t_health_record_details.setForeground(lockedGray);
-                                t_health_record_details.setBorder(border);
-                                t_health_record_details.setBounds(64, 680, 554, 139);
-                                t_health_record_details.setBackground(backgroundGray);
-                                t_health_record_details.setEnabled(false);
-                                pTables.add(t_health_record_details);
+                                t_other_details = new JTextArea();
+                                t_other_details.setLineWrap(true);
+                                t_other_details.setFont(bodyFont);
+                                t_other_details.setForeground(lockedGray);
+                                t_other_details.setBorder(border);
+                                t_other_details.setBounds(64, 680, 554, 139);
+                                t_other_details.setBackground(backgroundGray);
+                                t_other_details.setEnabled(false);
+                                pTables.add(t_other_details);
 
                                 JLabel l_health_record_update = new JLabel("New Information");
                                 l_health_record_update.setFont(subtitleFont);
@@ -1909,12 +2026,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_health_record_vet_id_update.setBounds(64, 898, 265, 20);
                                 pTables.add(l_health_record_vet_id_update);
 
-                                JComboBox cb_health_record_vet_id_update = new JComboBox();  // falta agregar las vets con la tabla vets
-                                cb_health_record_vet_id_update.setFont(bodyFont);
-                                cb_health_record_vet_id_update.setForeground(black);
-                                cb_health_record_vet_id_update.setBounds(64,922,265,40);
-                                cb_health_record_vet_id_update.setBackground(Color.WHITE);
-                                pTables.add(cb_health_record_vet_id_update);
+                                cb_vet_id_update = new JComboBox();
+                                cb_vet_id_update.setFont(bodyFont);
+                                cb_vet_id_update.setForeground(black);
+                                cb_vet_id_update.setBounds(64,922,265,40);
+                                cb_vet_id_update.setBackground(Color.WHITE);
+                                cb_data = Read.getVetID();
+                                for (String item : cb_data) {
+                                    cb_vet_id_update.addItem(item);
+                                }
+                                pTables.add(cb_vet_id_update);
 
                                 JLabel l_health_record_dog_id_update = new JLabel("New Dog ID");
                                 l_health_record_dog_id_update.setFont(labelFont);
@@ -1922,12 +2043,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_health_record_dog_id_update.setBounds(353, 898, 265, 20);
                                 pTables.add(l_health_record_dog_id_update);
 
-                                JComboBox cb_health_record_dog_id_update = new JComboBox();  // falta agregar las dogs con la tabla dogs
-                                cb_health_record_dog_id_update.setFont(bodyFont);
-                                cb_health_record_dog_id_update.setForeground(black);
-                                cb_health_record_dog_id_update.setBounds(353,922,265,40);
-                                cb_health_record_dog_id_update.setBackground(Color.WHITE);
-                                pTables.add(cb_health_record_dog_id_update);
+                                cb_dog_id_update = new JComboBox();
+                                cb_dog_id_update.setFont(bodyFont);
+                                cb_dog_id_update.setForeground(black);
+                                cb_dog_id_update.setBounds(353,922,265,40);
+                                cb_dog_id_update.setBackground(Color.WHITE);
+                                cb_data = Read.getDogID();
+                                for (String item : cb_data) {
+                                    cb_dog_id_update.addItem(item);
+                                }
+                                pTables.add(cb_dog_id_update);
 
                                 JLabel l_health_record_summary_update = new JLabel("New Summary");
                                 l_health_record_summary_update.setFont(labelFont);
@@ -1935,13 +2060,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_health_record_summary_update.setBounds(64, 978, 265, 20);
                                 pTables.add(l_health_record_summary_update);
 
-                                JPlaceholderTextArea t_health_record_summary_update = new JPlaceholderTextArea("e.g. The was administered the vaccines");
-                                t_health_record_summary_update.setLineWrap(true);
-                                t_health_record_summary_update.setFont(bodyFont);
-                                t_health_record_summary_update.setForeground(black);
-                                t_health_record_summary_update.setBorder(border);
-                                t_health_record_summary_update.setBounds(64,1002,554,139);
-                                pTables.add(t_health_record_summary_update);
+                                pt_summary_update = new JPlaceholderTextArea("e.g. The was administered the vaccines");
+                                pt_summary_update.setLineWrap(true);
+                                pt_summary_update.setFont(bodyFont);
+                                pt_summary_update.setForeground(black);
+                                pt_summary_update.setBorder(border);
+                                pt_summary_update.setBounds(64,1002,554,139);
+                                pTables.add(pt_summary_update);
 
                                 JLabel l_health_record_details_update = new JLabel("New Details");
                                 l_health_record_details_update.setFont(labelFont);
@@ -1949,13 +2074,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_health_record_details_update.setBounds(64, 1148, 265, 20);
                                 pTables.add(l_health_record_details_update);
 
-                                JPlaceholderTextArea t_health_record_details_update = new JPlaceholderTextArea("e.g. The dog is healthy");
-                                t_health_record_details_update.setLineWrap(true);
-                                t_health_record_details_update.setFont(bodyFont);
-                                t_health_record_details_update.setForeground(black);
-                                t_health_record_details_update.setBorder(border);
-                                t_health_record_details_update.setBounds(64,1172,554,139);
-                                pTables.add(t_health_record_details_update);
+                                pt_details_update = new JPlaceholderTextArea("e.g. The dog is healthy");
+                                pt_details_update.setLineWrap(true);
+                                pt_details_update.setFont(bodyFont);
+                                pt_details_update.setForeground(black);
+                                pt_details_update.setBorder(border);
+                                pt_details_update.setBounds(64,1172,554,139);
+                                pTables.add(pt_details_update);
 
                                 b_submit.setBounds(64, 1336, 554, 40);
                                 pTables.add(b_submit);
@@ -1992,12 +2117,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_common_problem_code.setBounds(64, 304, 200, 20);
                                 pTables.add(l_common_problem_code);
 
-                                JComboBox cb_common_problem_code = new JComboBox();  // falta agregar las common_problems con la tabla common_problems
-                                cb_common_problem_code.setFont(bodyFont);
-                                cb_common_problem_code.setForeground(black);
-                                cb_common_problem_code.setBounds(64,328,554,40);
-                                cb_common_problem_code.setBackground(Color.WHITE);
-                                pTables.add(cb_common_problem_code);
+                                cb_problem_code = new JComboBox();
+                                cb_problem_code.setFont(bodyFont);
+                                cb_problem_code.setForeground(black);
+                                cb_problem_code.setBounds(64,328,554,40);
+                                cb_problem_code.setBackground(Color.WHITE);
+                                cb_data = Read.getProblemCode();
+                                for (String item : cb_data) {
+                                    cb_problem_code.addItem(item);
+                                }
+                                pTables.add(cb_problem_code);
 
                                 JLabel l_common_problem_description = new JLabel("Current Description");
                                 l_common_problem_description.setFont(labelFont);
@@ -2005,15 +2134,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_common_problem_description.setBounds(64, 392, 265, 20);
                                 pTables.add(l_common_problem_description);
 
-                                JTextArea t_common_problem_description = new JTextArea();
-                                t_common_problem_description.setLineWrap(true);
-                                t_common_problem_description.setFont(bodyFont);
-                                t_common_problem_description.setForeground(lockedGray);
-                                t_common_problem_description.setBorder(border);
-                                t_common_problem_description.setBounds(64, 416, 554, 139);
-                                t_common_problem_description.setBackground(backgroundGray);
-                                t_common_problem_description.setEnabled(false);
-                                pTables.add(t_common_problem_description);
+                                t_problem_description = new JTextArea();
+                                t_problem_description.setLineWrap(true);
+                                t_problem_description.setFont(bodyFont);
+                                t_problem_description.setForeground(lockedGray);
+                                t_problem_description.setBorder(border);
+                                t_problem_description.setBounds(64, 416, 554, 139);
+                                t_problem_description.setBackground(backgroundGray);
+                                t_problem_description.setEnabled(false);
+                                pTables.add(t_problem_description);
 
                                 JLabel l_common_problem_update = new JLabel("New Information");
                                 l_common_problem_update.setFont(subtitleFont);
@@ -2027,13 +2156,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_common_problem_description_update.setBounds(64, 635, 265, 20);
                                 pTables.add(l_common_problem_description_update);
 
-                                JPlaceholderTextArea t_common_problem_description_update = new JPlaceholderTextArea("e.g. Fever: The dog has high temperature, coughing, and runny nose");
-                                t_common_problem_description_update.setLineWrap(true);
-                                t_common_problem_description_update.setFont(bodyFont);
-                                t_common_problem_description_update.setForeground(black);
-                                t_common_problem_description_update.setBorder(border);
-                                t_common_problem_description_update.setBounds(64,659,554,139);
-                                pTables.add(t_common_problem_description_update);
+                                pt_problem_description_update = new JPlaceholderTextArea("e.g. Fever: The dog has high temperature, coughing, and runny nose");
+                                pt_problem_description_update.setLineWrap(true);
+                                pt_problem_description_update.setFont(bodyFont);
+                                pt_problem_description_update.setForeground(black);
+                                pt_problem_description_update.setBorder(border);
+                                pt_problem_description_update.setBounds(64,659,554,139);
+                                pTables.add(pt_problem_description_update);
 
                                 b_submit.setBounds(64, 822, 554, 40);
                                 pTables.add(b_submit);
@@ -2070,12 +2199,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_problem_problem_code.setBounds(64, 304, 200, 20);
                                 pTables.add(l_dog_problem_problem_code);
 
-                                JComboBox cb_dog_problem_problem_code = new JComboBox();  // falta agregar las common_problems con la tabla common_problems
-                                cb_dog_problem_problem_code.setFont(bodyFont);
-                                cb_dog_problem_problem_code.setForeground(black);
-                                cb_dog_problem_problem_code.setBounds(64,328,265,40);
-                                cb_dog_problem_problem_code.setBackground(Color.WHITE);
-                                pTables.add(cb_dog_problem_problem_code);
+                                cb_problem_code = new JComboBox();
+                                cb_problem_code.setFont(bodyFont);
+                                cb_problem_code.setForeground(black);
+                                cb_problem_code.setBounds(64,328,265,40);
+                                cb_problem_code.setBackground(Color.WHITE);
+                                cb_data = Read.getDogID();
+                                for (String item : cb_data) {
+                                    cb_problem_code.addItem(item);
+                                }
+                                pTables.add(cb_problem_code);
 
                                 JLabel l_dog_problem_health_record_id = new JLabel("Current Health Record ID");
                                 l_dog_problem_health_record_id.setFont(labelFont);
@@ -2083,14 +2216,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_problem_health_record_id.setBounds(353, 304, 265, 20);
                                 pTables.add(l_dog_problem_health_record_id);
 
-                                JTextField t_dog_problem_health_record_id = new JTextField();
-                                t_dog_problem_health_record_id.setFont(bodyFont);
-                                t_dog_problem_health_record_id.setForeground(lockedGray);
-                                t_dog_problem_health_record_id.setBorder(border);
-                                t_dog_problem_health_record_id.setBounds(353,328,265,40);
-                                t_dog_problem_health_record_id.setBackground(backgroundGray);
-                                t_dog_problem_health_record_id.setEnabled(false);
-                                pTables.add(t_dog_problem_health_record_id);
+                                cb_health_record_id = new JComboBox();
+                                cb_health_record_id.setFont(bodyFont);
+                                cb_health_record_id.setForeground(black);
+                                cb_health_record_id.setBounds(353,328,265,40);
+                                cb_health_record_id.setBackground(Color.WHITE);
+                                cb_data = Read.getHealthRecordID();
+                                for (String item : cb_data) {
+                                    cb_health_record_id.addItem(item);
+                                }
+                                pTables.add(cb_health_record_id);
 
                                 JLabel l_dog_problem_treatment = new JLabel("Current Treatment");
                                 l_dog_problem_treatment.setFont(labelFont);
@@ -2098,15 +2233,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_problem_treatment.setBounds(64, 392, 265, 20);
                                 pTables.add(l_dog_problem_treatment);
 
-                                JTextArea t_dog_problem_treatment = new JTextArea();
-                                t_dog_problem_treatment.setLineWrap(true);
-                                t_dog_problem_treatment.setFont(bodyFont);
-                                t_dog_problem_treatment.setForeground(lockedGray);
-                                t_dog_problem_treatment.setBorder(border);
-                                t_dog_problem_treatment.setBounds(64, 416, 554, 139);
-                                t_dog_problem_treatment.setBackground(backgroundGray);
-                                t_dog_problem_treatment.setEnabled(false);
-                                pTables.add(t_dog_problem_treatment);
+                                t_problem_treatment = new JTextArea();
+                                t_problem_treatment.setLineWrap(true);
+                                t_problem_treatment.setFont(bodyFont);
+                                t_problem_treatment.setForeground(lockedGray);
+                                t_problem_treatment.setBorder(border);
+                                t_problem_treatment.setBounds(64, 416, 554, 139);
+                                t_problem_treatment.setBackground(backgroundGray);
+                                t_problem_treatment.setEnabled(false);
+                                pTables.add(t_problem_treatment);
 
                                 JLabel l_dog_problem_details = new JLabel("Current Details");
                                 l_dog_problem_details.setFont(labelFont);
@@ -2114,15 +2249,15 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_problem_details.setBounds(64, 568, 265, 20);
                                 pTables.add(l_dog_problem_details);
 
-                                JTextArea t_dog_problem_details = new JTextArea();
-                                t_dog_problem_details.setLineWrap(true);
-                                t_dog_problem_details.setFont(bodyFont);
-                                t_dog_problem_details.setForeground(lockedGray);
-                                t_dog_problem_details.setBorder(border);
-                                t_dog_problem_details.setBounds(64, 592, 554, 139);
-                                t_dog_problem_details.setBackground(backgroundGray);
-                                t_dog_problem_details.setEnabled(false);
-                                pTables.add(t_dog_problem_details);
+                                t_problem_details = new JTextArea();
+                                t_problem_details.setLineWrap(true);
+                                t_problem_details.setFont(bodyFont);
+                                t_problem_details.setForeground(lockedGray);
+                                t_problem_details.setBorder(border);
+                                t_problem_details.setBounds(64, 592, 554, 139);
+                                t_problem_details.setBackground(backgroundGray);
+                                t_problem_details.setEnabled(false);
+                                pTables.add(t_problem_details);
 
                                 JLabel l_dog_problem_update = new JLabel("New Information");
                                 l_dog_problem_update.setFont(subtitleFont);
@@ -2136,12 +2271,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_problem_health_record_id_update.setBounds(64, 810, 265, 20);
                                 pTables.add(l_dog_problem_health_record_id_update);
 
-                                JComboBox cb_dog_problem_health_record_id_update = new JComboBox();  // falta agregar las health_records con la tabla health_records
-                                cb_dog_problem_health_record_id_update.setFont(bodyFont);
-                                cb_dog_problem_health_record_id_update.setForeground(black);
-                                cb_dog_problem_health_record_id_update.setBounds(64,834,554,40);
-                                cb_dog_problem_health_record_id_update.setBackground(Color.WHITE);
-                                pTables.add(cb_dog_problem_health_record_id_update);
+                                cb_health_record_id_update = new JComboBox();
+                                cb_health_record_id_update.setFont(bodyFont);
+                                cb_health_record_id_update.setForeground(black);
+                                cb_health_record_id_update.setBounds(64,834,554,40);
+                                cb_health_record_id_update.setBackground(Color.WHITE);
+                                cb_data = Read.getHealthRecordID();
+                                for (String item : cb_data) {
+                                    cb_health_record_id_update.addItem(item);
+                                }
+                                pTables.add(cb_health_record_id_update);
 
                                 JLabel l_dog_problem_treatment_update = new JLabel("New Treatment");
                                 l_dog_problem_treatment_update.setFont(labelFont);
@@ -2149,13 +2288,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_problem_treatment_update.setBounds(64, 890, 265, 20);
                                 pTables.add(l_dog_problem_treatment_update);
 
-                                JPlaceholderTextArea t_dog_problem_treatment_update = new JPlaceholderTextArea("e.g. The dog was given antibiotics");
-                                t_dog_problem_treatment_update.setLineWrap(true);
-                                t_dog_problem_treatment_update.setFont(bodyFont);
-                                t_dog_problem_treatment_update.setForeground(black);
-                                t_dog_problem_treatment_update.setBorder(border);
-                                t_dog_problem_treatment_update.setBounds(64,914,554,139);
-                                pTables.add(t_dog_problem_treatment_update);
+                                pt_problem_treatment_update = new JPlaceholderTextArea("e.g. The dog was given antibiotics");
+                                pt_problem_treatment_update.setLineWrap(true);
+                                pt_problem_treatment_update.setFont(bodyFont);
+                                pt_problem_treatment_update.setForeground(black);
+                                pt_problem_treatment_update.setBorder(border);
+                                pt_problem_treatment_update.setBounds(64,914,554,139);
+                                pTables.add(pt_problem_treatment_update);
 
                                 JLabel l_dog_problem_details_update = new JLabel("New Details");
                                 l_dog_problem_details_update.setFont(labelFont);
@@ -2163,13 +2302,13 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_dog_problem_details_update.setBounds(64, 1060, 265, 20);
                                 pTables.add(l_dog_problem_details_update);
 
-                                JPlaceholderTextArea t_dog_problem_details_update = new JPlaceholderTextArea("e.g. The dog is healthy");
-                                t_dog_problem_details_update.setLineWrap(true);
-                                t_dog_problem_details_update.setFont(bodyFont);
-                                t_dog_problem_details_update.setForeground(black);
-                                t_dog_problem_details_update.setBorder(border);
-                                t_dog_problem_details_update.setBounds(64,1084,554,139);
-                                pTables.add(t_dog_problem_details_update);
+                                pt_other_details_update = new JPlaceholderTextArea("e.g. The dog is healthy");
+                                pt_other_details_update.setLineWrap(true);
+                                pt_other_details_update.setFont(bodyFont);
+                                pt_other_details_update.setForeground(black);
+                                pt_other_details_update.setBorder(border);
+                                pt_other_details_update.setBounds(64,1084,554,139);
+                                pTables.add(pt_other_details_update);
 
                                 b_submit.setBounds(64, 1248, 554, 40);
                                 pTables.add(b_submit);
@@ -2203,7 +2342,110 @@ public class MainFrame extends JFrame implements ActionListener {
             }
         }
         if (e.getSource() == b_submit){
-
+            try {
+                switch (panel) {
+                    case "create":
+                        switch (table) {
+                            case "vets":
+                                vet_id = Integer.parseInt(t_vet_id.getText());
+                                vet_name = t_vet_name.getText();
+                                other_details = pt_other_details.getText();
+                                Create.createVet(vet_id, vet_name, other_details);
+                                break;
+                            case "dogs":
+                                dogs_id = Integer.parseInt(t_dog_id.getText());
+                                dogs_name = t_dog_name.getText();
+                                place_of_birth = t_dog_place_of_birth.getText();
+                                date_of_birth = String.valueOf(dc_date_of_birth.getDate().getYear() + 1900) + "-" + String.valueOf(dc_date_of_birth.getDate().getMonth()) + "-" + String.valueOf(dc_date_of_birth.getDate().getDay());
+                                litter_id = Integer.parseInt(cb_dog_born_in_litter.getSelectedItem().toString());
+                                if (rb_dog_female.isSelected()) {
+                                    dogs_gender = "F";
+                                }
+                                if (rb_dog_male.isSelected()) {
+                                    dogs_gender = "M";
+                                }
+                                other_details = pt_other_details.getText();
+                                Create.createDog(dogs_id, dogs_name, place_of_birth, date_of_birth,
+                                        litter_id, dogs_gender, other_details);
+                                break;
+                            case "litters":
+                                break;
+                            case "relationships":
+                                break;
+                            case "relationship_types":
+                                break;
+                            case "health_records":
+                                break;
+                            case "dog_problems":
+                                break;
+                            case "common_problem":
+                                break;
+                        }
+                        break;
+                    case "read":
+                        switch (table) {
+                            case "vets":
+                                break;
+                            case "dogs":
+                                break;
+                            case "litters":
+                                break;
+                            case "relationships":
+                                break;
+                            case "relationship_types":
+                                break;
+                            case "health_records":
+                                break;
+                            case "dog_problems":
+                                break;
+                            case "common_problem":
+                                break;
+                        }
+                        break;
+                    case "update":
+                        switch (table) {
+                            case "vets":
+                                break;
+                            case "dogs":
+                                break;
+                            case "litters":
+                                break;
+                            case "relationships":
+                                break;
+                            case "relationship_types":
+                                break;
+                            case "health_records":
+                                break;
+                            case "dog_problems":
+                                break;
+                            case "common_problem":
+                                break;
+                        }
+                        break;
+                    case "delete":
+                        switch (table) {
+                            case "vets":
+                                break;
+                            case "dogs":
+                                break;
+                            case "litters":
+                                break;
+                            case "relationships":
+                                break;
+                            case "relationship_types":
+                                break;
+                            case "health_records":
+                                break;
+                            case "dog_problems":
+                                break;
+                            case "common_problem":
+                                break;
+                        }
+                        break;
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Please fill or check all the fields", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 }

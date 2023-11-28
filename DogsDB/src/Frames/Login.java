@@ -49,19 +49,19 @@ public class Login extends JFrame implements ActionListener{
         tUser = new JTextField();
         tUser.setFont(bodyFont);
         tUser.setForeground(black);
-        tUser.setBounds(175,174,205,30);
+        tUser.setBounds(175,174,200,30);
         add(tUser);
 
         lPassword = new JLabel("Password:");
         lPassword.setFont(bodyFont);
         lPassword.setForeground(black);
-        lPassword.setBounds(100,224,100,30);
+        lPassword.setBounds(80,224,100,30);
         add(lPassword);
 
         tPassword = new JPasswordField();
         tPassword.setFont(bodyFont);
         tPassword.setForeground(black);
-        tPassword.setBounds(200,224,200,30);
+        tPassword.setBounds(175,224,200,30);
         add(tPassword);
 
         bLogin = new JButton("Login");
