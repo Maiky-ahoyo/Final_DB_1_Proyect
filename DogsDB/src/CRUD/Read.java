@@ -483,4 +483,23 @@ public class Read {
         }
         return data;
     }
+
+    public static ArrayList<String> getDogProblems_HealthRecordsID(int problem_code) throws SQLException {
+        ArrayList<String> data = new ArrayList<>();
+        try {
+            connection = DriverManager.getConnection(URL, user, password);
+            statement = connection.createStatement();
+            query = "SELECT problem_description FROM common_problems WHERE problem_code = " + problem_code;
+            rs = statement.executeQuery(query);
+            data = new ArrayList<>();
+            while (rs.next()) {
+                data.add(rs.getString("problem_description"));
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            connection.close();
+        }
+        return data;
+    }
 }

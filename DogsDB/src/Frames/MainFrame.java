@@ -33,7 +33,7 @@ public class MainFrame extends JFrame implements ActionListener {
     private Color orange = new Color(248, 127, 39);
     private Color black = new Color(15, 23, 42);
     private Color textGray = new Color(71, 85, 105);
-    private Color lockedGray = new Color(119, 141, 170);
+    private Color lockedGray = new Color(30, 36, 44);
     private Color borderGray = new Color(119, 141, 170);
     private Font titleFont = Inter_Semibold.deriveFont(30f);
     private Font subtitleFont = Inter_Semibold.deriveFont(24f);
