@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import CRUD.*;
@@ -63,12 +64,14 @@ public class MainFrame extends JFrame implements ActionListener {
     private JComboBox cb_dog_born_in_litter, cb_sire_dog_id, cb_dam_dog_id, cb_vet_id, cb_dog_id, cb_health_record_id,
             cb_problem_code, cb_dog_born_in_litter_update, cb_litter_id, cb_sire_dog_id_update, cb_dam_dog_id_update,
             cb_relationship_id, cb_relationship_code, cb_relationship_code_update, cb_vet_id_update, cb_dog_id_update,
-            cb_health_record_id_update;
-    private String dogs_name, place_of_birth, date_of_birth, dogs_gender, other_details, vet_name;
+            cb_health_record_id_update, cb_dog_1_id, cb_dog_2_id, cb_dog_1_id_update, cb_dog_2_id_update;
+    private String dogs_name, place_of_birth, dogs_gender, other_details, vet_name, relationship_description, treatment,
+            summary, problem_description;
     private ArrayList<String> cb_data;
-    private int dogs_id, litter_id, sire_dog_id, dam_dog_id, vet_id, health_record_id, problem_code, relationship_id,
+    private int dogs_id, litter_id, sire_dog_id, dam_dog_id, dog_1_id, dog_2_id, vet_id, health_record_id, problem_code, relationship_id,
             relationship_code, dog_id_update, litter_id_update, sire_dog_id_update, dam_dog_id_update, vet_id_update,
             health_record_id_update, problem_code_update, relationship_id_update, relationship_code_update;
+    private Date date_of_birth, date_of_birth_update, date_of_problem, date_of_problem_update;
 
 
     public static String getTable() {
@@ -382,6 +385,8 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 pTables.removeAll();
 
+                                b_submit.removeActionListener(this);
+
                                 lTitle.setBounds(64,90,100,38);
                                 pTables.add(lTitle);
 
@@ -446,6 +451,8 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.setPreferredSize(new Dimension (642,895));
 
                                 pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
 
                                 lTitle.setBounds(64,64,100,38);
                                 pTables.add(lTitle);
@@ -527,6 +534,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_dog_born_in_litter.addItem(item);
                                 }
+                                cb_dog_born_in_litter.setSelectedItem(null);
                                 pTables.add(cb_dog_born_in_litter);
 
                                 JLabel l_dog_gender_mf = new JLabel("Dog's Gender");
@@ -580,6 +588,8 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 pTables.removeAll();
 
+                                b_submit.removeActionListener(this);
+
                                 lTitle.setBounds(64,44,100,38);
                                 pTables.add(lTitle);
 
@@ -622,6 +632,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_sire_dog_id.addItem(item);
                                 }
+                                cb_sire_dog_id.setSelectedItem(null);
                                 pTables.add(cb_sire_dog_id);
 
                                 JLabel l_litter_dam_dog_id = new JLabel("Dam Dog ID");
@@ -639,6 +650,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_dam_dog_id.addItem(item);
                                 }
+                                cb_dam_dog_id.setSelectedItem(null);
                                 pTables.add(cb_dam_dog_id);
 
                                 JLabel l_litter_place_of_birth = new JLabel("Litter's Place of Birth");
@@ -681,6 +693,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(pt_other_details);
 
                                 b_submit.setBounds(64, 685, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -689,6 +702,8 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.setPreferredSize(new Dimension (642,700));
 
                                 pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
 
                                 lTitle.setBounds(64,40,100,38);
                                 pTables.add(lTitle);
@@ -723,12 +738,17 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_code.setBounds(353, 224, 130, 20);
                                 pTables.add(l_relationship_code);
 
-                                t_relationship_code = new JTextField();
-                                t_relationship_code.setFont(bodyFont);
-                                t_relationship_code.setForeground(black);
-                                t_relationship_code.setBorder(border);
-                                t_relationship_code.setBounds(353, 248, 265, 40);
-                                pTables.add(t_relationship_code);
+                                cb_relationship_code = new JComboBox();
+                                cb_relationship_code.setFont(bodyFont);
+                                cb_relationship_code.setForeground(black);
+                                cb_relationship_code.setBounds(353, 248, 265, 40);
+                                cb_relationship_code.setBackground(Color.WHITE);
+                                cb_data = Read.getRelationshipCode();
+                                for (String item : cb_data) {
+                                    cb_relationship_code.addItem(item);
+                                }
+                                cb_relationship_code.setSelectedItem(null);
+                                pTables.add(cb_relationship_code);
 
                                 JLabel l_relationship_sire_dog_id = new JLabel("Dog 1 ID");
                                 l_relationship_sire_dog_id.setFont(labelFont);
@@ -736,16 +756,17 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_sire_dog_id.setBounds(64, 312, 265, 20);
                                 pTables.add(l_relationship_sire_dog_id);
 
-                                cb_sire_dog_id = new JComboBox();
-                                cb_sire_dog_id.setFont(bodyFont);
-                                cb_sire_dog_id.setForeground(black);
-                                cb_sire_dog_id.setBounds(64,336,265,40);
-                                cb_sire_dog_id.setBackground(Color.WHITE);
+                                cb_dog_1_id = new JComboBox();
+                                cb_dog_1_id.setFont(bodyFont);
+                                cb_dog_1_id.setForeground(black);
+                                cb_dog_1_id.setBounds(64,336,265,40);
+                                cb_dog_1_id.setBackground(Color.WHITE);
                                 cb_data = Read.getDogID();
                                 for (String item : cb_data) {
-                                    cb_sire_dog_id.addItem(item);
+                                    cb_dog_1_id.addItem(item);
                                 }
-                                pTables.add(cb_sire_dog_id);
+                                cb_dog_1_id.setSelectedItem(null);
+                                pTables.add(cb_dog_1_id);
 
                                 JLabel l_relationship_dam_dog_id = new JLabel("Dog 2 ID");
                                 l_relationship_dam_dog_id.setFont(labelFont);
@@ -753,16 +774,17 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_dam_dog_id.setBounds(353, 312, 269, 20);
                                 pTables.add(l_relationship_dam_dog_id);
 
-                                cb_dam_dog_id = new JComboBox();
-                                cb_dam_dog_id.setFont(bodyFont);
-                                cb_dam_dog_id.setForeground(black);
-                                cb_dam_dog_id.setBounds(353,336,265,40);
-                                cb_dam_dog_id.setBackground(Color.WHITE);
+                                cb_dog_2_id = new JComboBox();
+                                cb_dog_2_id.setFont(bodyFont);
+                                cb_dog_2_id.setForeground(black);
+                                cb_dog_2_id.setBounds(353,336,265,40);
+                                cb_dog_2_id.setBackground(Color.WHITE);
                                 cb_data = Read.getDogID();
                                 for (String item : cb_data) {
-                                    cb_dam_dog_id.addItem(item);
+                                    cb_dog_2_id.addItem(item);
                                 }
-                                pTables.add(cb_dam_dog_id);
+                                cb_dog_2_id.setSelectedItem(null);
+                                pTables.add(cb_dog_2_id);
 
                                 JLabel l_relationship_other_details = new JLabel("Other Details");
                                 l_relationship_other_details.setFont(labelFont);
@@ -779,6 +801,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(pt_other_details);
 
                                 b_submit.setBounds(64, 587, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -787,6 +810,10 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.setPreferredSize(new Dimension (642,700));
 
                                 pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
+
+                                b_submit.removeActionListener(this);
 
                                 lTitle.setBounds(64,90,100,38);
                                 pTables.add(lTitle);
@@ -830,6 +857,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(pt_relationships_description);
 
                                 b_submit.setBounds(64, 549, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -838,6 +866,8 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.setPreferredSize(new Dimension (642,940));
 
                                 pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
 
                                 lTitle.setBounds(64,64,100,38);
                                 pTables.add(lTitle);
@@ -881,6 +911,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_vet_id.addItem(item);
                                 }
+                                cb_vet_id.setSelectedItem(null);
                                 pTables.add(cb_vet_id);
 
                                 JLabel l_health_record_dog_id = new JLabel("Dog ID");
@@ -898,6 +929,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_dog_id.addItem(item);
                                 }
+                                cb_dog_id.setSelectedItem(null);
                                 pTables.add(cb_dog_id);
 
                                 JLabel l_health_record_summary = new JLabel("Summary");
@@ -929,6 +961,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(pt_other_details);
 
                                 b_submit.setBounds(64, 798, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -937,6 +970,8 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.setPreferredSize(new Dimension (642,700));
 
                                 pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
 
                                 lTitle.setBounds(64,90,100,38);
                                 pTables.add(lTitle);
@@ -980,6 +1015,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(pt_problem_description);
 
                                 b_submit.setBounds(64, 549, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -988,6 +1024,8 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.setPreferredSize(new Dimension (642,860));
 
                                 pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
 
                                 lTitle.setBounds(64,64,100,38);
                                 pTables.add(lTitle);
@@ -1017,6 +1055,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_problem_code.addItem(item);
                                 }
+                                cb_problem_code.setSelectedItem(null);
                                 pTables.add(cb_problem_code);
 
                                 JLabel l_dog_problem_health_record_id = new JLabel("Health Record ID");
@@ -1034,6 +1073,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_health_record_id.addItem(item);
                                 }
+                                cb_health_record_id.setSelectedItem(null);
                                 pTables.add(cb_health_record_id);
 
                                 JLabel l_dog_problem_date_of_problem = new JLabel("Date of Problem");
@@ -1077,6 +1117,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(pt_other_details);
 
                                 b_submit.setBounds(64, 710, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -1091,6 +1132,8 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.setPreferredSize(new Dimension (642,1060));
 
                                 pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
 
                                 lTitle.setBounds(64,64,120,38);
                                 pTables.add(lTitle);
@@ -1126,6 +1169,20 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_vet_id.addItem(item);
                                 }
+                                cb_vet_id.setSelectedItem(null);
+                                cb_vet_id.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        try {
+                                            vet_id = Integer.parseInt(cb_vet_id.getSelectedItem().toString());
+                                            ArrayList<String> info = Read.getVetInfo(vet_id);
+                                            t_vet_name.setText(info.get(0));
+                                            t_other_details.setText(info.get(1));
+                                        }
+                                        catch (Exception ex) {
+                                        }
+                                    }
+                                });
                                 pTables.add(cb_vet_id);
 
                                 JLabel l_vet_name = new JLabel("Current Vet's Name");
@@ -1193,6 +1250,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(pt_other_details_update);
 
                                 b_submit.setBounds(62, 910, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -1201,6 +1259,8 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.setPreferredSize(new Dimension (642,1470));
 
                                 pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
 
                                 lTitle.setBounds(64,64,120,38);
                                 pTables.add(lTitle);
@@ -1236,6 +1296,25 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_dog_id.addItem(item);
                                 }
+                                cb_dog_id.setSelectedItem(null);
+                                cb_dog_id.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        dogs_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
+                                        ArrayList<String> info = Read.getDogInfo(dogs_id);
+                                        t_dog_name.setText(info.get(0));
+                                        t_dog_place_of_birth.setText(info.get(1));
+                                        t_date_of_birth.setText(info.get(2));
+                                        t_dog_born_in_litter.setText(info.get(3));
+                                        if (info.get(4).equals("F")) {
+                                            rb_dog_female.setSelected(true);
+                                        }
+                                        if (info.get(4).equals("M")) {
+                                            rb_dog_male.setSelected(true);
+                                        }
+                                        t_other_details.setText(info.get(5));
+                                    }
+                                });
                                 pTables.add(cb_dog_id);
 
                                 JLabel l_dog_dogs_name = new JLabel("Current Dog's Name");
@@ -1401,6 +1480,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_dog_born_in_litter_update.addItem(item);
                                 }
+                                cb_dog_born_in_litter_update.setSelectedItem(null);
                                 pTables.add(cb_dog_born_in_litter_update);
 
                                 JLabel l_dog_gender_mf_update = new JLabel("New Dog's Gender");
@@ -1445,6 +1525,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(pt_other_details_update);
 
                                 b_submit.setBounds(64, 1314, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -1453,6 +1534,8 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.setPreferredSize(new Dimension (642,1320));
 
                                 pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
 
                                 lTitle.setBounds(64,64,265,38);
                                 pTables.add(lTitle);
@@ -1488,6 +1571,23 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_litter_id.addItem(item);
                                 }
+                                cb_litter_id.setSelectedItem(null);
+                                cb_litter_id.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        try {
+                                            litter_id = Integer.parseInt(cb_litter_id.getSelectedItem().toString());
+                                            ArrayList<String> info = Read.getLitterInfo(litter_id);
+                                            t_sire_dog_id.setText(info.get(0));
+                                            t_dam_dog_id.setText(info.get(1));
+                                            t_litter_place_of_birth.setText(info.get(2));
+                                            t_date_of_birth.setText(info.get(3));
+                                            t_other_details.setText(info.get(4));
+                                        }
+                                        catch (Exception ex) {
+                                        }
+                                    }
+                                });
                                 pTables.add(cb_litter_id);
 
                                 JLabel l_litter_sire_dog_id = new JLabel("Current Sire Dog ID");
@@ -1587,6 +1687,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_sire_dog_id_update.addItem(item);
                                 }
+                                cb_sire_dog_id_update.setSelectedItem(null);
                                 pTables.add(cb_sire_dog_id_update);
 
                                 JLabel l_litter_dam_dog_id_update = new JLabel("New Dam Dog ID");
@@ -1604,6 +1705,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_dam_dog_id_update.addItem(item);
                                 }
+                                cb_dam_dog_id_update.setSelectedItem(null);
                                 pTables.add(cb_dam_dog_id_update);
 
                                 JLabel l_litter_place_of_birth_update = new JLabel("New Place of Birth");
@@ -1647,6 +1749,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(t_litter_other_details_update);
 
                                 b_submit.setBounds(64, 1164, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -1655,6 +1758,8 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.setPreferredSize(new Dimension (642,1250));
 
                                 pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
 
                                 lTitle.setBounds(64,64,265,38);
                                 pTables.add(lTitle);
@@ -1690,6 +1795,22 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_relationship_id.addItem(item);
                                 }
+                                cb_relationship_id.setSelectedItem(null);
+                                cb_relationship_id.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        try {
+                                            relationship_id = Integer.parseInt(cb_relationship_id.getSelectedItem().toString());
+                                            ArrayList<String> info = Read.getRelationshipInfo(relationship_id);
+                                            t_relationship_code.setText(info.get(0));
+                                            t_sire_dog_id.setText(info.get(1));
+                                            t_dam_dog_id.setText(info.get(2));
+                                            t_other_details.setText(info.get(3));
+                                        }
+                                        catch (Exception ex) {
+                                        }
+                                    }
+                                });
                                 pTables.add(cb_relationship_id);
 
                                 JLabel l_relationship_code = new JLabel("Current Relationship Code");
@@ -1774,6 +1895,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_relationship_code_update.addItem(item);
                                 }
+                                cb_relationship_code_update.setSelectedItem(null);
                                 pTables.add(cb_relationship_code_update);
 
                                 JLabel l_relationship_sire_dog_id_update = new JLabel("New Dog 1 ID");
@@ -1791,6 +1913,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_sire_dog_id_update.addItem(item);
                                 }
+                                cb_sire_dog_id_update.setSelectedItem(null);
                                 pTables.add(cb_sire_dog_id_update);
 
                                 JLabel l_relationship_dam_dog_id_update = new JLabel("New Dog 2 ID");
@@ -1808,6 +1931,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_dam_dog_id_update.addItem(item);
                                 }
+                                cb_dam_dog_id_update.setSelectedItem(null);
                                 pTables.add(cb_dam_dog_id_update);
 
                                 JLabel l_relationship_other_details_update = new JLabel("New Details");
@@ -1825,6 +1949,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(pt_other_details_update);
 
                                 b_submit.setBounds(64, 1072, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -1833,6 +1958,8 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.setPreferredSize(new Dimension (642,970));
 
                                 pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
 
                                 lTitle.setBounds(64,64,265,38);
                                 pTables.add(lTitle);
@@ -1868,6 +1995,19 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_relationship_code.addItem(item);
                                 }
+                                cb_relationship_code.setSelectedItem(null);
+                                cb_relationship_code.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        try {
+                                            relationship_code = Integer.parseInt(cb_relationship_code.getSelectedItem().toString());
+                                            ArrayList<String> info = Read.getRelationshipTypeInfo(relationship_code);
+                                            t_relationships_description.setText(info.get(0));
+                                        }
+                                        catch (Exception ex) {
+                                        }
+                                    }
+                                });
                                 pTables.add(cb_relationship_code);
 
                                 JLabel l_relationship_details = new JLabel("Current Details");
@@ -1907,6 +2047,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(pt_relationships_description_update);
 
                                 b_submit.setBounds(64, 822, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -1915,6 +2056,8 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.setPreferredSize(new Dimension (642,1470));
 
                                 pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
 
                                 lTitle.setBounds(64,64,265,38);
                                 pTables.add(lTitle);
@@ -1950,6 +2093,22 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_health_record_id.addItem(item);
                                 }
+                                cb_health_record_id.setSelectedItem(null);
+                                cb_health_record_id.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        try {
+                                            health_record_id = Integer.parseInt(cb_health_record_id.getSelectedItem().toString());
+                                            ArrayList<String> info = Read.getHealthRecordInfo(health_record_id);
+                                            t_vet_id.setText(info.get(0));
+                                            t_dog_id.setText(info.get(1));
+                                            t_summary.setText(info.get(2));
+                                            t_other_details.setText(info.get(3));
+                                        }
+                                        catch (Exception ex) {
+                                        }
+                                    }
+                                });
                                 pTables.add(cb_health_record_id);
 
                                 JLabel l_health_record_vet_id = new JLabel("Current Vet ID");
@@ -2035,6 +2194,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_vet_id_update.addItem(item);
                                 }
+                                cb_vet_id_update.setSelectedItem(null);
                                 pTables.add(cb_vet_id_update);
 
                                 JLabel l_health_record_dog_id_update = new JLabel("New Dog ID");
@@ -2052,6 +2212,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_dog_id_update.addItem(item);
                                 }
+                                cb_dog_id_update.setSelectedItem(null);
                                 pTables.add(cb_dog_id_update);
 
                                 JLabel l_health_record_summary_update = new JLabel("New Summary");
@@ -2083,6 +2244,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(pt_details_update);
 
                                 b_submit.setBounds(64, 1336, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -2091,6 +2253,8 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.setPreferredSize(new Dimension (642,960));
 
                                 pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
 
                                 lTitle.setBounds(64,64,265,38);
                                 pTables.add(lTitle);
@@ -2126,6 +2290,19 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_problem_code.addItem(item);
                                 }
+                                cb_problem_code.setSelectedItem(null);
+                                cb_problem_code.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        try {
+                                            problem_code = Integer.parseInt(cb_problem_code.getSelectedItem().toString());
+                                            ArrayList<String> info = Read.getCommonProblemInfo(problem_code);
+                                            t_problem_description.setText(info.get(0));
+                                        }
+                                        catch (Exception ex) {
+                                        }
+                                    }
+                                });
                                 pTables.add(cb_problem_code);
 
                                 JLabel l_common_problem_description = new JLabel("Current Description");
@@ -2165,6 +2342,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(pt_problem_description_update);
 
                                 b_submit.setBounds(64, 822, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -2173,6 +2351,8 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.setPreferredSize(new Dimension (642,1400));
 
                                 pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
 
                                 lTitle.setBounds(64,64,265,38);
                                 pTables.add(lTitle);
@@ -2208,6 +2388,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_problem_code.addItem(item);
                                 }
+                                cb_problem_code.setSelectedItem(null);
                                 pTables.add(cb_problem_code);
 
                                 JLabel l_dog_problem_health_record_id = new JLabel("Current Health Record ID");
@@ -2225,6 +2406,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_health_record_id.addItem(item);
                                 }
+                                cb_health_record_id.setSelectedItem(null);
                                 pTables.add(cb_health_record_id);
 
                                 JLabel l_dog_problem_treatment = new JLabel("Current Treatment");
@@ -2280,6 +2462,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 for (String item : cb_data) {
                                     cb_health_record_id_update.addItem(item);
                                 }
+                                cb_health_record_id_update.setSelectedItem(null);
                                 pTables.add(cb_health_record_id_update);
 
                                 JLabel l_dog_problem_treatment_update = new JLabel("New Treatment");
@@ -2311,6 +2494,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(pt_other_details_update);
 
                                 b_submit.setBounds(64, 1248, 554, 40);
+                                b_submit.addActionListener(this);
                                 pTables.add(b_submit);
 
                                 pTables.updateUI();
@@ -2351,12 +2535,17 @@ public class MainFrame extends JFrame implements ActionListener {
                                 vet_name = t_vet_name.getText();
                                 other_details = pt_other_details.getText();
                                 Create.createVet(vet_id, vet_name, other_details);
+                                t_vet_id.setText("" + Read.getMaxVetID());
+                                t_vet_name.setText(null);
+                                pt_other_details.setText(null);
                                 break;
                             case "dogs":
                                 dogs_id = Integer.parseInt(t_dog_id.getText());
                                 dogs_name = t_dog_name.getText();
                                 place_of_birth = t_dog_place_of_birth.getText();
-                                date_of_birth = String.valueOf(dc_date_of_birth.getDate().getYear() + 1900) + "-" + String.valueOf(dc_date_of_birth.getDate().getMonth()) + "-" + String.valueOf(dc_date_of_birth.getDate().getDay());
+                                date_of_birth = Date.valueOf(dc_date_of_birth.getDate().getYear() + 1900 +
+                                        "-" + dc_date_of_birth.getDate().getMonth() +
+                                        "-" + dc_date_of_birth.getDate().getDay());
                                 litter_id = Integer.parseInt(cb_dog_born_in_litter.getSelectedItem().toString());
                                 if (rb_dog_female.isSelected()) {
                                     dogs_gender = "F";
@@ -2367,38 +2556,84 @@ public class MainFrame extends JFrame implements ActionListener {
                                 other_details = pt_other_details.getText();
                                 Create.createDog(dogs_id, dogs_name, place_of_birth, date_of_birth,
                                         litter_id, dogs_gender, other_details);
+                                t_dog_id.setText("" + Read.getMaxDogID());
+                                t_dog_name.setText(null);
+                                t_dog_place_of_birth.setText(null);
+                                dc_date_of_birth.setDate(null);
+                                cb_dog_born_in_litter.setSelectedItem(null);
                                 break;
                             case "litters":
+                                litter_id = Integer.parseInt(t_litter_id.getText());
+                                sire_dog_id = Integer.parseInt(cb_sire_dog_id.getSelectedItem().toString());
+                                dam_dog_id = Integer.parseInt(cb_dam_dog_id.getSelectedItem().toString());
+                                place_of_birth = t_litter_place_of_birth.getText();
+                                date_of_birth = Date.valueOf(dc_date_of_birth.getDate().getYear() + 1900 +
+                                        "-" + dc_date_of_birth.getDate().getMonth() +
+                                        "-" + dc_date_of_birth.getDate().getDay());
+                                other_details = pt_other_details.getText();
+                                Create.createLitter(litter_id, sire_dog_id, dam_dog_id, place_of_birth,
+                                        date_of_birth, other_details);
+                                t_litter_id.setText("" + Read.getMaxLitterID());
+                                cb_sire_dog_id.setSelectedItem(null);
+                                cb_dam_dog_id.setSelectedItem(null);
+                                t_litter_place_of_birth.setText(null);
+                                dc_date_of_birth.setDate(null);
+                                pt_other_details.setText(null);
                                 break;
                             case "relationships":
+                                relationship_id = Integer.parseInt(t_relationship_id.getText());
+                                relationship_code = Integer.parseInt(cb_relationship_code.getSelectedItem().toString());
+                                dog_1_id = Integer.parseInt(cb_dog_1_id.getSelectedItem().toString());
+                                dog_2_id = Integer.parseInt(cb_dog_2_id.getSelectedItem().toString());
+                                other_details = pt_other_details.getText();
+                                Create.createRelationship(relationship_id, relationship_code, dog_1_id, dog_2_id, other_details);
+                                t_relationship_id.setText("" + Read.getMaxRelationshipID());
+                                cb_relationship_code.setSelectedItem(null);
+                                cb_dog_1_id.setSelectedItem(null);
+                                cb_dog_2_id.setSelectedItem(null);
+                                pt_other_details.setText(null);
                                 break;
                             case "relationship_types":
+                                relationship_code = Integer.parseInt(t_relationship_code.getText());
+                                relationship_description = pt_relationships_description.getText();
+                                Create.createRelationshipType(relationship_code, relationship_description);
+                                t_relationship_code.setText("" + Read.getMaxRelationshipCode());
+                                pt_relationships_description.setText(null);
                                 break;
                             case "health_records":
-                                break;
-                            case "dog_problems":
-                                break;
-                            case "common_problem":
-                                break;
-                        }
-                        break;
-                    case "read":
-                        switch (table) {
-                            case "vets":
-                                break;
-                            case "dogs":
-                                break;
-                            case "litters":
-                                break;
-                            case "relationships":
-                                break;
-                            case "relationship_types":
-                                break;
-                            case "health_records":
-                                break;
-                            case "dog_problems":
+                                health_record_id = Integer.parseInt(t_health_record_id.getText());
+                                vet_id = Integer.parseInt(cb_vet_id.getSelectedItem().toString());
+                                dogs_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
+                                summary = pt_summary.getText();
+                                other_details = pt_other_details.getText();
+                                Create.createHealthRecord(health_record_id, vet_id, dogs_id, summary, other_details);
+                                t_health_record_id.setText("" + Read.getMaxHealthRecordID());
+                                cb_vet_id.setSelectedItem(null);
+                                cb_dog_id.setSelectedItem(null);
+                                pt_summary.setText(null);
+                                pt_other_details.setText(null);
                                 break;
                             case "common_problem":
+                                problem_code = Integer.parseInt(t_problem_code.getText());
+                                problem_description = pt_problem_description.getText();
+                                Create.createCommonProblem(problem_code, problem_description);
+                                t_problem_code.setText("" + Read.getMaxProblemCode());
+                                pt_problem_description.setText(null);
+                                break;
+                            case "dog_problems":
+                                problem_code = Integer.parseInt(cb_problem_code.getSelectedItem().toString());
+                                health_record_id = Integer.parseInt(cb_health_record_id.getSelectedItem().toString());
+                                date_of_problem = Date.valueOf(dc_date_of_problem.getDate().getYear() + 1900 +
+                                        "-" + dc_date_of_problem.getDate().getMonth() +
+                                        "-" + dc_date_of_problem.getDate().getDay());
+                                treatment = pt_problem_treatment.getText();
+                                other_details = pt_other_details.getText();
+                                Create.createDogProblems(problem_code, health_record_id, date_of_problem, treatment, other_details);
+                                cb_problem_code.setSelectedItem(null);
+                                cb_health_record_id.setSelectedItem(null);
+                                dc_date_of_problem.setDate(null);
+                                pt_problem_treatment.setText(null);
+                                pt_other_details.setText(null);
                                 break;
                         }
                         break;
