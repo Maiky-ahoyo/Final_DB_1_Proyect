@@ -61,7 +61,8 @@ public class MainFrame extends JFrame implements ActionListener {
     private JTextField t_vet_id, t_vet_name, t_dog_id, t_dog_name, t_dog_place_of_birth, t_litter_id,
             t_litter_place_of_birth, t_relationship_id, t_relationship_code, t_health_record_id, t_problem_code,
             t_vet_name_update, t_dog_born_in_litter, t_date_of_birth, t_dogs_name_update, t_dog_place_of_birth_update,
-            t_sire_dog_id, t_dam_dog_id, t_litter_place_of_birth_update, t_dog_1_id, t_dog_2_id, t_date_of_problem;
+            t_sire_dog_id, t_dam_dog_id, t_litter_place_of_birth_update, t_dog_1_id, t_dog_2_id, t_date_of_problem,
+            t_owner_update;
     private JPlaceholderTextArea pt_other_details, pt_relationships_description, pt_summary, pt_problem_description,
             pt_other_details_update, pt_relationships_description_update, pt_summary_update, pt_problem_details_update,
             pt_problem_description_update, pt_problem_treatment_update, pt_problem_treatment;
@@ -75,7 +76,7 @@ public class MainFrame extends JFrame implements ActionListener {
             cb_relationship_id, cb_relationship_code, cb_relationship_code_update, cb_vet_id_update, cb_dog_id_update,
             cb_health_record_id_update, cb_dog_1_id, cb_dog_2_id, cb_dog_1_id_update, cb_dog_2_id_update;
     private String dogs_name, place_of_birth, dogs_gender, other_details, vet_name, relationship_description, treatment,
-            summary, problem_description;
+            summary, problem_description, owner_name;
     private ArrayList<String> cb_data;
     private int dogs_id, litter_id, sire_dog_id, dam_dog_id, dog_1_id, dog_2_id, vet_id, health_record_id, problem_code, relationship_id,
             relationship_code, dog_id_update, litter_id_update, sire_dog_id_update, dam_dog_id_update, vet_id_update,
@@ -275,6 +276,10 @@ public class MainFrame extends JFrame implements ActionListener {
             bRead.setBackground(Color.white);
             bUpdate.setBackground(Color.white);
             bDelete.setBackground(Color.white);
+            bAdopt.setBackground(Color.white);
+            bReturn.setBackground(Color.white);
+            bBook.setBackground(Color.white);
+
 
             pTables.setPreferredSize(new Dimension (642,700));
 
@@ -311,6 +316,9 @@ public class MainFrame extends JFrame implements ActionListener {
             bRead.setBackground(buttonGray);
             bUpdate.setBackground(Color.white);
             bDelete.setBackground(Color.white);
+            bAdopt.setBackground(Color.white);
+            bReturn.setBackground(Color.white);
+            bBook.setBackground(Color.white);
 
             pTables.setPreferredSize(new Dimension (642,700));
 
@@ -352,6 +360,9 @@ public class MainFrame extends JFrame implements ActionListener {
             bRead.setBackground(Color.white);
             bUpdate.setBackground(buttonGray);
             bDelete.setBackground(Color.white);
+            bAdopt.setBackground(Color.white);
+            bReturn.setBackground(Color.white);
+            bBook.setBackground(Color.white);
 
             pTables.setPreferredSize(new Dimension (642,700));
 
@@ -390,6 +401,9 @@ public class MainFrame extends JFrame implements ActionListener {
             bRead.setBackground(Color.white);
             bUpdate.setBackground(Color.white);
             bDelete.setBackground(buttonGray);
+            bAdopt.setBackground(Color.white);
+            bReturn.setBackground(Color.white);
+            bBook.setBackground(Color.white);
 
             pTables.setPreferredSize(new Dimension (642,700));
 
@@ -417,6 +431,97 @@ public class MainFrame extends JFrame implements ActionListener {
 
             pTables.updateUI();
             pTables.setVisible(true);
+        }
+        if (e.getSource() == bAdopt) {
+            remove(lWelcomeMessage);
+            remove(lBrunoGif);
+
+            panel = "adopt";
+
+            bCreate.setBackground(Color.white);
+            bRead.setBackground(Color.white);
+            bUpdate.setBackground(Color.white);
+            bDelete.setBackground(Color.white);
+            bAdopt.setBackground(buttonGray);
+            bReturn.setBackground(Color.white);
+            bBook.setBackground(Color.white);
+
+            pTables.setPreferredSize(new Dimension (642,700));
+
+            pTables.removeAll();
+
+            lTitle = new JLabel("Adopt Puppy");
+            lTitle.setFont(titleFont);
+            lTitle.setForeground(black);
+            lTitle.setBounds(64,110,200,38);
+            pTables.add(lTitle);
+
+            lDescription = new JLabel("Fill in the information to send a puppy to a happy home!");
+            lDescription.setFont(bodyFont);
+            lDescription.setForeground(textGray);
+            lDescription.setBounds(64,154,430,28);
+            pTables.add(lDescription);
+
+            JLabel l_dog_id = new JLabel("Dog's ID");
+            l_dog_id.setFont(labelFont);
+            l_dog_id.setForeground(black);
+            l_dog_id.setBounds(64, 206, 265, 20);
+            pTables.add(l_dog_id);
+
+            cb_dog_id = new JComboBox();
+            cb_dog_id.setFont(bodyFont);
+            cb_dog_id.setForeground(black);
+            cb_dog_id.setBounds(64, 230, 554, 40);
+            cb_dog_id.setBackground(Color.WHITE);
+            cb_data = Read.getAdoptedID();
+            for (String item : cb_data) {
+                cb_dog_id.addItem(item);
+            }
+            cb_dog_id.setSelectedItem(null);
+            cb_dog_id.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    dogs_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
+                    ArrayList<String> info = Read.getDogInfo(dogs_id);
+                    dogs_name = info.get(0);
+                    t_dog_name.setText(dogs_name);
+                }
+            });
+            pTables.add(cb_dog_id);
+
+            JLabel l_dog_name = new JLabel("Dog's Name");
+            l_dog_name.setFont(labelFont);
+            l_dog_name.setForeground(black);
+            l_dog_name.setBounds(64, 289, 200, 20);
+            pTables.add(l_dog_name);
+
+            t_dog_name = new JTextField();
+            t_dog_name.setFont(bodyFont);
+            t_dog_name.setForeground(black);
+            t_dog_name.setBackground(Color.WHITE);
+            t_dog_name.setBorder(border);
+            t_dog_name.setBounds(64, 313, 554, 40);
+            t_dog_name.setEditable(false);
+            pTables.add(t_dog_name);
+
+            JLabel l_owner_update = new JLabel("Owner's Name");
+            l_owner_update.setFont(labelFont);
+            l_owner_update.setForeground(black);
+            l_owner_update.setBounds(64, 377, 200, 20);
+            pTables.add(l_owner_update);
+
+            t_owner_update = new JTextField();
+            t_owner_update.setFont(bodyFont);
+            t_owner_update.setForeground(black);
+            t_owner_update.setBorder(border);
+            t_owner_update.setBounds(64, 401, 554, 40);
+            pTables.add(t_owner_update);
+
+            b_submit.setBounds(62, 549, 554, 40);
+            b_submit.addActionListener(this);
+            pTables.add(b_submit);
+
+            pTables.updateUI();
         }
         if ((e.getSource() == cbTables)){
             try {
@@ -1242,7 +1347,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_vet_name.setBorder(border);
                                 t_vet_name.setBounds(353, 328, 265, 40);
                                 t_vet_name.setBackground(backgroundGray);
-                                t_vet_name.setEnabled(false);
+                                t_vet_name.setEditable(false);
                                 pTables.add(t_vet_name);
 
                                 JLabel l_vet_other_details = new JLabel("Current Details");
@@ -1258,7 +1363,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_other_details.setBorder(border);
                                 t_other_details.setBounds(64, 416, 554, 139);
                                 t_other_details.setBackground(backgroundGray);
-                                t_other_details.setEnabled(false);
+                                t_other_details.setEditable(false);
                                 pTables.add(t_other_details);
 
                                 JLabel l_vet_update = new JLabel("New Information");
@@ -1374,7 +1479,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_dog_name.setBorder(border);
                                 t_dog_name.setBounds(353, 328, 265, 40);
                                 t_dog_name.setBackground(backgroundGray);
-                                t_dog_name.setEnabled(false);
+                                t_dog_name.setEditable(false);
                                 pTables.add(t_dog_name);
 
                                 JLabel l_dog_place_of_birth = new JLabel("Current Place of Birth");
@@ -1389,7 +1494,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_dog_place_of_birth.setBorder(border);
                                 t_dog_place_of_birth.setBounds(64, 416, 265, 40);
                                 t_dog_place_of_birth.setBackground(backgroundGray);
-                                t_dog_place_of_birth.setEnabled(false);
+                                t_dog_place_of_birth.setEditable(false);
                                 pTables.add(t_dog_place_of_birth);
 
                                 JLabel l_dog_date_of_birth = new JLabel("Current Date of Birth");
@@ -1404,7 +1509,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_date_of_birth.setBorder(border);
                                 t_date_of_birth.setBounds(353, 416, 265, 40);
                                 t_date_of_birth.setBackground(backgroundGray);
-                                t_date_of_birth.setEnabled(false);
+                                t_date_of_birth.setEditable(false);
                                 pTables.add(t_date_of_birth);
 
                                 JLabel l_dog_born_in_litter = new JLabel("Current Born in Litter");
@@ -1419,7 +1524,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_dog_born_in_litter.setBorder(border);
                                 t_dog_born_in_litter.setBounds(64,504,554,40);
                                 t_dog_born_in_litter.setBackground(backgroundGray);
-                                t_dog_born_in_litter.setEnabled(false);
+                                t_dog_born_in_litter.setEditable(false);
                                 pTables.add(t_dog_born_in_litter);
 
                                 JLabel l_dog_gender_mf = new JLabel("Current Dog's Gender");
@@ -1463,7 +1568,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_other_details.setBorder(border);
                                 t_other_details.setBounds(64, 664, 554, 139);
                                 t_other_details.setBackground(backgroundGray);
-                                t_other_details.setEnabled(false);
+                                t_other_details.setEditable(false);
                                 pTables.add(t_other_details);
 
                                 JLabel l_dog_update = new JLabel("New Information");
@@ -1646,7 +1751,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_sire_dog_id.setBorder(border);
                                 t_sire_dog_id.setBounds(64,415,265,40);
                                 t_sire_dog_id.setBackground(backgroundGray);
-                                t_sire_dog_id.setEnabled(false);
+                                t_sire_dog_id.setEditable(false);
                                 pTables.add(t_sire_dog_id);
 
                                 JLabel l_litter_dam_dog_id = new JLabel("Current Dam Dog ID");
@@ -1661,7 +1766,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_dam_dog_id.setBorder(border);
                                 t_dam_dog_id.setBounds(353,415,265,40);
                                 t_dam_dog_id.setBackground(backgroundGray);
-                                t_dam_dog_id.setEnabled(false);
+                                t_dam_dog_id.setEditable(false);
                                 pTables.add(t_dam_dog_id);
 
                                 JLabel l_litter_place_of_birth = new JLabel("Current Litter's Place of Birth");
@@ -1676,7 +1781,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_litter_place_of_birth.setBorder(border);
                                 t_litter_place_of_birth.setBounds(64, 503, 265, 40);
                                 t_litter_place_of_birth.setBackground(backgroundGray);
-                                t_litter_place_of_birth.setEnabled(false);
+                                t_litter_place_of_birth.setEditable(false);
                                 pTables.add(t_litter_place_of_birth);
 
                                 JLabel l_litter_date_of_birth = new JLabel("Current Litter's Date of Birth");
@@ -1691,7 +1796,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_date_of_birth.setBorder(border);
                                 t_date_of_birth.setBounds(353, 503, 265, 40);
                                 t_date_of_birth.setBackground(backgroundGray);
-                                t_date_of_birth.setEnabled(false);
+                                t_date_of_birth.setEditable(false);
                                 pTables.add(t_date_of_birth);
 
                                 JLabel l_litter_other_details = new JLabel("Current Details");
@@ -1707,7 +1812,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_other_details.setBorder(border);
                                 t_other_details.setBounds(64, 591, 554, 139);
                                 t_other_details.setBackground(backgroundGray);
-                                t_other_details.setEnabled(false);
+                                t_other_details.setEditable(false);
                                 pTables.add(t_other_details);
 
                                 JLabel l_litter_update = new JLabel("New Information");
@@ -1869,7 +1974,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_relationship_code.setBorder(border);
                                 t_relationship_code.setBounds(353, 328, 265, 40);
                                 t_relationship_code.setBackground(backgroundGray);
-                                t_relationship_code.setEnabled(false);
+                                t_relationship_code.setEditable(false);
                                 pTables.add(t_relationship_code);
 
                                 JLabel l_relationship_sire_dog_id = new JLabel("Current Dog 1 ID");
@@ -1884,7 +1989,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_dog_1_id.setBorder(border);
                                 t_dog_1_id.setBounds(64,416,265,40);
                                 t_dog_1_id.setBackground(backgroundGray);
-                                t_dog_1_id.setEnabled(false);
+                                t_dog_1_id.setEditable(false);
                                 pTables.add(t_dog_1_id);
 
                                 JLabel l_relationship_dam_dog_id = new JLabel("Current Dog 2 ID");
@@ -1899,7 +2004,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_dog_2_id.setBorder(border);
                                 t_dog_2_id.setBounds(353,416,265,40);
                                 t_dog_2_id.setBackground(backgroundGray);
-                                t_dog_2_id.setEnabled(false);
+                                t_dog_2_id.setEditable(false);
                                 pTables.add(t_dog_2_id);
 
                                 JLabel l_relationship_other_details = new JLabel("Current Details");
@@ -1915,7 +2020,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_other_details.setBorder(border);
                                 t_other_details.setBounds(64, 504, 554, 139);
                                 t_other_details.setBackground(backgroundGray);
-                                t_other_details.setEnabled(false);
+                                t_other_details.setEditable(false);
                                 pTables.add(t_other_details);
 
                                 JLabel l_relationship_update = new JLabel("New Information");
@@ -2067,7 +2172,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_relationships_description.setBorder(border);
                                 t_relationships_description.setBounds(64, 416, 554, 139);
                                 t_relationships_description.setBackground(backgroundGray);
-                                t_relationships_description.setEnabled(false);
+                                t_relationships_description.setEditable(false);
                                 pTables.add(t_relationships_description);
 
                                 JLabel l_relationship_type_update = new JLabel("New Information");
@@ -2167,7 +2272,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_vet_id.setBorder(border);
                                 t_vet_id.setBounds(353,328,265,40);
                                 t_vet_id.setBackground(backgroundGray);
-                                t_vet_id.setEnabled(false);
+                                t_vet_id.setEditable(false);
                                 pTables.add(t_vet_id);
 
                                 JLabel l_health_record_dog_id = new JLabel("Current Dog ID");
@@ -2182,7 +2287,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_dog_id.setBorder(border);
                                 t_dog_id.setBounds(64,416,554,40);
                                 t_dog_id.setBackground(backgroundGray);
-                                t_dog_id.setEnabled(false);
+                                t_dog_id.setEditable(false);
                                 pTables.add(t_dog_id);
 
                                 JLabel l_health_record_summary = new JLabel("Current Summary");
@@ -2198,7 +2303,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_summary.setBorder(border);
                                 t_summary.setBounds(64, 504, 554, 139);
                                 t_summary.setBackground(backgroundGray);
-                                t_summary.setEnabled(false);
+                                t_summary.setEditable(false);
                                 pTables.add(t_summary);
 
                                 JLabel l_health_record_details = new JLabel("Current Details");
@@ -2214,7 +2319,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_other_details.setBorder(border);
                                 t_other_details.setBounds(64, 680, 554, 139);
                                 t_other_details.setBackground(backgroundGray);
-                                t_other_details.setEnabled(false);
+                                t_other_details.setEditable(false);
                                 pTables.add(t_other_details);
 
                                 JLabel l_health_record_update = new JLabel("New Information");
@@ -2362,7 +2467,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_problem_description.setBorder(border);
                                 t_problem_description.setBounds(64, 416, 554, 139);
                                 t_problem_description.setBackground(backgroundGray);
-                                t_problem_description.setEnabled(false);
+                                t_problem_description.setEditable(false);
                                 pTables.add(t_problem_description);
 
                                 JLabel l_common_problem_update = new JLabel("New Information");
@@ -2501,7 +2606,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_date_of_problem.setBorder(border);
                                 t_date_of_problem.setBounds(64,416,554,40);
                                 t_date_of_problem.setBackground(backgroundGray);
-                                t_date_of_problem.setEnabled(false);
+                                t_date_of_problem.setEditable(false);
                                 pTables.add(t_date_of_problem);
 
                                 JLabel l_dog_problem_treatment = new JLabel("Current Treatment");
@@ -2517,7 +2622,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_problem_treatment.setBorder(border);
                                 t_problem_treatment.setBounds(64, 504, 554, 139);
                                 t_problem_treatment.setBackground(backgroundGray);
-                                t_problem_treatment.setEnabled(false);
+                                t_problem_treatment.setEditable(false);
                                 pTables.add(t_problem_treatment);
 
                                 JLabel l_dog_problem_details = new JLabel("Current Details");
@@ -2533,7 +2638,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 t_problem_details.setBorder(border);
                                 t_problem_details.setBounds(64, 680, 554, 139);
                                 t_problem_details.setBackground(backgroundGray);
-                                t_problem_details.setEnabled(false);
+                                t_problem_details.setEditable(false);
                                 pTables.add(t_problem_details);
 
                                 JLabel l_dog_problem_update = new JLabel("New Information");
@@ -3029,11 +3134,18 @@ public class MainFrame extends JFrame implements ActionListener {
                                 break;
                         }
                         break;
+                    case "adopt":
+                        dogs_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
+                        owner_name = t_owner_update.getText();
+                        Update.updateAdopted(dogs_id, owner_name);
+                        cb_dog_id.removeItem(cb_dog_id.getSelectedItem());
+                        t_dog_name.setText(null);
+                        t_owner_update.setText(null);
+
+                        break;
                 }
             } catch (Exception ex) {
-                if (!table.equals("dogs") && !panel.equals("update")) {
-                    JOptionPane.showMessageDialog(null, "Please fill in all the required fields.");
-                }
+                JOptionPane.showMessageDialog(null, "Please fill in all the required fields.");
             }
         }
     }

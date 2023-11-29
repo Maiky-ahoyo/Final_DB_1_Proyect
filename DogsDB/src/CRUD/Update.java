@@ -314,4 +314,39 @@ public class Update {
             }
         }
     }
+
+    public static void updateAdopted(int dog_id, String owner_name) {
+        try {
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL, user, password);
+            connection.setAutoCommit(false);
+            String query = "BEGIN TRANSACTION ";
+            statement = connection.prepareStatement(query);
+            statement.execute();
+
+            query = "UPDATE dogs SET adopted = true, owner = ? WHERE dog_id = ?";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, owner_name);
+            statement.setInt(2, dog_id);
+            statement.executeUpdate();
+
+            int option = JOptionPane.showConfirmDialog(null, "Do you want to save the changes?", "Save changes", JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                connection.commit();
+                JOptionPane.showMessageDialog(null, "Save complete");
+            } else {
+                connection.rollback();
+                JOptionPane.showMessageDialog(null, "Save canceled");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"There was an error saving the data");
+            System.out.println("Error: "+e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
 }
