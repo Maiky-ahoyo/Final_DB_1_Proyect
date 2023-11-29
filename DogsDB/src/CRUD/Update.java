@@ -11,7 +11,8 @@ public class Update {
     private static Connection connection;
     private static PreparedStatement statement;
 
-    public static void updateVet(int vet_id, String vet_name, String details) {
+    public static boolean updateVet(int vet_id, String vet_name, String details) {
+        boolean updated = false;
         try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(URL, user, password);
@@ -31,9 +32,11 @@ public class Update {
             if (option == JOptionPane.YES_OPTION) {
                 connection.commit();
                 JOptionPane.showMessageDialog(null, "Save complete");
+                updated = true;
             } else {
                 connection.rollback();
                 JOptionPane.showMessageDialog(null, "Save canceled");
+                updated = false;
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"There was an error saving the data");
@@ -45,9 +48,11 @@ public class Update {
                 System.out.println("Error: " + e.getMessage());
             }
         }
+        return updated;
     }
 
-    public static void updateDog(int dog_id, String dog_name, String place_of_birth, Date date_of_birth, int litter_id, String gender, String details) {
+    public static boolean updateDog(int dog_id, String dog_name, String place_of_birth, Date date_of_birth, int litter_id, String gender, String details) {
+        boolean updated = false;
         try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(URL, user, password);
@@ -72,9 +77,11 @@ public class Update {
             if (option == JOptionPane.YES_OPTION) {
                 connection.commit();
                 JOptionPane.showMessageDialog(null, "Save complete");
+                updated = true;
             } else {
                 connection.rollback();
                 JOptionPane.showMessageDialog(null, "Save canceled");
+                updated = false;
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"There was an error saving the data");
@@ -86,9 +93,11 @@ public class Update {
                 System.out.println("Error: " + e.getMessage());
             }
         }
+        return updated;
     }
 
-    public static void updateLitter(int litter_id, int sire_dog_id, int dam_dog_id, String place_of_birth, Date date_of_birth, String details) {
+    public static boolean updateLitter(int litter_id, int sire_dog_id, int dam_dog_id, String place_of_birth, Date date_of_birth, String details) {
+        boolean updated = false;
         try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(URL, user, password);
@@ -112,9 +121,11 @@ public class Update {
             if (option == JOptionPane.YES_OPTION) {
                 connection.commit();
                 JOptionPane.showMessageDialog(null, "Save complete");
+                updated = true;
             } else {
                 connection.rollback();
                 JOptionPane.showMessageDialog(null, "Save canceled");
+                updated = false;
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"There was an error saving the data");
@@ -126,9 +137,11 @@ public class Update {
                 System.out.println("Error: " + e.getMessage());
             }
         }
+        return updated;
     }
 
-    public static void updateRelationship(int relationship_id, int relationship_code, int dog_1_id, int dog_2_id, String details) {
+    public static boolean updateRelationship(int relationship_id, int relationship_code, int dog_1_id, int dog_2_id, String details) {
+        boolean updated = false;
         try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(URL, user, password);
@@ -151,9 +164,11 @@ public class Update {
             if (option == JOptionPane.YES_OPTION) {
                 connection.commit();
                 JOptionPane.showMessageDialog(null, "Save complete");
+                updated = true;
             } else {
                 connection.rollback();
                 JOptionPane.showMessageDialog(null, "Save canceled");
+                updated = false;
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"There was an error saving the data");
@@ -165,9 +180,11 @@ public class Update {
                 System.out.println("Error: " + e.getMessage());
             }
         }
+        return updated;
     }
 
-    public static void updateRelationshipType(int relationship_code, String description) {
+    public static boolean updateRelationshipType(int relationship_code, String description) {
+        boolean updated = false;
         try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(URL, user, password);
@@ -186,9 +203,11 @@ public class Update {
             if (option == JOptionPane.YES_OPTION) {
                 connection.commit();
                 JOptionPane.showMessageDialog(null, "Save complete");
+                updated = true;
             } else {
                 connection.rollback();
                 JOptionPane.showMessageDialog(null, "Save canceled");
+                updated = false;
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"There was an error saving the data");
@@ -200,9 +219,11 @@ public class Update {
                 System.out.println("Error: " + e.getMessage());
             }
         }
+        return updated;
     }
 
-    public static void updateHealthRecord(int health_record_id, int vet_id, int dog_id, String summary, String details) {
+    public static boolean updateHealthRecord(int health_record_id, int vet_id, int dog_id, String summary, String details) {
+        boolean updated = false;
         try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(URL, user, password);
@@ -225,9 +246,11 @@ public class Update {
             if (option == JOptionPane.YES_OPTION) {
                 connection.commit();
                 JOptionPane.showMessageDialog(null, "Save complete");
+                updated = true;
             } else {
                 connection.rollback();
                 JOptionPane.showMessageDialog(null, "Save canceled");
+                updated = false;
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"There was an error saving the data");
@@ -239,9 +262,11 @@ public class Update {
                 System.out.println("Error: " + e.getMessage());
             }
         }
+        return updated;
     }
 
-    public static void updateCommonProblem(int problem_code, String problem_description) {
+    public static boolean updateCommonProblem(int problem_code, String problem_description) {
+        boolean updated = false;
         try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(URL, user, password);
@@ -260,9 +285,11 @@ public class Update {
             if (option == JOptionPane.YES_OPTION) {
                 connection.commit();
                 JOptionPane.showMessageDialog(null, "Save complete");
+                updated = true;
             } else {
                 connection.rollback();
                 JOptionPane.showMessageDialog(null, "Save canceled");
+                updated = false;
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "There was an error saving the data");
@@ -274,9 +301,11 @@ public class Update {
                 System.out.println("Error: " + e.getMessage());
             }
         }
+        return updated;
     }
 
-    public static void updateDogProblems(int problem_code, int health_record_id, Date date_of_problem, String treatment, String details) {
+    public static boolean updateDogProblems(int problem_code, int health_record_id, Date date_of_problem, String treatment, String details) {
+        boolean updated = false;
         try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(URL, user, password);
@@ -299,9 +328,11 @@ public class Update {
             if (option == JOptionPane.YES_OPTION) {
                 connection.commit();
                 JOptionPane.showMessageDialog(null, "Save complete");
+                updated = true;
             } else {
                 connection.rollback();
                 JOptionPane.showMessageDialog(null, "Save canceled");
+                updated = false;
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"There was an error saving the data");
@@ -313,9 +344,11 @@ public class Update {
                 System.out.println("Error: " + e.getMessage());
             }
         }
+        return updated;
     }
 
-    public static void updateAdopted(int dog_id, String owner_name) {
+    public static boolean updateAdopted(int dog_id, String owner_name) {
+        boolean adopted = false;
         try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(URL, user, password);
@@ -334,9 +367,11 @@ public class Update {
             if (option == JOptionPane.YES_OPTION) {
                 connection.commit();
                 JOptionPane.showMessageDialog(null, "Save complete");
+                adopted = true;
             } else {
                 connection.rollback();
                 JOptionPane.showMessageDialog(null, "Save canceled");
+                adopted = false;
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"There was an error saving the data");
@@ -348,5 +383,44 @@ public class Update {
                 System.out.println("Error: " + e.getMessage());
             }
         }
+        return adopted;
+    }
+
+    public static boolean updateReturned(int dog_id) {
+        boolean returned = false;
+        try {
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL, user, password);
+            connection.setAutoCommit(false);
+            String query = "BEGIN TRANSACTION ";
+            statement = connection.prepareStatement(query);
+            statement.execute();
+
+            query = "UPDATE dogs SET adopted = false, owner = 'no owner' WHERE dog_id = ?";
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, dog_id);
+            statement.executeUpdate();
+
+            int option = JOptionPane.showConfirmDialog(null, "Do you want to save the changes?", "Save changes", JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                connection.commit();
+                JOptionPane.showMessageDialog(null, "Save complete");
+                returned = true;
+            } else {
+                connection.rollback();
+                JOptionPane.showMessageDialog(null, "Save canceled");
+                returned = false;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"There was an error saving the data");
+            System.out.println("Error: "+e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+        return returned;
     }
 }

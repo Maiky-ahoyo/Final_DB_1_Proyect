@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import CRUD.*;
 
@@ -76,12 +75,11 @@ public class MainFrame extends JFrame implements ActionListener {
             cb_relationship_id, cb_relationship_code, cb_relationship_code_update, cb_vet_id_update, cb_dog_id_update,
             cb_health_record_id_update, cb_dog_1_id, cb_dog_2_id, cb_dog_1_id_update, cb_dog_2_id_update;
     private String dogs_name, place_of_birth, dogs_gender, other_details, vet_name, relationship_description, treatment,
-            summary, problem_description, owner_name;
+            summary, problem_description, owner_name, column1, column2;
     private ArrayList<String> cb_data;
-    private int dogs_id, litter_id, sire_dog_id, dam_dog_id, dog_1_id, dog_2_id, vet_id, health_record_id, problem_code, relationship_id,
-            relationship_code, dog_id_update, litter_id_update, sire_dog_id_update, dam_dog_id_update, vet_id_update,
-            health_record_id_update, problem_code_update, relationship_id_update, relationship_code_update;
-    private java.sql.Date date_of_birth, date_of_birth_update, date_of_problem, date_of_problem_update;
+    private int dog_id, litter_id, sire_dog_id, dam_dog_id, dog_1_id, dog_2_id, vet_id, health_record_id,
+            problem_code, relationship_id, relationship_code;
+    private java.sql.Date date_of_birth, date_of_problem;
 
 
     public static String getTable() {
@@ -231,7 +229,7 @@ public class MainFrame extends JFrame implements ActionListener {
         cbTables.addItem("relationships");
         cbTables.addItem("relationship_types");
         cbTables.addItem("health_records");
-        cbTables.addItem("common_problem");
+        cbTables.addItem("common_problems");
         cbTables.addItem("dog_problems");
         cbTables.addActionListener(this);
 
@@ -481,8 +479,8 @@ public class MainFrame extends JFrame implements ActionListener {
             cb_dog_id.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    dogs_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
-                    ArrayList<String> info = Read.getDogInfo(dogs_id);
+                    dog_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
+                    ArrayList<String> info = Read.getDogInfo(dog_id);
                     dogs_name = info.get(0);
                     t_dog_name.setText(dogs_name);
                 }
@@ -516,6 +514,84 @@ public class MainFrame extends JFrame implements ActionListener {
             t_owner_update.setBorder(border);
             t_owner_update.setBounds(64, 401, 554, 40);
             pTables.add(t_owner_update);
+
+            b_submit.setBounds(62, 549, 554, 40);
+            b_submit.addActionListener(this);
+            pTables.add(b_submit);
+
+            pTables.updateUI();
+        }
+        if (e.getSource() == bReturn) {
+            remove(lWelcomeMessage);
+            remove(lBrunoGif);
+
+            panel = "return";
+
+            bCreate.setBackground(Color.white);
+            bRead.setBackground(Color.white);
+            bUpdate.setBackground(Color.white);
+            bDelete.setBackground(Color.white);
+            bAdopt.setBackground(Color.white);
+            bReturn.setBackground(buttonGray);
+            bBook.setBackground(Color.white);
+
+            pTables.setPreferredSize(new Dimension (642,700));
+
+            pTables.removeAll();
+
+            lTitle = new JLabel("Return Puppy");
+            lTitle.setFont(titleFont);
+            lTitle.setForeground(black);
+            lTitle.setBounds(64,110,200,38);
+            pTables.add(lTitle);
+
+            lDescription = new JLabel("Fill in the information to return a puppy to the shelter!");
+            lDescription.setFont(bodyFont);
+            lDescription.setForeground(textGray);
+            lDescription.setBounds(64,154,430,28);
+            pTables.add(lDescription);
+
+            JLabel l_dog_id = new JLabel("Dog's ID");
+            l_dog_id.setFont(labelFont);
+            l_dog_id.setForeground(black);
+            l_dog_id.setBounds(64, 206, 265, 20);
+            pTables.add(l_dog_id);
+
+            cb_dog_id = new JComboBox();
+            cb_dog_id.setFont(bodyFont);
+            cb_dog_id.setForeground(black);
+            cb_dog_id.setBounds(64, 230, 554, 40);
+            cb_dog_id.setBackground(Color.WHITE);
+            cb_data = Read.getReturnID();
+            for (String item : cb_data) {
+                cb_dog_id.addItem(item);
+            }
+            cb_dog_id.setSelectedItem(null);
+            cb_dog_id.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    dog_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
+                    ArrayList<String> info = Read.getDogInfo(dog_id);
+                    dogs_name = info.get(0);
+                    t_dog_name.setText(dogs_name);
+                }
+            });
+            pTables.add(cb_dog_id);
+
+            JLabel l_dog_name = new JLabel("Dog's Name");
+            l_dog_name.setFont(labelFont);
+            l_dog_name.setForeground(black);
+            l_dog_name.setBounds(64, 289, 200, 20);
+            pTables.add(l_dog_name);
+
+            t_dog_name = new JTextField();
+            t_dog_name.setFont(bodyFont);
+            t_dog_name.setForeground(black);
+            t_dog_name.setBackground(Color.WHITE);
+            t_dog_name.setBorder(border);
+            t_dog_name.setBounds(64, 313, 554, 40);
+            t_dog_name.setEditable(false);
+            pTables.add(t_dog_name);
 
             b_submit.setBounds(62, 549, 554, 40);
             b_submit.addActionListener(this);
@@ -1116,7 +1192,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 pTables.updateUI();
                                 break;
-                            case "common_problem":
+                            case "common_problems":
                                 pTables.setPreferredSize(new Dimension (642,700));
 
                                 pTables.removeAll();
@@ -1133,7 +1209,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(lTables);
 
                                 cbTables.setBounds(64,210,554,40);
-                                cbTables.setSelectedItem("common_problem");
+                                cbTables.setSelectedItem("common_problems");
                                 pTables.add(cbTables);
 
                                 JLabel l_common_problem_code = new JLabel("Problem Code");
@@ -1450,8 +1526,8 @@ public class MainFrame extends JFrame implements ActionListener {
                                 cb_dog_id.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        dogs_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
-                                        ArrayList<String> info = Read.getDogInfo(dogs_id);
+                                        dog_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
+                                        ArrayList<String> info = Read.getDogInfo(dog_id);
                                         t_dog_name.setText(info.get(0));
                                         t_dog_place_of_birth.setText(info.get(1));
                                         t_date_of_birth.setText(info.get(2));
@@ -2071,7 +2147,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 l_relationship_dam_dog_id_update.setBounds(353, 803, 265, 20);
                                 pTables.add(l_relationship_dam_dog_id_update);
 
-                                cb_dog_2_id_update = new JComboBox();  // falta agregar las dogs con la tabla dogs
+                                cb_dog_2_id_update = new JComboBox();
                                 cb_dog_2_id_update.setFont(bodyFont);
                                 cb_dog_2_id_update.setForeground(black);
                                 cb_dog_2_id_update.setBounds(353,827,265,40);
@@ -2398,7 +2474,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                 pTables.updateUI();
                                 break;
-                            case "common_problem":
+                            case "common_problems":
                                 pTables.setPreferredSize(new Dimension (642,960));
 
                                 pTables.removeAll();
@@ -2415,7 +2491,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pTables.add(lTables);
 
                                 cbTables.setBounds(64,184,554,40);
-                                cbTables.setSelectedItem("common_problem");
+                                cbTables.setSelectedItem("common_problems");
                                 pTables.add(cbTables);
 
                                 JLabel l_common_problem = new JLabel("Current Information");
@@ -2717,20 +2793,972 @@ public class MainFrame extends JFrame implements ActionListener {
                     case "delete":
                         switch (table) {
                             case "vets":
+                                pTables.setPreferredSize(new Dimension (642,700));
+
+                                pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
+
+                                lTitle.setBounds(64,64,120,38);
+                                pTables.add(lTitle);
+
+                                lDescription.setBounds(64,108,554,28);
+                                pTables.add(lDescription);
+
+                                lTables.setBounds(64,160,40 ,20);
+                                pTables.add(lTables);
+
+                                cbTables.setBounds(64,184,554,40);
+                                cbTables.setSelectedItem("vets");
+                                pTables.add(cbTables);
+
+                                JLabel l_vet = new JLabel("Current Information");
+                                l_vet.setFont(subtitleFont);
+                                l_vet.setForeground(black);
+                                l_vet.setBounds(64, 248, 280, 32);
+                                pTables.add(l_vet);
+
+                                JLabel l_vet_id = new JLabel("Vet's ID");
+                                l_vet_id.setFont(labelFont);
+                                l_vet_id.setForeground(black);
+                                l_vet_id.setBounds(64, 304, 100, 20);
+                                pTables.add(l_vet_id);
+
+                                cb_vet_id = new JComboBox();
+                                cb_vet_id.setFont(bodyFont);
+                                cb_vet_id.setForeground(black);
+                                cb_vet_id.setBounds(64, 328, 265, 40);
+                                cb_vet_id.setBackground(Color.WHITE);
+                                cb_data = Read.getVetID();
+                                for (String item : cb_data) {
+                                    cb_vet_id.addItem(item);
+                                }
+                                cb_vet_id.setSelectedItem(null);
+                                cb_vet_id.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        try {
+                                            vet_id = Integer.parseInt(cb_vet_id.getSelectedItem().toString());
+                                            ArrayList<String> info = Read.getVetInfo(vet_id);
+                                            t_vet_name.setText(info.get(0));
+                                            t_other_details.setText(info.get(1));
+                                        }
+                                        catch (Exception ex) {
+                                        }
+                                    }
+                                });
+                                pTables.add(cb_vet_id);
+
+                                JLabel l_vet_name = new JLabel("Vet's Name");
+                                l_vet_name.setFont(labelFont);
+                                l_vet_name.setForeground(black);
+                                l_vet_name.setBounds(353, 304, 160, 20);
+                                pTables.add(l_vet_name);
+
+                                t_vet_name = new JTextField();
+                                t_vet_name.setFont(bodyFont);
+                                t_vet_name.setForeground(lockedGray);
+                                t_vet_name.setBorder(border);
+                                t_vet_name.setBounds(353, 328, 265, 40);
+                                t_vet_name.setBackground(backgroundGray);
+                                t_vet_name.setEditable(false);
+                                pTables.add(t_vet_name);
+
+                                JLabel l_vet_other_details = new JLabel("Details");
+                                l_vet_other_details.setFont(labelFont);
+                                l_vet_other_details.setForeground(black);
+                                l_vet_other_details.setBounds(64, 392, 150, 20);
+                                pTables.add(l_vet_other_details);
+
+                                t_other_details = new JTextArea();
+                                t_other_details.setLineWrap(true);
+                                t_other_details.setFont(bodyFont);
+                                t_other_details.setForeground(lockedGray);
+                                t_other_details.setBorder(border);
+                                t_other_details.setBounds(64, 416, 554, 139);
+                                t_other_details.setBackground(backgroundGray);
+                                t_other_details.setEditable(false);
+                                pTables.add(t_other_details);
+
+                                b_submit.setBounds(64, 576, 554, 40);
+                                b_submit.addActionListener(this);
+                                pTables.add(b_submit);
+
+                                pTables.updateUI();
                                 break;
                             case "dogs":
+                                pTables.setPreferredSize(new Dimension (642,980));
+
+                                pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
+
+                                lTitle.setBounds(64,64,120,38);
+                                pTables.add(lTitle);
+
+                                lDescription.setBounds(64,108,554,28);
+                                pTables.add(lDescription);
+
+                                lTables.setBounds(64,160,40 ,20);
+                                pTables.add(lTables);
+
+                                cbTables.setBounds(64,184,554,40);
+                                cbTables.setSelectedItem("dogs");
+                                pTables.add(cbTables);
+
+                                JLabel l_dog = new JLabel("Current Information");
+                                l_dog.setFont(subtitleFont);
+                                l_dog.setForeground(black);
+                                l_dog.setBounds(64, 248, 280, 32);
+                                pTables.add(l_dog);
+
+                                JLabel l_dog_id = new JLabel("Dog's ID");
+                                l_dog_id.setFont(labelFont);
+                                l_dog_id.setForeground(black);
+                                l_dog_id.setBounds(64, 304, 265, 20);
+                                pTables.add(l_dog_id);
+
+                                cb_dog_id = new JComboBox();
+                                cb_dog_id.setFont(bodyFont);
+                                cb_dog_id.setForeground(black);
+                                cb_dog_id.setBounds(64, 328, 265, 40);
+                                cb_dog_id.setBackground(Color.WHITE);
+                                cb_data = Read.getDogID();
+                                for (String item : cb_data) {
+                                    cb_dog_id.addItem(item);
+                                }
+                                cb_dog_id.setSelectedItem(null);
+                                cb_dog_id.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        dog_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
+                                        ArrayList<String> info = Read.getDogInfo(dog_id);
+                                        t_dog_name.setText(info.get(0));
+                                        t_dog_place_of_birth.setText(info.get(1));
+                                        t_date_of_birth.setText(info.get(2));
+                                        t_dog_born_in_litter.setText(info.get(3));
+                                        if (info.get(4).equals("F")) {
+                                            rb_dog_female.setSelected(true);
+                                        }
+                                        if (info.get(4).equals("M")) {
+                                            rb_dog_male.setSelected(true);
+                                        }
+                                        t_other_details.setText(info.get(5));
+                                    }
+                                });
+                                pTables.add(cb_dog_id);
+
+                                JLabel l_dog_dogs_name = new JLabel("Dog's Name");
+                                l_dog_dogs_name.setFont(labelFont);
+                                l_dog_dogs_name.setForeground(black);
+                                l_dog_dogs_name.setBounds(353, 304, 265, 20);
+                                pTables.add(l_dog_dogs_name);
+
+                                t_dog_name = new JTextField();
+                                t_dog_name.setFont(bodyFont);
+                                t_dog_name.setForeground(lockedGray);
+                                t_dog_name.setBorder(border);
+                                t_dog_name.setBounds(353, 328, 265, 40);
+                                t_dog_name.setBackground(backgroundGray);
+                                t_dog_name.setEditable(false);
+                                pTables.add(t_dog_name);
+
+                                JLabel l_dog_place_of_birth = new JLabel("Place of Birth");
+                                l_dog_place_of_birth.setFont(labelFont);
+                                l_dog_place_of_birth.setForeground(black);
+                                l_dog_place_of_birth.setBounds(64, 392, 265, 20);
+                                pTables.add(l_dog_place_of_birth);
+
+                                t_dog_place_of_birth = new JTextField();
+                                t_dog_place_of_birth.setFont(bodyFont);
+                                t_dog_place_of_birth.setForeground(lockedGray);
+                                t_dog_place_of_birth.setBorder(border);
+                                t_dog_place_of_birth.setBounds(64, 416, 265, 40);
+                                t_dog_place_of_birth.setBackground(backgroundGray);
+                                t_dog_place_of_birth.setEditable(false);
+                                pTables.add(t_dog_place_of_birth);
+
+                                JLabel l_dog_date_of_birth = new JLabel("Date of Birth");
+                                l_dog_date_of_birth.setFont(labelFont);
+                                l_dog_date_of_birth.setForeground(black);
+                                l_dog_date_of_birth.setBounds(353, 392, 265, 20);
+                                pTables.add(l_dog_date_of_birth);
+
+                                t_date_of_birth = new JTextField();
+                                t_date_of_birth.setFont(bodyFont);
+                                t_date_of_birth.setForeground(lockedGray);
+                                t_date_of_birth.setBorder(border);
+                                t_date_of_birth.setBounds(353, 416, 265, 40);
+                                t_date_of_birth.setBackground(backgroundGray);
+                                t_date_of_birth.setEditable(false);
+                                pTables.add(t_date_of_birth);
+
+                                JLabel l_dog_born_in_litter = new JLabel("Born in Litter");
+                                l_dog_born_in_litter.setFont(labelFont);
+                                l_dog_born_in_litter.setForeground(black);
+                                l_dog_born_in_litter.setBounds(64, 480, 265, 20);
+                                pTables.add(l_dog_born_in_litter);
+
+                                t_dog_born_in_litter = new JTextField();
+                                t_dog_born_in_litter.setFont(bodyFont);
+                                t_dog_born_in_litter.setForeground(lockedGray);
+                                t_dog_born_in_litter.setBorder(border);
+                                t_dog_born_in_litter.setBounds(64,504,554,40);
+                                t_dog_born_in_litter.setBackground(backgroundGray);
+                                t_dog_born_in_litter.setEditable(false);
+                                pTables.add(t_dog_born_in_litter);
+
+                                JLabel l_dog_gender_mf = new JLabel("Dog's Gender");
+                                l_dog_gender_mf.setFont(labelFont);
+                                l_dog_gender_mf.setForeground(black);
+                                l_dog_gender_mf.setBounds(64, 566, 265, 20);
+                                pTables.add(l_dog_gender_mf);
+
+                                bg_group = new ButtonGroup();
+
+                                rb_dog_female = new JRadioButton();
+                                rb_dog_female.setFont(bodyFont);
+                                rb_dog_female.setForeground(black);
+                                rb_dog_female.setBounds(64, 592, 90, 20);
+                                rb_dog_female.setText("Female");
+                                rb_dog_female.setBackground(null);
+                                rb_dog_female.setEnabled(false);
+                                bg_group.add(rb_dog_female);
+                                pTables.add(rb_dog_female);
+
+                                rb_dog_male = new JRadioButton();
+                                rb_dog_male.setFont(bodyFont);
+                                rb_dog_male.setForeground(black);
+                                rb_dog_male.setBounds(211, 592, 80, 20);
+                                rb_dog_male.setText("Male");
+                                rb_dog_male.setBackground(null);
+                                rb_dog_male.setEnabled(false);
+                                bg_group.add(rb_dog_male);
+                                pTables.add(rb_dog_male);
+
+                                JLabel l_dog_other_details = new JLabel("Details");
+                                l_dog_other_details.setFont(labelFont);
+                                l_dog_other_details.setForeground(black);
+                                l_dog_other_details.setBounds(64, 640, 265, 20);
+                                pTables.add(l_dog_other_details);
+
+                                t_other_details = new JTextArea();
+                                t_other_details.setLineWrap(true);
+                                t_other_details.setFont(bodyFont);
+                                t_other_details.setForeground(lockedGray);
+                                t_other_details.setBorder(border);
+                                t_other_details.setBounds(64, 664, 554, 139);
+                                t_other_details.setBackground(backgroundGray);
+                                t_other_details.setEditable(false);
+                                pTables.add(t_other_details);
+
+                                b_submit.setBounds(64, 822, 554, 40);
+                                b_submit.addActionListener(this);
+                                pTables.add(b_submit);
+
+                                pTables.updateUI();
                                 break;
                             case "litters":
+                                pTables.setPreferredSize(new Dimension (642,900));
+
+                                pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
+
+                                lTitle.setBounds(64,64,265,38);
+                                pTables.add(lTitle);
+
+                                lDescription.setBounds(64,108,554,28);
+                                pTables.add(lDescription);
+
+                                lTables.setBounds(64,160,40 ,20);
+                                pTables.add(lTables);
+
+                                cbTables.setBounds(64,184,554,40);
+                                cbTables.setSelectedItem("litters");
+                                pTables.add(cbTables);
+
+                                JLabel l_litter = new JLabel("Current Information");
+                                l_litter.setFont(subtitleFont);
+                                l_litter.setForeground(black);
+                                l_litter.setBounds(64, 248, 280, 32);
+                                pTables.add(l_litter);
+
+                                JLabel l_litter_id = new JLabel("Litter ID");
+                                l_litter_id.setFont(labelFont);
+                                l_litter_id.setForeground(black);
+                                l_litter_id.setBounds(64, 304, 200, 20);
+                                pTables.add(l_litter_id);
+
+                                cb_litter_id = new JComboBox();
+                                cb_litter_id.setFont(bodyFont);
+                                cb_litter_id.setForeground(black);
+                                cb_litter_id.setBounds(64, 328, 554, 40);
+                                cb_litter_id.setBackground(Color.WHITE);
+                                cb_data = Read.getLitterID();
+                                for (String item : cb_data) {
+                                    cb_litter_id.addItem(item);
+                                }
+                                cb_litter_id.setSelectedItem(null);
+                                cb_litter_id.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        try {
+                                            litter_id = Integer.parseInt(cb_litter_id.getSelectedItem().toString());
+                                            ArrayList<String> info = Read.getLitterInfo(litter_id);
+                                            t_sire_dog_id.setText(info.get(0));
+                                            t_dam_dog_id.setText(info.get(1));
+                                            t_litter_place_of_birth.setText(info.get(2));
+                                            t_date_of_birth.setText(info.get(3));
+                                            t_other_details.setText(info.get(4));
+                                        }
+                                        catch (Exception ex) {
+                                        }
+                                    }
+                                });
+                                pTables.add(cb_litter_id);
+
+                                JLabel l_litter_sire_dog_id = new JLabel("Sire Dog ID");
+                                l_litter_sire_dog_id.setFont(labelFont);
+                                l_litter_sire_dog_id.setForeground(black);
+                                l_litter_sire_dog_id.setBounds(64, 392, 265, 20);
+                                pTables.add(l_litter_sire_dog_id);
+
+                                t_sire_dog_id = new JTextField();
+                                t_sire_dog_id.setFont(bodyFont);
+                                t_sire_dog_id.setForeground(lockedGray);
+                                t_sire_dog_id.setBorder(border);
+                                t_sire_dog_id.setBounds(64,415,265,40);
+                                t_sire_dog_id.setBackground(backgroundGray);
+                                t_sire_dog_id.setEditable(false);
+                                pTables.add(t_sire_dog_id);
+
+                                JLabel l_litter_dam_dog_id = new JLabel("Dam Dog ID");
+                                l_litter_dam_dog_id.setFont(labelFont);
+                                l_litter_dam_dog_id.setForeground(black);
+                                l_litter_dam_dog_id.setBounds(353, 392, 265, 20);
+                                pTables.add(l_litter_dam_dog_id);
+
+                                t_dam_dog_id = new JTextField();
+                                t_dam_dog_id.setFont(bodyFont);
+                                t_dam_dog_id.setForeground(lockedGray);
+                                t_dam_dog_id.setBorder(border);
+                                t_dam_dog_id.setBounds(353,415,265,40);
+                                t_dam_dog_id.setBackground(backgroundGray);
+                                t_dam_dog_id.setEditable(false);
+                                pTables.add(t_dam_dog_id);
+
+                                JLabel l_litter_place_of_birth = new JLabel("Litter's Place of Birth");
+                                l_litter_place_of_birth.setFont(labelFont);
+                                l_litter_place_of_birth.setForeground(black);
+                                l_litter_place_of_birth.setBounds(64, 479, 265, 20);
+                                pTables.add(l_litter_place_of_birth);
+
+                                t_litter_place_of_birth = new JTextField();
+                                t_litter_place_of_birth.setFont(bodyFont);
+                                t_litter_place_of_birth.setForeground(lockedGray);
+                                t_litter_place_of_birth.setBorder(border);
+                                t_litter_place_of_birth.setBounds(64, 503, 265, 40);
+                                t_litter_place_of_birth.setBackground(backgroundGray);
+                                t_litter_place_of_birth.setEditable(false);
+                                pTables.add(t_litter_place_of_birth);
+
+                                JLabel l_litter_date_of_birth = new JLabel("Litter's Date of Birth");
+                                l_litter_date_of_birth.setFont(labelFont);
+                                l_litter_date_of_birth.setForeground(black);
+                                l_litter_date_of_birth.setBounds(353, 479, 265, 20);
+                                pTables.add(l_litter_date_of_birth);
+
+                                t_date_of_birth = new JTextField();
+                                t_date_of_birth.setFont(bodyFont);
+                                t_date_of_birth.setForeground(lockedGray);
+                                t_date_of_birth.setBorder(border);
+                                t_date_of_birth.setBounds(353, 503, 265, 40);
+                                t_date_of_birth.setBackground(backgroundGray);
+                                t_date_of_birth.setEditable(false);
+                                pTables.add(t_date_of_birth);
+
+                                JLabel l_litter_other_details = new JLabel("Details");
+                                l_litter_other_details.setFont(labelFont);
+                                l_litter_other_details.setForeground(black);
+                                l_litter_other_details.setBounds(64, 567, 265, 20);
+                                pTables.add(l_litter_other_details);
+
+                                t_other_details = new JTextArea();
+                                t_other_details.setLineWrap(true);
+                                t_other_details.setFont(bodyFont);
+                                t_other_details.setForeground(lockedGray);
+                                t_other_details.setBorder(border);
+                                t_other_details.setBounds(64, 591, 554, 139);
+                                t_other_details.setBackground(backgroundGray);
+                                t_other_details.setEditable(false);
+                                pTables.add(t_other_details);
+
+                                b_submit.setBounds(64, 744, 554, 40);
+                                b_submit.addActionListener(this);
+                                pTables.add(b_submit);
+
+                                pTables.updateUI();
                                 break;
                             case "relationships":
+                                pTables.setPreferredSize(new Dimension (642,820));
+
+                                pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
+
+                                lTitle.setBounds(64,64,265,38);
+                                pTables.add(lTitle);
+
+                                lDescription.setBounds(64,108,554,28);
+                                pTables.add(lDescription);
+
+                                lTables.setBounds(64,160,40 ,20);
+                                pTables.add(lTables);
+
+                                cbTables.setBounds(64,184,554,40);
+                                cbTables.setSelectedItem("relationships");
+                                pTables.add(cbTables);
+
+                                JLabel l_relationship = new JLabel("Current Information");
+                                l_relationship.setFont(subtitleFont);
+                                l_relationship.setForeground(black);
+                                l_relationship.setBounds(64, 248, 280, 32);
+                                pTables.add(l_relationship);
+
+                                JLabel l_relationship_id = new JLabel("Relationship ID");
+                                l_relationship_id.setFont(labelFont);
+                                l_relationship_id.setForeground(black);
+                                l_relationship_id.setBounds(64, 304, 200, 20);
+                                pTables.add(l_relationship_id);
+
+                                cb_relationship_id = new JComboBox();
+                                cb_relationship_id.setFont(bodyFont);
+                                cb_relationship_id.setForeground(black);
+                                cb_relationship_id.setBounds(64,328,265,40);
+                                cb_relationship_id.setBackground(Color.WHITE);
+                                cb_data = Read.getRelationshipID();
+                                for (String item : cb_data) {
+                                    cb_relationship_id.addItem(item);
+                                }
+                                cb_relationship_id.setSelectedItem(null);
+                                cb_relationship_id.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        try {
+                                            relationship_id = Integer.parseInt(cb_relationship_id.getSelectedItem().toString());
+                                            ArrayList<String> info = Read.getRelationshipInfo(relationship_id);
+                                            t_relationship_code.setText(info.get(0));
+                                            t_dog_1_id.setText(info.get(1));
+                                            t_dog_2_id.setText(info.get(2));
+                                            t_other_details.setText(info.get(3));
+                                        }
+                                        catch (Exception ex) {
+                                        }
+                                    }
+                                });
+                                pTables.add(cb_relationship_id);
+
+                                JLabel l_relationship_code = new JLabel("Relationship Code");
+                                l_relationship_code.setFont(labelFont);
+                                l_relationship_code.setForeground(black);
+                                l_relationship_code.setBounds(353, 304, 265, 20);
+                                pTables.add(l_relationship_code);
+
+                                t_relationship_code = new JTextField();
+                                t_relationship_code.setFont(bodyFont);
+                                t_relationship_code.setForeground(lockedGray);
+                                t_relationship_code.setBorder(border);
+                                t_relationship_code.setBounds(353, 328, 265, 40);
+                                t_relationship_code.setBackground(backgroundGray);
+                                t_relationship_code.setEditable(false);
+                                pTables.add(t_relationship_code);
+
+                                JLabel l_relationship_sire_dog_id = new JLabel("Dog 1 ID");
+                                l_relationship_sire_dog_id.setFont(labelFont);
+                                l_relationship_sire_dog_id.setForeground(black);
+                                l_relationship_sire_dog_id.setBounds(64, 392, 265, 20);
+                                pTables.add(l_relationship_sire_dog_id);
+
+                                t_dog_1_id = new JTextField();
+                                t_dog_1_id.setFont(bodyFont);
+                                t_dog_1_id.setForeground(lockedGray);
+                                t_dog_1_id.setBorder(border);
+                                t_dog_1_id.setBounds(64,416,265,40);
+                                t_dog_1_id.setBackground(backgroundGray);
+                                t_dog_1_id.setEditable(false);
+                                pTables.add(t_dog_1_id);
+
+                                JLabel l_relationship_dam_dog_id = new JLabel("Dog 2 ID");
+                                l_relationship_dam_dog_id.setFont(labelFont);
+                                l_relationship_dam_dog_id.setForeground(black);
+                                l_relationship_dam_dog_id.setBounds(353, 392, 265, 20);
+                                pTables.add(l_relationship_dam_dog_id);
+
+                                t_dog_2_id = new JTextField();
+                                t_dog_2_id.setFont(bodyFont);
+                                t_dog_2_id.setForeground(lockedGray);
+                                t_dog_2_id.setBorder(border);
+                                t_dog_2_id.setBounds(353,416,265,40);
+                                t_dog_2_id.setBackground(backgroundGray);
+                                t_dog_2_id.setEditable(false);
+                                pTables.add(t_dog_2_id);
+
+                                JLabel l_relationship_other_details = new JLabel("Details");
+                                l_relationship_other_details.setFont(labelFont);
+                                l_relationship_other_details.setForeground(black);
+                                l_relationship_other_details.setBounds(64, 480, 265, 20);
+                                pTables.add(l_relationship_other_details);
+
+                                t_other_details = new JTextArea();
+                                t_other_details.setLineWrap(true);
+                                t_other_details.setFont(bodyFont);
+                                t_other_details.setForeground(lockedGray);
+                                t_other_details.setBorder(border);
+                                t_other_details.setBounds(64, 504, 554, 139);
+                                t_other_details.setBackground(backgroundGray);
+                                t_other_details.setEditable(false);
+                                pTables.add(t_other_details);
+
+                                b_submit.setBounds(64, 672, 554, 40);
+                                b_submit.addActionListener(this);
+                                pTables.add(b_submit);
+
+                                pTables.updateUI();
                                 break;
                             case "relationship_types":
+                                pTables.setPreferredSize(new Dimension (642,700));
+
+                                pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
+
+                                lTitle.setBounds(64,64,265,38);
+                                pTables.add(lTitle);
+
+                                lDescription.setBounds(64,108,554,28);
+                                pTables.add(lDescription);
+
+                                lTables.setBounds(64,160,40 ,20);
+                                pTables.add(lTables);
+
+                                cbTables.setBounds(64,184,554,40);
+                                cbTables.setSelectedItem("relationship_types");
+                                pTables.add(cbTables);
+
+                                JLabel l_relationship_type = new JLabel("Current Information");
+                                l_relationship_type.setFont(subtitleFont);
+                                l_relationship_type.setForeground(black);
+                                l_relationship_type.setBounds(64, 248, 280, 32);
+                                pTables.add(l_relationship_type);
+
+                                JLabel l_relationship_type_id = new JLabel("Relationship Type ID");
+                                l_relationship_type_id.setFont(labelFont);
+                                l_relationship_type_id.setForeground(black);
+                                l_relationship_type_id.setBounds(64, 304, 200, 20);
+                                pTables.add(l_relationship_type_id);
+
+                                cb_relationship_code = new JComboBox();
+                                cb_relationship_code.setFont(bodyFont);
+                                cb_relationship_code.setForeground(black);
+                                cb_relationship_code.setBounds(64,328,554,40);
+                                cb_relationship_code.setBackground(Color.WHITE);
+                                cb_data = Read.getRelationshipCode();
+                                for (String item : cb_data) {
+                                    cb_relationship_code.addItem(item);
+                                }
+                                cb_relationship_code.setSelectedItem(null);
+                                cb_relationship_code.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        try {
+                                            relationship_code = Integer.parseInt(cb_relationship_code.getSelectedItem().toString());
+                                            ArrayList<String> info = Read.getRelationshipTypeInfo(relationship_code);
+                                            t_relationships_description.setText(info.get(0));
+                                        }
+                                        catch (Exception ex) {
+                                        }
+                                    }
+                                });
+                                pTables.add(cb_relationship_code);
+
+                                JLabel l_relationship_details = new JLabel("Details");
+                                l_relationship_details.setFont(labelFont);
+                                l_relationship_details.setForeground(black);
+                                l_relationship_details.setBounds(64, 392, 265, 20);
+                                pTables.add(l_relationship_details);
+
+                                t_relationships_description = new JTextArea();
+                                t_relationships_description.setLineWrap(true);
+                                t_relationships_description.setFont(bodyFont);
+                                t_relationships_description.setForeground(lockedGray);
+                                t_relationships_description.setBorder(border);
+                                t_relationships_description.setBounds(64, 416, 554, 139);
+                                t_relationships_description.setBackground(backgroundGray);
+                                t_relationships_description.setEditable(false);
+                                pTables.add(t_relationships_description);
+
+                                b_submit.setBounds(64, 576, 554, 40);
+                                b_submit.addActionListener(this);
+                                pTables.add(b_submit);
+
+                                pTables.updateUI();
                                 break;
                             case "health_records":
+                                pTables.setPreferredSize(new Dimension (642,1000));
+
+                                pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
+
+                                lTitle.setBounds(64,64,265,38);
+                                pTables.add(lTitle);
+
+                                lDescription.setBounds(64,108,554,28);
+                                pTables.add(lDescription);
+
+                                lTables.setBounds(64,160,40 ,20);
+                                pTables.add(lTables);
+
+                                cbTables.setBounds(64,184,554,40);
+                                cbTables.setSelectedItem("health_records");
+                                pTables.add(cbTables);
+
+                                JLabel l_health_record = new JLabel("Current Information");
+                                l_health_record.setFont(subtitleFont);
+                                l_health_record.setForeground(black);
+                                l_health_record.setBounds(64, 248, 280, 32);
+                                pTables.add(l_health_record);
+
+                                JLabel l_health_record_id = new JLabel("Health Record ID");
+                                l_health_record_id.setFont(labelFont);
+                                l_health_record_id.setForeground(black);
+                                l_health_record_id.setBounds(64, 304, 200, 20);
+                                pTables.add(l_health_record_id);
+
+                                cb_health_record_id = new JComboBox();
+                                cb_health_record_id.setFont(bodyFont);
+                                cb_health_record_id.setForeground(black);
+                                cb_health_record_id.setBounds(64,328,265,40);
+                                cb_health_record_id.setBackground(Color.WHITE);
+                                cb_data = Read.getHealthRecordID();
+                                for (String item : cb_data) {
+                                    cb_health_record_id.addItem(item);
+                                }
+                                cb_health_record_id.setSelectedItem(null);
+                                cb_health_record_id.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        try {
+                                            health_record_id = Integer.parseInt(cb_health_record_id.getSelectedItem().toString());
+                                            ArrayList<String> info = Read.getHealthRecordInfo(health_record_id);
+                                            t_vet_id.setText(info.get(0));
+                                            t_dog_id.setText(info.get(1));
+                                            t_summary.setText(info.get(2));
+                                            t_other_details.setText(info.get(3));
+                                        }
+                                        catch (Exception ex) {
+                                        }
+                                    }
+                                });
+                                pTables.add(cb_health_record_id);
+
+                                JLabel l_health_record_vet_id = new JLabel("Vet ID");
+                                l_health_record_vet_id.setFont(labelFont);
+                                l_health_record_vet_id.setForeground(black);
+                                l_health_record_vet_id.setBounds(353, 304, 265, 20);
+                                pTables.add(l_health_record_vet_id);
+
+                                t_vet_id = new JTextField();
+                                t_vet_id.setFont(bodyFont);
+                                t_vet_id.setForeground(lockedGray);
+                                t_vet_id.setBorder(border);
+                                t_vet_id.setBounds(353,328,265,40);
+                                t_vet_id.setBackground(backgroundGray);
+                                t_vet_id.setEditable(false);
+                                pTables.add(t_vet_id);
+
+                                JLabel l_health_record_dog_id = new JLabel("Dog ID");
+                                l_health_record_dog_id.setFont(labelFont);
+                                l_health_record_dog_id.setForeground(black);
+                                l_health_record_dog_id.setBounds(64, 392, 265, 20);
+                                pTables.add(l_health_record_dog_id);
+
+                                t_dog_id = new JTextField();
+                                t_dog_id.setFont(bodyFont);
+                                t_dog_id.setForeground(lockedGray);
+                                t_dog_id.setBorder(border);
+                                t_dog_id.setBounds(64,416,554,40);
+                                t_dog_id.setBackground(backgroundGray);
+                                t_dog_id.setEditable(false);
+                                pTables.add(t_dog_id);
+
+                                JLabel l_health_record_summary = new JLabel("Summary");
+                                l_health_record_summary.setFont(labelFont);
+                                l_health_record_summary.setForeground(black);
+                                l_health_record_summary.setBounds(64, 480, 265, 20);
+                                pTables.add(l_health_record_summary);
+
+                                t_summary = new JTextArea();
+                                t_summary.setLineWrap(true);
+                                t_summary.setFont(bodyFont);
+                                t_summary.setForeground(lockedGray);
+                                t_summary.setBorder(border);
+                                t_summary.setBounds(64, 504, 554, 139);
+                                t_summary.setBackground(backgroundGray);
+                                t_summary.setEditable(false);
+                                pTables.add(t_summary);
+
+                                JLabel l_health_record_details = new JLabel("Details");
+                                l_health_record_details.setFont(labelFont);
+                                l_health_record_details.setForeground(black);
+                                l_health_record_details.setBounds(64, 658, 265, 20);
+                                pTables.add(l_health_record_details);
+
+                                t_other_details = new JTextArea();
+                                t_other_details.setLineWrap(true);
+                                t_other_details.setFont(bodyFont);
+                                t_other_details.setForeground(lockedGray);
+                                t_other_details.setBorder(border);
+                                t_other_details.setBounds(64, 680, 554, 139);
+                                t_other_details.setBackground(backgroundGray);
+                                t_other_details.setEditable(false);
+                                pTables.add(t_other_details);
+
+                                b_submit.setBounds(64, 842, 554, 40);
+                                b_submit.addActionListener(this);
+                                pTables.add(b_submit);
+
+                                pTables.updateUI();
+                                break;
+                            case "common_problems":
+                                pTables.setPreferredSize(new Dimension (642,700));
+
+                                pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
+
+                                lTitle.setBounds(64,64,265,38);
+                                pTables.add(lTitle);
+
+                                lDescription.setBounds(64,108,554,28);
+                                pTables.add(lDescription);
+
+                                lTables.setBounds(64,160,40 ,20);
+                                pTables.add(lTables);
+
+                                cbTables.setBounds(64,184,554,40);
+                                cbTables.setSelectedItem("common_problems");
+                                pTables.add(cbTables);
+
+                                JLabel l_common_problem = new JLabel("Current Information");
+                                l_common_problem.setFont(subtitleFont);
+                                l_common_problem.setForeground(black);
+                                l_common_problem.setBounds(64, 248, 280, 32);
+                                pTables.add(l_common_problem);
+
+                                JLabel l_common_problem_code = new JLabel("Problem Code");
+                                l_common_problem_code.setFont(labelFont);
+                                l_common_problem_code.setForeground(black);
+                                l_common_problem_code.setBounds(64, 304, 200, 20);
+                                pTables.add(l_common_problem_code);
+
+                                cb_problem_code = new JComboBox();
+                                cb_problem_code.setFont(bodyFont);
+                                cb_problem_code.setForeground(black);
+                                cb_problem_code.setBounds(64,328,554,40);
+                                cb_problem_code.setBackground(Color.WHITE);
+                                cb_data = Read.getProblemCode();
+                                for (String item : cb_data) {
+                                    cb_problem_code.addItem(item);
+                                }
+                                cb_problem_code.setSelectedItem(null);
+                                cb_problem_code.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        try {
+                                            problem_code = Integer.parseInt(cb_problem_code.getSelectedItem().toString());
+                                            ArrayList<String> info = Read.getCommonProblemInfo(problem_code);
+                                            t_problem_description.setText(info.get(0));
+                                        }
+                                        catch (Exception ex) {
+                                        }
+                                    }
+                                });
+                                pTables.add(cb_problem_code);
+
+                                JLabel l_common_problem_description = new JLabel("Description");
+                                l_common_problem_description.setFont(labelFont);
+                                l_common_problem_description.setForeground(black);
+                                l_common_problem_description.setBounds(64, 392, 265, 20);
+                                pTables.add(l_common_problem_description);
+
+                                t_problem_description = new JTextArea();
+                                t_problem_description.setLineWrap(true);
+                                t_problem_description.setFont(bodyFont);
+                                t_problem_description.setForeground(lockedGray);
+                                t_problem_description.setBorder(border);
+                                t_problem_description.setBounds(64, 416, 554, 139);
+                                t_problem_description.setBackground(backgroundGray);
+                                t_problem_description.setEditable(false);
+                                pTables.add(t_problem_description);
+
+                                b_submit.setBounds(64, 576, 554, 40);
+                                b_submit.addActionListener(this);
+                                pTables.add(b_submit);
+
+                                pTables.updateUI();
                                 break;
                             case "dog_problems":
-                                break;
-                            case "common_problem":
+                                pTables.setPreferredSize(new Dimension (642,1000));
+
+                                pTables.removeAll();
+
+                                b_submit.removeActionListener(this);
+
+                                lTitle.setBounds(64,64,265,38);
+                                pTables.add(lTitle);
+
+                                lDescription.setBounds(64,108,554,28);
+                                pTables.add(lDescription);
+
+                                lTables.setBounds(64,160,40 ,20);
+                                pTables.add(lTables);
+
+                                cbTables.setBounds(64,184,554,40);
+                                cbTables.setSelectedItem("dog_problems");
+                                pTables.add(cbTables);
+
+                                JLabel l_dog_problem = new JLabel("Current Information");
+                                l_dog_problem.setFont(subtitleFont);
+                                l_dog_problem.setForeground(black);
+                                l_dog_problem.setBounds(64, 248, 280, 32);
+                                pTables.add(l_dog_problem);
+
+                                JLabel l_dog_problem_problem_code = new JLabel("Problem Code");
+                                l_dog_problem_problem_code.setFont(labelFont);
+                                l_dog_problem_problem_code.setForeground(black);
+                                l_dog_problem_problem_code.setBounds(64, 304, 200, 20);
+                                pTables.add(l_dog_problem_problem_code);
+
+                                cb_problem_code = new JComboBox();
+                                cb_problem_code.setFont(bodyFont);
+                                cb_problem_code.setForeground(black);
+                                cb_problem_code.setBounds(64,328,265,40);
+                                cb_problem_code.setBackground(Color.WHITE);
+                                cb_data = Read.getProblemCode();
+                                for (String item : cb_data) {
+                                    cb_problem_code.addItem(item);
+                                }
+                                cb_problem_code.setSelectedItem(null);
+                                cb_problem_code.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        try {
+                                            cb_health_record_id.removeAllItems();
+                                            problem_code = Integer.parseInt(cb_problem_code.getSelectedItem().toString());
+                                            ArrayList<String> data = Read.getDogProblems_HealthRecordsID(problem_code);
+                                            for (String item : data) {
+                                                cb_health_record_id.addItem(item);
+                                            }
+                                            cb_health_record_id.setSelectedItem(null);
+                                            cb_health_record_id.setEnabled(true);
+                                        }
+                                        catch (Exception ex) {
+                                        }
+                                    }
+                                });
+                                pTables.add(cb_problem_code);
+
+                                JLabel l_dog_problem_health_record_id = new JLabel("Health Record ID");
+                                l_dog_problem_health_record_id.setFont(labelFont);
+                                l_dog_problem_health_record_id.setForeground(black);
+                                l_dog_problem_health_record_id.setBounds(353, 304, 265, 20);
+                                pTables.add(l_dog_problem_health_record_id);
+
+                                cb_health_record_id = new JComboBox();
+                                cb_health_record_id.setFont(bodyFont);
+                                cb_health_record_id.setForeground(black);
+                                cb_health_record_id.setBounds(353,328,265,40);
+                                cb_health_record_id.setBackground(Color.WHITE);
+                                cb_health_record_id.setSelectedItem(null);
+                                cb_health_record_id.setEnabled(false);
+                                cb_health_record_id.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        try {
+                                            if (cb_health_record_id.getSelectedItem() != null) {
+                                                problem_code = Integer.parseInt(cb_problem_code.getSelectedItem().toString());
+                                                health_record_id = Integer.parseInt(cb_health_record_id.getSelectedItem().toString());
+                                                ArrayList<String> info = Read.getDogProblems_HealthRecordsIDInfo(problem_code, health_record_id);
+                                                t_date_of_problem.setText(info.get(0));
+                                                t_problem_treatment.setText(info.get(1));
+                                                t_problem_details.setText(info.get(2));
+                                            }
+                                            else {
+                                                t_date_of_problem.setText("");
+                                                t_problem_treatment.setText("");
+                                                t_problem_details.setText("");
+                                            }
+                                        }
+                                        catch (Exception ex) {
+                                        }
+                                    }
+                                });
+                                pTables.add(cb_health_record_id);
+
+                                JLabel l_dog_problem_date_of_problem = new JLabel("Date of Problem");
+                                l_dog_problem_date_of_problem.setFont(labelFont);
+                                l_dog_problem_date_of_problem.setForeground(black);
+                                l_dog_problem_date_of_problem.setBounds(64, 392, 265, 20);
+                                pTables.add(l_dog_problem_date_of_problem);
+
+                                t_date_of_problem = new JTextField();
+                                t_date_of_problem.setFont(bodyFont);
+                                t_date_of_problem.setForeground(lockedGray);
+                                t_date_of_problem.setBorder(border);
+                                t_date_of_problem.setBounds(64,416,554,40);
+                                t_date_of_problem.setBackground(backgroundGray);
+                                t_date_of_problem.setEditable(false);
+                                pTables.add(t_date_of_problem);
+
+                                JLabel l_dog_problem_treatment = new JLabel("Treatment");
+                                l_dog_problem_treatment.setFont(labelFont);
+                                l_dog_problem_treatment.setForeground(black);
+                                l_dog_problem_treatment.setBounds(64, 480, 265, 20);
+                                pTables.add(l_dog_problem_treatment);
+
+                                t_problem_treatment = new JTextArea();
+                                t_problem_treatment.setLineWrap(true);
+                                t_problem_treatment.setFont(bodyFont);
+                                t_problem_treatment.setForeground(lockedGray);
+                                t_problem_treatment.setBorder(border);
+                                t_problem_treatment.setBounds(64, 504, 554, 139);
+                                t_problem_treatment.setBackground(backgroundGray);
+                                t_problem_treatment.setEditable(false);
+                                pTables.add(t_problem_treatment);
+
+                                JLabel l_dog_problem_details = new JLabel("Details");
+                                l_dog_problem_details.setFont(labelFont);
+                                l_dog_problem_details.setForeground(black);
+                                l_dog_problem_details.setBounds(64, 656, 265, 20);
+                                pTables.add(l_dog_problem_details);
+
+                                t_problem_details = new JTextArea();
+                                t_problem_details.setLineWrap(true);
+                                t_problem_details.setFont(bodyFont);
+                                t_problem_details.setForeground(lockedGray);
+                                t_problem_details.setBorder(border);
+                                t_problem_details.setBounds(64, 680, 554, 139);
+                                t_problem_details.setBackground(backgroundGray);
+                                t_problem_details.setEditable(false);
+                                pTables.add(t_problem_details);
+
+                                b_submit.setBounds(64, 842, 554, 40);
+                                b_submit.addActionListener(this);
+                                pTables.add(b_submit);
+
+                                pTables.updateUI();
                                 break;
                         }
                         break;
@@ -2753,7 +3781,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 pt_other_details.setText(null);
                                 break;
                             case "dogs":
-                                dogs_id = Integer.parseInt(t_dog_id.getText());
+                                dog_id = Integer.parseInt(t_dog_id.getText());
                                 dogs_name = t_dog_name.getText();
                                 place_of_birth = t_dog_place_of_birth.getText();
                                 date_of_birth = new java.sql.Date(dc_date_of_birth.getDate().getTime());
@@ -2765,7 +3793,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                     dogs_gender = "M";
                                 }
                                 other_details = pt_other_details.getText();
-                                Create.createDog(dogs_id, dogs_name, place_of_birth, date_of_birth,
+                                Create.createDog(dog_id, dogs_name, place_of_birth, date_of_birth,
                                         litter_id, dogs_gender, other_details);
                                 t_dog_id.setText("" + Read.getMaxDogID());
                                 t_dog_name.setText(null);
@@ -2815,17 +3843,17 @@ public class MainFrame extends JFrame implements ActionListener {
                             case "health_records":
                                 health_record_id = Integer.parseInt(t_health_record_id.getText());
                                 vet_id = Integer.parseInt(cb_vet_id.getSelectedItem().toString());
-                                dogs_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
+                                dog_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
                                 summary = pt_summary.getText();
                                 other_details = pt_other_details.getText();
-                                Create.createHealthRecord(health_record_id, vet_id, dogs_id, summary, other_details);
+                                Create.createHealthRecord(health_record_id, vet_id, dog_id, summary, other_details);
                                 t_health_record_id.setText("" + Read.getMaxHealthRecordID());
                                 cb_vet_id.setSelectedItem(null);
                                 cb_dog_id.setSelectedItem(null);
                                 pt_summary.setText(null);
                                 pt_other_details.setText(null);
                                 break;
-                            case "common_problem":
+                            case "common_problems":
                                 problem_code = Integer.parseInt(t_problem_code.getText());
                                 problem_description = pt_problem_description.getText();
                                 Create.createCommonProblem(problem_code, problem_description);
@@ -2863,15 +3891,17 @@ public class MainFrame extends JFrame implements ActionListener {
                                 else {
                                     other_details = pt_other_details_update.getText();
                                 }
-                                Update.updateVet(vet_id, vet_name, other_details);
-                                cb_vet_id.setSelectedItem(null);
-                                t_vet_name.setText(null);
-                                t_other_details.setText(null);
-                                t_vet_name_update.setText(null);
-                                pt_other_details_update.setText(null);
+                                if (Update.updateVet(vet_id, vet_name, other_details)) {
+                                    cb_vet_id.setSelectedItem(null);
+                                    t_vet_name.setText(null);
+                                    t_other_details.setText(null);
+                                    t_vet_name_update.setText(null);
+                                    pt_other_details_update.setText(null);
+                                }
                                 break;
                             case "dogs":
-                                dogs_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
+                                //error en cb_dog_id
+                                dog_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
                                 if (t_dogs_name_update.getText().equals("")) {
                                     dogs_name = t_dog_name.getText();
                                 }
@@ -2888,7 +3918,6 @@ public class MainFrame extends JFrame implements ActionListener {
                                     date_of_birth = Date.valueOf(t_date_of_birth.getText());
                                 }
                                 else {
-                                    //nos da mal la fecha
                                     date_of_birth = new java.sql.Date(dc_date_of_birth_update.getDate().getTime());
                                 }
                                 if (cb_dog_born_in_litter_update.getSelectedItem() == null) {
@@ -2918,22 +3947,24 @@ public class MainFrame extends JFrame implements ActionListener {
                                 else {
                                     other_details = pt_other_details_update.getText();
                                 }
-                                Update.updateDog(dogs_id, dogs_name, place_of_birth, date_of_birth, litter_id, dogs_gender, other_details);
-                                t_dog_name.setText(null);
-                                t_dog_place_of_birth.setText(null);
-                                t_date_of_birth.setText(null);
-                                t_dog_born_in_litter.setText(null);
-                                rb_dog_female.setSelected(false);
-                                rb_dog_male.setSelected(false);
-                                t_other_details.setText(null);
-                                t_dogs_name_update.setText(null);
-                                t_dog_place_of_birth_update.setText(null);
-                                dc_date_of_birth_update.setDate(null);
-                                cb_dog_born_in_litter_update.setSelectedItem(null);
-                                rb_dog_female_update.setSelected(false);
-                                rb_dog_male_update.setSelected(false);
-                                pt_other_details_update.setText(null);
-                                cb_dog_id.setSelectedItem(null);
+                                if (Update.updateDog(dog_id, dogs_name, place_of_birth, date_of_birth,
+                                    litter_id, dogs_gender, other_details)) {
+                                    t_dog_name.setText(null);
+                                    t_dog_place_of_birth.setText(null);
+                                    t_date_of_birth.setText(null);
+                                    t_dog_born_in_litter.setText(null);
+                                    rb_dog_female.setSelected(false);
+                                    rb_dog_male.setSelected(false);
+                                    t_other_details.setText(null);
+                                    t_dogs_name_update.setText(null);
+                                    t_dog_place_of_birth_update.setText(null);
+                                    dc_date_of_birth_update.setDate(null);
+                                    cb_dog_born_in_litter_update.setSelectedItem(null);
+                                    rb_dog_female_update.setSelected(false);
+                                    rb_dog_male_update.setSelected(false);
+                                    pt_other_details_update.setText(null);
+                                    cb_dog_id.setSelectedItem(null);
+                                }
                                 break;
                             case "litters":
                                 litter_id = Integer.parseInt(cb_litter_id.getSelectedItem().toString());
@@ -2957,7 +3988,6 @@ public class MainFrame extends JFrame implements ActionListener {
                                     date_of_birth = Date.valueOf(t_date_of_birth.getText());
                                 }
                                 else {
-                                    // da mal la fecha
                                     date_of_birth = new java.sql.Date(dc_date_of_birth_update.getDate().getTime());
                                 }
                                 if (pt_other_details_update.getText().equals("e.g. All puppies are healthy, Five puppies in total")) {
@@ -2966,19 +3996,20 @@ public class MainFrame extends JFrame implements ActionListener {
                                 else {
                                     other_details = pt_other_details_update.getText();
                                 }
-                                Update.updateLitter(litter_id, sire_dog_id, dam_dog_id, place_of_birth,
-                                        date_of_birth, other_details);
-                                cb_litter_id.setSelectedItem(null);
-                                t_sire_dog_id.setText(null);
-                                t_dam_dog_id.setText(null);
-                                t_litter_place_of_birth.setText(null);
-                                t_date_of_birth.setText(null);
-                                t_other_details.setText(null);
-                                cb_sire_dog_id_update.setSelectedItem(null);
-                                cb_dam_dog_id_update.setSelectedItem(null);
-                                t_litter_place_of_birth_update.setText(null);
-                                dc_date_of_birth_update.setDate(null);
-                                pt_other_details_update.setText(null);
+                                if (Update.updateLitter(litter_id, sire_dog_id, dam_dog_id, place_of_birth,
+                                        date_of_birth, other_details)) {
+                                    cb_litter_id.setSelectedItem(null);
+                                    t_sire_dog_id.setText(null);
+                                    t_dam_dog_id.setText(null);
+                                    t_litter_place_of_birth.setText(null);
+                                    t_date_of_birth.setText(null);
+                                    t_other_details.setText(null);
+                                    cb_sire_dog_id_update.setSelectedItem(null);
+                                    cb_dam_dog_id_update.setSelectedItem(null);
+                                    t_litter_place_of_birth_update.setText(null);
+                                    dc_date_of_birth_update.setDate(null);
+                                    pt_other_details_update.setText(null);
+                                }
                                 break;
                             case "relationships":
                                 relationship_id = Integer.parseInt(cb_relationship_id.getSelectedItem().toString());
@@ -3003,16 +4034,17 @@ public class MainFrame extends JFrame implements ActionListener {
                                 else {
                                     other_details = pt_other_details_update.getText();
                                 }
-                                Update.updateRelationship(relationship_id, relationship_code, dog_1_id, dog_2_id, other_details);
-                                cb_relationship_id.setSelectedItem(null);
-                                t_relationship_code.setText(null);
-                                t_dog_1_id.setText(null);
-                                t_dog_2_id.setText(null);
-                                t_other_details.setText(null);
-                                cb_relationship_code_update.setSelectedItem(null);
-                                cb_dog_1_id_update.setSelectedItem(null);
-                                cb_dog_2_id_update.setSelectedItem(null);
-                                pt_other_details_update.setText(null);
+                                if (Update.updateRelationship(relationship_id, relationship_code, dog_1_id, dog_2_id, other_details)) {
+                                    cb_relationship_id.setSelectedItem(null);
+                                    t_relationship_code.setText(null);
+                                    t_dog_1_id.setText(null);
+                                    t_dog_2_id.setText(null);
+                                    t_other_details.setText(null);
+                                    cb_relationship_code_update.setSelectedItem(null);
+                                    cb_dog_1_id_update.setSelectedItem(null);
+                                    cb_dog_2_id_update.setSelectedItem(null);
+                                    pt_other_details_update.setText(null);
+                                }
                                 break;
                             case "relationship_types":
                                 relationship_code = Integer.parseInt(cb_relationship_code.getSelectedItem().toString());
@@ -3022,10 +4054,11 @@ public class MainFrame extends JFrame implements ActionListener {
                                 else {
                                     relationship_description = pt_relationships_description_update.getText();
                                 }
-                                Update.updateRelationshipType(relationship_code, relationship_description);
-                                t_relationships_description.setText(null);
-                                pt_relationships_description_update.setText(null);
-                                cb_relationship_code.setSelectedItem(null);
+                                if (Update.updateRelationshipType(relationship_code, relationship_description)) {
+                                    t_relationships_description.setText(null);
+                                    pt_relationships_description_update.setText(null);
+                                    cb_relationship_code.setSelectedItem(null);
+                                }
                                 break;
                             case "health_records":
                                 health_record_id = Integer.parseInt(cb_health_record_id.getSelectedItem().toString());
@@ -3035,9 +4068,9 @@ public class MainFrame extends JFrame implements ActionListener {
                                     vet_id = Integer.parseInt(cb_vet_id_update.getSelectedItem().toString());
                                 }
                                 if (cb_dog_id_update.getSelectedItem() == null) {
-                                    dogs_id = Integer.parseInt(t_dog_id.getText());
+                                    dog_id = Integer.parseInt(t_dog_id.getText());
                                 } else {
-                                    dogs_id = Integer.parseInt(cb_dog_id_update.getSelectedItem().toString());
+                                    dog_id = Integer.parseInt(cb_dog_id_update.getSelectedItem().toString());
                                 }
                                 if (pt_summary_update.getText().equals("e.g. The was administered the vaccines")) {
                                     summary = t_summary.getText();
@@ -3051,18 +4084,19 @@ public class MainFrame extends JFrame implements ActionListener {
                                 else {
                                     other_details = pt_other_details_update.getText();
                                 }
-                                Update.updateHealthRecord(health_record_id, vet_id, dogs_id, summary, other_details);
-                                cb_health_record_id.setSelectedItem(null);
-                                t_vet_id.setText(null);
-                                t_dog_id.setText(null);
-                                t_summary.setText(null);
-                                t_other_details.setText(null);
-                                cb_vet_id_update.setSelectedItem(null);
-                                cb_dog_id_update.setSelectedItem(null);
-                                pt_summary_update.setText(null);
-                                pt_other_details_update.setText(null);
+                                if (Update.updateHealthRecord(health_record_id, vet_id, dog_id, summary, other_details)) {
+                                    cb_health_record_id.setSelectedItem(null);
+                                    t_vet_id.setText(null);
+                                    t_dog_id.setText(null);
+                                    t_summary.setText(null);
+                                    t_other_details.setText(null);
+                                    cb_vet_id_update.setSelectedItem(null);
+                                    cb_dog_id_update.setSelectedItem(null);
+                                    pt_summary_update.setText(null);
+                                    pt_other_details_update.setText(null);
+                                }
                                 break;
-                            case "common_problem":
+                            case "common_problems":
                                 problem_code = Integer.parseInt(cb_problem_code.getSelectedItem().toString());
                                 if (pt_problem_description_update.getText().equals("e.g. Fever: The dog has high temperature, coughing, and runny nose")) {
                                     problem_description = t_problem_description.getText();
@@ -3070,10 +4104,11 @@ public class MainFrame extends JFrame implements ActionListener {
                                 else {
                                     problem_description = pt_problem_description_update.getText();
                                 }
-                                Update.updateCommonProblem(problem_code, problem_description);
-                                cb_problem_code.setSelectedItem(null);
-                                t_problem_description.setText(null);
-                                pt_problem_description_update.setText(null);
+                                if (Update.updateCommonProblem(problem_code, problem_description)) {
+                                    cb_problem_code.setSelectedItem(null);
+                                    t_problem_description.setText(null);
+                                    pt_problem_description_update.setText(null);
+                                }
                                 break;
                             case "dog_problems":
                                 problem_code = Integer.parseInt(cb_problem_code.getSelectedItem().toString());
@@ -3086,7 +4121,6 @@ public class MainFrame extends JFrame implements ActionListener {
                                     date_of_problem = Date.valueOf(t_date_of_problem.getText());
                                 }
                                 else {
-                                    // nos da mal la fecha
                                     date_of_problem = new java.sql.Date(dc_date_of_problem_update.getDate().getTime());
                                 }
                                 if (pt_problem_treatment_update.getText().equals("e.g. The dog was given antibiotics")) {
@@ -3101,47 +4135,125 @@ public class MainFrame extends JFrame implements ActionListener {
                                 else {
                                     other_details = pt_problem_details_update.getText();
                                 }
-                                Update.updateDogProblems(problem_code, health_record_id, date_of_problem, treatment, other_details);
-                                cb_problem_code.setSelectedItem(null);
-                                cb_health_record_id.setSelectedItem(null);
-                                t_date_of_problem.setText(null);
-                                t_problem_treatment.setText(null);
-                                t_problem_details.setText(null);
-                                cb_health_record_id_update.setSelectedItem(null);
-                                dc_date_of_problem_update.setDate(null);
-                                pt_problem_treatment_update.setText(null);
-                                pt_problem_details_update.setText(null);
+                                if (Update.updateDogProblems(problem_code, health_record_id, date_of_problem, treatment, other_details)) {
+                                    cb_problem_code.setSelectedItem(null);
+                                    cb_health_record_id.setSelectedItem(null);
+                                    t_date_of_problem.setText(null);
+                                    t_problem_treatment.setText(null);
+                                    t_problem_details.setText(null);
+                                    cb_health_record_id_update.setSelectedItem(null);
+                                    dc_date_of_problem_update.setDate(null);
+                                    pt_problem_treatment_update.setText(null);
+                                    pt_problem_details_update.setText(null);
+                                }
                                 break;
                         }
                         break;
                     case "delete":
                         switch (table) {
                             case "vets":
+                                vet_id = Integer.parseInt(cb_vet_id.getSelectedItem().toString());
+                                column1 = "vet_id";
+                                if (Delete.deleteInfo(table, column1, vet_id)) {
+                                    cb_vet_id.setSelectedItem(null);
+                                    t_vet_name.setText(null);
+                                    t_other_details.setText(null);
+                                }
                                 break;
                             case "dogs":
+                                dog_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
+                                column1 = "dog_id";
+                                if (Delete.deleteInfo(table, column1, dog_id)) {
+                                    t_dog_name.setText(null);
+                                    t_dog_place_of_birth.setText(null);
+                                    t_date_of_birth.setText(null);
+                                    t_dog_born_in_litter.setText(null);
+                                    rb_dog_female.setSelected(false);
+                                    rb_dog_male.setSelected(false);
+                                    t_other_details.setText(null);
+                                    cb_dog_id.setSelectedItem(null);
+                                }
                                 break;
                             case "litters":
+                                litter_id = Integer.parseInt(cb_litter_id.getSelectedItem().toString());
+                                column1 = "litter_id";
+                                if (Delete.deleteInfo(table, column1, litter_id)) {
+                                    cb_litter_id.setSelectedItem(null);
+                                    t_sire_dog_id.setText(null);
+                                    t_dam_dog_id.setText(null);
+                                    t_litter_place_of_birth.setText(null);
+                                    t_date_of_birth.setText(null);
+                                    t_other_details.setText(null);
+                                }
                                 break;
                             case "relationships":
+                                relationship_id = Integer.parseInt(cb_relationship_id.getSelectedItem().toString());
+                                column1 = "relationship_id";
+                                if (Delete.deleteInfo(table, column1, relationship_id)) {
+                                    cb_relationship_id.setSelectedItem(null);
+                                    t_relationship_code.setText(null);
+                                    t_dog_1_id.setText(null);
+                                    t_dog_2_id.setText(null);
+                                    t_other_details.setText(null);
+                                }
                                 break;
                             case "relationship_types":
+                                relationship_code = Integer.parseInt(cb_relationship_code.getSelectedItem().toString());
+                                column1 = "relationship_code";
+                                if (Delete.deleteInfo(table, column1, relationship_code)) {
+                                    cb_relationship_code.setSelectedItem(null);
+                                    t_relationships_description.setText(null);
+                                }
                                 break;
                             case "health_records":
+                                health_record_id = Integer.parseInt(cb_health_record_id.getSelectedItem().toString());
+                                column1 = "health_record_id";
+                                if (Delete.deleteInfo(table, column1, health_record_id)) {
+                                    cb_health_record_id.setSelectedItem(null);
+                                    t_vet_id.setText(null);
+                                    t_dog_id.setText(null);
+                                    t_summary.setText(null);
+                                    t_other_details.setText(null);
+                                }
+                                break;
+                            case "common_problems":
+                                problem_code = Integer.parseInt(cb_problem_code.getSelectedItem().toString());
+                                column1 = "problem_code";
+                                if (Delete.deleteInfo(table, column1, problem_code)) {
+                                    cb_problem_code.setSelectedItem(null);
+                                    t_problem_description.setText(null);
+                                }
                                 break;
                             case "dog_problems":
-                                break;
-                            case "common_problem":
+                                problem_code = Integer.parseInt(cb_problem_code.getSelectedItem().toString());
+                                health_record_id = Integer.parseInt(cb_health_record_id.getSelectedItem().toString());
+                                column1 = "problem_code";
+                                column2 = "health_record_id";
+                                if (Delete.deleteInfo(table, column1, problem_code, column2, health_record_id)) {
+                                    cb_problem_code.setSelectedItem(null);
+                                    cb_health_record_id.setSelectedItem(null);
+                                    t_date_of_problem.setText(null);
+                                    t_problem_treatment.setText(null);
+                                    t_problem_details.setText(null);
+                                }
                                 break;
                         }
                         break;
                     case "adopt":
-                        dogs_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
+                        //error en cb_dog_id
+                        dog_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
                         owner_name = t_owner_update.getText();
-                        Update.updateAdopted(dogs_id, owner_name);
-                        cb_dog_id.removeItem(cb_dog_id.getSelectedItem());
-                        t_dog_name.setText(null);
-                        t_owner_update.setText(null);
-
+                        if (Update.updateAdopted(dog_id, owner_name)) {
+                            t_dog_name.setText(null);
+                            t_owner_update.setText(null);
+                        }
+                        break;
+                    case "return":
+                        //error en cb_dog_id
+                        dog_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
+                        if (Update.updateReturned(dog_id)) {
+                            t_dog_name.setText(null);
+                        }
                         break;
                 }
             } catch (Exception ex) {

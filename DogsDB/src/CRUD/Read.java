@@ -196,6 +196,29 @@ public class Read {
         return data;
     }
 
+    public static ArrayList<String> getReturnID() {
+        ArrayList<String> data = new ArrayList<>();
+        try {
+            connection = DriverManager.getConnection(URL, user, password);
+            statement = connection.createStatement();
+            query = "SELECT dog_id FROM dogs WHERE adopted = true ORDER BY dog_id ASC";
+            rs = statement.executeQuery(query);
+            data = new ArrayList<>();
+            while (rs.next()) {
+                data.add(rs.getString("dog_id"));
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+        return data;
+    }
+
     public static int getMaxVetID() {
         int data = 0;
         try {
