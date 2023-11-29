@@ -219,6 +219,29 @@ public class Read {
         return data;
     }
 
+    public static ArrayList<String> getAppointmentID() {
+        ArrayList<String> data = new ArrayList<>();
+        try {
+            connection = DriverManager.getConnection(URL, user, password);
+            statement = connection.createStatement();
+            query = "SELECT appointment_id FROM vet_appointments ORDER BY appointment_id ASC";
+            rs = statement.executeQuery(query);
+            data = new ArrayList<>();
+            while (rs.next()) {
+                data.add(rs.getString("appointment_id"));
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+        return data;
+    }
+
     public static int getMaxVetID() {
         int data = 0;
         try {
@@ -357,6 +380,28 @@ public class Read {
             connection = DriverManager.getConnection(URL, user, password);
             statement = connection.createStatement();
             query = "SELECT MAX (problem_code) FROM common_problems";
+            rs = statement.executeQuery(query);
+            while (rs.next()) {
+                data = rs.getInt("max") + 1;
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+        return data;
+    }
+
+    public static int getMaxAppointmentID() {
+        int data = 0;
+        try {
+            connection = DriverManager.getConnection(URL, user, password);
+            statement = connection.createStatement();
+            query = "SELECT MAX (appointment_id) FROM vet_appointments";
             rs = statement.executeQuery(query);
             while (rs.next()) {
                 data = rs.getInt("max") + 1;
@@ -568,6 +613,33 @@ public class Read {
             System.out.println("Error: " + e.getMessage());
         } finally {
             connection.close();
+        }
+        return data;
+    }
+
+    public static ArrayList<String> getAppointmentInfo(int appointment_id) {
+        ArrayList<String> data = new ArrayList<>();
+        try {
+            connection = DriverManager.getConnection(URL, user, password);
+            statement = connection.createStatement();
+            query = "SELECT * FROM vet_appointments WHERE appointment_id = " + appointment_id;
+            rs = statement.executeQuery(query);
+            data = new ArrayList<>();
+            while (rs.next()) {
+                data.add(String.valueOf(rs.getInt("dog_id")));
+                data.add(String.valueOf(rs.getInt("vet_id")));
+                data.add(String.valueOf(rs.getDate("appointment_date")));
+                data.add(String.valueOf(rs.getTime("appointment_time")));
+                data.add(rs.getString("reason"));
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
         }
         return data;
     }

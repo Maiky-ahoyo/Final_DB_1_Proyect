@@ -20,7 +20,7 @@ public class Create {
             statement.setInt(1, vet_id);
             statement.setString(2, vet_name);
             statement.setString(3, details);
-            int i= statement.executeUpdate();
+            int i = statement.executeUpdate();
             if(i>0){
                 JOptionPane.showMessageDialog(null,"Save complete");
             }
@@ -49,7 +49,7 @@ public class Create {
             statement.setInt(5, litter_id);
             statement.setString(6, gender);
             statement.setString(7, details);
-            int i= statement.executeUpdate();
+            int i = statement.executeUpdate();
             if(i>0){
                 JOptionPane.showMessageDialog(null,"Save complete");
             }
@@ -78,7 +78,7 @@ public class Create {
             statement.setString(4, place_of_birth);
             statement.setDate(5, date_of_birth);
             statement.setString(6, details);
-            int i= statement.executeUpdate();
+            int i = statement.executeUpdate();
             if(i>0){
                 JOptionPane.showMessageDialog(null,"Save complete");
             }
@@ -105,7 +105,7 @@ public class Create {
             statement.setInt(3, dog_1_id);
             statement.setInt(4, dog_2_id);
             statement.setString(5, details);
-            int i= statement.executeUpdate();
+            int i = statement.executeUpdate();
             if(i>0){
                 JOptionPane.showMessageDialog(null,"Save complete");
             }
@@ -129,7 +129,7 @@ public class Create {
             statement = connection.prepareStatement(query);
             statement.setInt(1, relationship_code);
             statement.setString(2, description);
-            int i= statement.executeUpdate();
+            int i = statement.executeUpdate();
             if(i>0){
                 JOptionPane.showMessageDialog(null,"Save complete");
             }
@@ -156,7 +156,7 @@ public class Create {
             statement.setInt(3, dog_id);
             statement.setString(4, summary);
             statement.setString(5, details);
-            int i= statement.executeUpdate();
+            int i = statement.executeUpdate();
             if(i>0){
                 JOptionPane.showMessageDialog(null,"Save complete");
             }
@@ -180,7 +180,7 @@ public class Create {
             statement = connection.prepareStatement(query);
             statement.setInt(1, problem_code);
             statement.setString(2, problem_description);
-            int i= statement.executeUpdate();
+            int i = statement.executeUpdate();
             if(i>0){
                 JOptionPane.showMessageDialog(null,"Save complete");
             }
@@ -207,7 +207,35 @@ public class Create {
             statement.setDate(3, date_of_problem);
             statement.setString(4, treatment);
             statement.setString(5, details);
-            int i= statement.executeUpdate();
+            int i = statement.executeUpdate();
+            if(i>0){
+                JOptionPane.showMessageDialog(null,"Save complete");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"There was an error saving the data");
+            System.out.println("Error: "+e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+
+    public static void createAppointment(int appointment_id, int dog_id, int vet_id, Date appointment_date, Time appointment_time, String reason) {
+        try {
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL, user, password);
+            String query = "INSERT INTO vet_appointments (appointment_id, dog_id, vet_id, appointment_date, appointment_time, reason) VALUES (?,?,?,?,?,?)";
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, appointment_id);
+            statement.setInt(2, dog_id);
+            statement.setInt(3, vet_id);
+            statement.setDate(4, appointment_date);
+            statement.setTime(5, appointment_time);
+            statement.setString(6, reason);
+            int i = statement.executeUpdate();
             if(i>0){
                 JOptionPane.showMessageDialog(null,"Save complete");
             }

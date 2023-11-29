@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 
 import CRUD.*;
@@ -20,7 +21,7 @@ public class MainFrame extends JFrame implements ActionListener {
     private JPanel pMain, pTables;
     private JScrollPane spTables;
     private JScrollBar scrollBar;
-    private JButton bCreate, bRead, bUpdate, bDelete, bAdopt, bReturn, bBook;
+    private JButton bCreate, bRead, bUpdate, bDelete, bAdopt, bReturn, bBook, bBookAppointment, bCancelAppointment;
     private JButton b_submit = new JButton("Submit");
     private Font Inter_Semibold = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Inter-SemiBold.ttf"));
     private Font Inter_Regular = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Inter-Regular.ttf"));
@@ -31,6 +32,7 @@ public class MainFrame extends JFrame implements ActionListener {
     private Color backgroundGray = new Color(241, 245, 249);
     private Color buttonGray = new Color(195, 205, 224);
     private Color orange = new Color(248, 127, 39);
+    private Color darkOrange = new Color(185, 90, 8);
     private Color black = new Color(15, 23, 42);
     private Color textGray = new Color(71, 85, 105);
     private Color lockedGray = new Color(30, 36, 44);
@@ -61,26 +63,28 @@ public class MainFrame extends JFrame implements ActionListener {
             t_litter_place_of_birth, t_relationship_id, t_relationship_code, t_health_record_id, t_problem_code,
             t_vet_name_update, t_dog_born_in_litter, t_date_of_birth, t_dogs_name_update, t_dog_place_of_birth_update,
             t_sire_dog_id, t_dam_dog_id, t_litter_place_of_birth_update, t_dog_1_id, t_dog_2_id, t_date_of_problem,
-            t_owner_update;
+            t_owner_update, t_appointment_id, t_appointment_date, t_appointment_time;
     private JPlaceholderTextArea pt_other_details, pt_relationships_description, pt_summary, pt_problem_description,
             pt_other_details_update, pt_relationships_description_update, pt_summary_update, pt_problem_details_update,
-            pt_problem_description_update, pt_problem_treatment_update, pt_problem_treatment;
+            pt_problem_description_update, pt_problem_treatment_update, pt_problem_treatment, pt_appointment_reason;
     private JTextArea t_other_details, t_relationships_description, t_summary, t_problem_description,
-            t_problem_treatment, t_problem_details;
-    private JDateChooser dc_date_of_birth, dc_date_of_problem, dc_date_of_birth_update, dc_date_of_problem_update;
+            t_problem_treatment, t_problem_details, t_appointment_reason;
+    private JDateChooser dc_date_of_birth, dc_date_of_problem, dc_date_of_birth_update, dc_date_of_problem_update,
+            dc_appointment_date;
     private ButtonGroup bg_group, bg_group_update;
     private JRadioButton rb_dog_female, rb_dog_male, rb_dog_female_update, rb_dog_male_update;
     private JComboBox cb_dog_born_in_litter, cb_sire_dog_id, cb_dam_dog_id, cb_vet_id, cb_dog_id, cb_health_record_id,
             cb_problem_code, cb_dog_born_in_litter_update, cb_litter_id, cb_sire_dog_id_update, cb_dam_dog_id_update,
             cb_relationship_id, cb_relationship_code, cb_relationship_code_update, cb_vet_id_update, cb_dog_id_update,
-            cb_health_record_id_update, cb_dog_1_id, cb_dog_2_id, cb_dog_1_id_update, cb_dog_2_id_update;
+            cb_health_record_id_update, cb_dog_1_id, cb_dog_2_id, cb_dog_1_id_update, cb_dog_2_id_update,
+            cb_appointment_time, cb_appointment_id;
     private String dogs_name, place_of_birth, dogs_gender, other_details, vet_name, relationship_description, treatment,
-            summary, problem_description, owner_name, column1, column2;
+            summary, problem_description, owner_name, column1, column2, appointment_reason;
     private ArrayList<String> cb_data;
     private int dog_id, litter_id, sire_dog_id, dam_dog_id, dog_1_id, dog_2_id, vet_id, health_record_id,
-            problem_code, relationship_id, relationship_code;
-    private java.sql.Date date_of_birth, date_of_problem;
-
+            problem_code, relationship_id, relationship_code, appointment_id;
+    private java.sql.Date date_of_birth, date_of_problem, appointment_date;
+    private java.sql.Time appointment_time;
 
     public static String getTable() {
         return table;
@@ -278,7 +282,6 @@ public class MainFrame extends JFrame implements ActionListener {
             bReturn.setBackground(Color.white);
             bBook.setBackground(Color.white);
 
-
             pTables.setPreferredSize(new Dimension (642,700));
 
             pTables.removeAll();
@@ -448,6 +451,8 @@ public class MainFrame extends JFrame implements ActionListener {
 
             pTables.removeAll();
 
+            b_submit.removeActionListener(this);
+
             lTitle = new JLabel("Adopt Puppy");
             lTitle.setFont(titleFont);
             lTitle.setForeground(black);
@@ -539,6 +544,8 @@ public class MainFrame extends JFrame implements ActionListener {
 
             pTables.removeAll();
 
+            b_submit.removeActionListener(this);
+
             lTitle = new JLabel("Return Puppy");
             lTitle.setFont(titleFont);
             lTitle.setForeground(black);
@@ -599,10 +606,348 @@ public class MainFrame extends JFrame implements ActionListener {
 
             pTables.updateUI();
         }
-        if ((e.getSource() == cbTables)){
+        if (e.getSource() == bBook) {
+            remove(lWelcomeMessage);
+            remove(lBrunoGif);
+
+            bCreate.setBackground(Color.white);
+            bRead.setBackground(Color.white);
+            bUpdate.setBackground(Color.white);
+            bDelete.setBackground(Color.white);
+            bAdopt.setBackground(Color.white);
+            bReturn.setBackground(Color.white);
+            bBook.setBackground(buttonGray);
+
+            pTables.setPreferredSize(new Dimension (642,700));
+
+            pTables.removeAll();
+
+            lTitle = new JLabel("Book/Cancel Appointment");
+            lTitle.setFont(titleFont);
+            lTitle.setForeground(black);
+            lTitle.setBounds(64,110,430,38);
+            pTables.add(lTitle);
+
+            lDescription = new JLabel("Fill in the information to book or cancel an appointment.");
+            lDescription.setFont(bodyFont);
+            lDescription.setForeground(textGray);
+            lDescription.setBounds(64,154,500,28);
+            pTables.add(lDescription);
+
+            bBookAppointment = new JButton("Book Appointment");
+            bBookAppointment.setFont(buttonFont);
+            bBookAppointment.setBackground(orange);
+            bBookAppointment.setForeground(Color.WHITE);
+            bBookAppointment.setBorder(new RoundedBorder(Color.WHITE, 1, 12));
+            bBookAppointment.setBounds(64, 202, 265, 40);
+            bBookAppointment.addActionListener(this);
+            pTables.add(bBookAppointment);
+
+            bCancelAppointment = new JButton("Cancel Appointment");
+            bCancelAppointment.setFont(buttonFont);
+            bCancelAppointment.setBackground(orange);
+            bCancelAppointment.setForeground(Color.WHITE);
+            bCancelAppointment.setBorder(new RoundedBorder(Color.WHITE, 1, 12));
+            bCancelAppointment.setBounds(353, 202, 265, 40);
+            bCancelAppointment.addActionListener(this);
+            pTables.add(bCancelAppointment);
+
+            pTables.updateUI();
+        }
+        if (e.getSource() == bBookAppointment) {
+            panel = "book_visit";
+
+            pTables.setPreferredSize(new Dimension (642,780));
+
+            pTables.removeAll();
+
+            b_submit.removeActionListener(this);
+
+            lTitle.setText("Book Appointment");
+            lTitle.setBounds(64,44,430,38);
+            pTables.add(lTitle);
+
+            lDescription.setText("Fill in the information to book an appointment.");
+            lDescription.setBounds(64,88,430,28);
+            pTables.add(lDescription);
+
+            bBookAppointment.setBackground(darkOrange);
+            bBookAppointment.setForeground(Color.WHITE);
+            bBookAppointment.setBorder(new RoundedBorder(Color.WHITE, 1, 12));
+            bBookAppointment.setBounds(64, 136, 265, 40);
+            pTables.add(bBookAppointment);
+
+            bCancelAppointment.setBackground(orange);
+            bCancelAppointment.setForeground(Color.WHITE);
+            bCancelAppointment.setBorder(new RoundedBorder(Color.WHITE, 1, 12));
+            bCancelAppointment.setBounds(353, 136, 265, 40);
+            pTables.add(bCancelAppointment);
+
+            JLabel l_appointment_id = new JLabel("Appointment's ID");
+            l_appointment_id.setFont(labelFont);
+            l_appointment_id.setForeground(black);
+            l_appointment_id.setBounds(64, 200, 265, 20);
+            pTables.add(l_appointment_id);
+
+            t_appointment_id = new JTextField("" + Read.getMaxAppointmentID());
+            t_appointment_id.setFont(bodyFont);
+            t_appointment_id.setForeground(black);
+            t_appointment_id.setBackground(backgroundGray);
+            t_appointment_id.setBorder(border);
+            t_appointment_id.setBounds(64, 224, 554, 40);
+            t_appointment_id.setEditable(false);
+            pTables.add(t_appointment_id);
+
+            JLabel l_dog_id = new JLabel("Dog's ID");
+            l_dog_id.setFont(labelFont);
+            l_dog_id.setForeground(black);
+            l_dog_id.setBounds(64,288,265,20);
+            pTables.add(l_dog_id);
+
+            cb_dog_id = new JComboBox();
+            cb_dog_id.setFont(bodyFont);
+            cb_dog_id.setForeground(black);
+            cb_dog_id.setBounds(64,312,265,40);
+            cb_dog_id.setBackground(Color.WHITE);
+            cb_data = Read.getDogID();
+            for (String item : cb_data) {
+                cb_dog_id.addItem(item);
+            }
+            cb_dog_id.setSelectedItem(null);
+            pTables.add(cb_dog_id);
+
+            JLabel l_vet_id = new JLabel("Vet's ID");
+            l_vet_id.setFont(labelFont);
+            l_vet_id.setForeground(black);
+            l_vet_id.setBounds(353, 288, 265, 20);
+            pTables.add(l_vet_id);
+
+            cb_vet_id = new JComboBox();
+            cb_vet_id.setFont(bodyFont);
+            cb_vet_id.setForeground(black);
+            cb_vet_id.setBounds(353, 312, 265, 40);
+            cb_vet_id.setBackground(Color.WHITE);
+            cb_data = Read.getVetID();
+            for (String item : cb_data) {
+                cb_vet_id.addItem(item);
+            }
+            cb_vet_id.setSelectedItem(null);
+            pTables.add(cb_vet_id);
+
+            JLabel l_date_of_appointment = new JLabel("Appointment's Date");
+            l_date_of_appointment.setFont(labelFont);
+            l_date_of_appointment.setForeground(black);
+            l_date_of_appointment.setBounds(64, 376, 200, 20);
+            pTables.add(l_date_of_appointment);
+
+            dc_appointment_date = new JDateChooser("yyyy-MM-dd", "yyyy-MM-dd", '_');
+            dc_appointment_date.setFont(bodyFont);
+            dc_appointment_date.setForeground(black);
+            dc_appointment_date.setBounds(64, 400, 265, 40);
+            pTables.add(dc_appointment_date);
+
+            JLabel l_appointment_time = new JLabel("Appointment's Time");
+            l_appointment_time.setFont(labelFont);
+            l_appointment_time.setForeground(black);
+            l_appointment_time.setBounds(353, 376, 200, 20);
+            pTables.add(l_appointment_time);
+
+            cb_appointment_time = new JComboBox();
+            cb_appointment_time.setFont(bodyFont);
+            cb_appointment_time.setForeground(black);
+            cb_appointment_time.setBounds(353, 400, 265, 40);
+            cb_appointment_time.setBackground(Color.WHITE);
+            cb_appointment_time.addItem("08:00:00");
+            cb_appointment_time.addItem("08:30:00");
+            cb_appointment_time.addItem("09:00:00");
+            cb_appointment_time.addItem("09:30:00");
+            cb_appointment_time.addItem("10:00:00");
+            cb_appointment_time.addItem("10:30:00");
+            cb_appointment_time.addItem("11:00:00");
+            cb_appointment_time.addItem("11:30:00");
+            cb_appointment_time.addItem("12:00:00");
+            cb_appointment_time.addItem("12:30:00");
+            cb_appointment_time.addItem("13:00:00");
+            cb_appointment_time.addItem("13:30:00");
+            cb_appointment_time.addItem("14:00:00");
+            cb_appointment_time.addItem("14:30:00");
+            cb_appointment_time.addItem("15:00:00");
+            cb_appointment_time.addItem("15:30:00");
+            cb_appointment_time.addItem("16:00:00");
+            cb_appointment_time.addItem("16:30:00");
+            cb_appointment_time.addItem("17:00:00");
+            cb_appointment_time.setSelectedItem(null);
+            pTables.add(cb_appointment_time);
+
+            JLabel l_appointment_reason = new JLabel("Appointment's Reason");
+            l_appointment_reason.setFont(labelFont);
+            l_appointment_reason.setForeground(black);
+            l_appointment_reason.setBounds(64, 464, 200, 20);
+            pTables.add(l_appointment_reason);
+
+            pt_appointment_reason = new JPlaceholderTextArea("e.g. Puppy has been vomiting for 3 days");
+            pt_appointment_reason.setLineWrap(true);
+            pt_appointment_reason.setFont(bodyFont);
+            pt_appointment_reason.setForeground(black);
+            pt_appointment_reason.setBorder(border);
+            pt_appointment_reason.setBounds(64, 488, 554, 139);
+            pTables.add(pt_appointment_reason);
+
+            b_submit.setBounds(62, 657, 554, 40);
+            b_submit.addActionListener(this);
+            pTables.add(b_submit);
+
+            pTables.updateUI();
+        }
+        if (e.getSource() == bCancelAppointment) {
+            panel = "cancel_visit";
+
+            pTables.setPreferredSize(new Dimension (642,780));
+
+            pTables.removeAll();
+
+            b_submit.removeActionListener(this);
+
+            lTitle.setText("Cancel Appointment");
+            lTitle.setBounds(64,44,430,38);
+            pTables.add(lTitle);
+
+            lDescription.setText("Fill in the information to cancel an appointment.");
+            lDescription.setBounds(64,88,430,28);
+            pTables.add(lDescription);
+
+            bBookAppointment.setBackground(orange);
+            bBookAppointment.setForeground(Color.WHITE);
+            bBookAppointment.setBorder(new RoundedBorder(Color.WHITE, 1, 12));
+            bBookAppointment.setBounds(64, 136, 265, 40);
+            pTables.add(bBookAppointment);
+
+            bCancelAppointment.setBackground(darkOrange);
+            bCancelAppointment.setForeground(Color.WHITE);
+            bCancelAppointment.setBorder(new RoundedBorder(Color.WHITE, 1, 12));
+            bCancelAppointment.setBounds(353, 136, 265, 40);
+            pTables.add(bCancelAppointment);
+
+            JLabel l_appointment_id = new JLabel("Appointment's ID");
+            l_appointment_id.setFont(labelFont);
+            l_appointment_id.setForeground(black);
+            l_appointment_id.setBounds(64, 200, 265, 20);
+            pTables.add(l_appointment_id);
+
+            cb_appointment_id = new JComboBox();
+            cb_appointment_id.setFont(bodyFont);
+            cb_appointment_id.setForeground(black);
+            cb_appointment_id.setBounds(64, 224, 554, 40);
+            cb_appointment_id.setBackground(Color.WHITE);
+            cb_data = Read.getAppointmentID();
+            for (String item : cb_data) {
+                cb_appointment_id.addItem(item);
+            }
+            cb_appointment_id.setSelectedItem(null);
+            cb_appointment_id.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    appointment_id = Integer.parseInt(cb_appointment_id.getSelectedItem().toString());
+                    ArrayList<String> info = Read.getAppointmentInfo(appointment_id);
+                    dog_id = Integer.parseInt(info.get(0));
+                    vet_id = Integer.parseInt(info.get(1));
+                    appointment_date = Date.valueOf(info.get(2));
+                    appointment_time = Time.valueOf(info.get(3));
+                    appointment_reason = info.get(4);
+                    t_dog_id.setText("" + dog_id);
+                    t_vet_id.setText("" + vet_id);
+                    t_appointment_date.setText(String.valueOf(appointment_date));
+                    t_appointment_time.setText(String.valueOf(appointment_time));
+                    t_appointment_reason.setText(appointment_reason);
+                }
+            });
+            pTables.add(cb_appointment_id);
+
+            JLabel l_dog_id = new JLabel("Dog's ID");
+            l_dog_id.setFont(labelFont);
+            l_dog_id.setForeground(black);
+            l_dog_id.setBounds(64, 288, 265, 20);
+            pTables.add(l_dog_id);
+
+            t_dog_id = new JTextField();
+            t_dog_id.setFont(bodyFont);
+            t_dog_id.setForeground(lockedGray);
+            t_dog_id.setBackground(backgroundGray);
+            t_dog_id.setBorder(border);
+            t_dog_id.setBounds(64, 312, 265, 40);
+            t_dog_id.setEditable(false);
+            pTables.add(t_dog_id);
+
+            JLabel l_vet_id = new JLabel("Vet's ID");
+            l_vet_id.setFont(labelFont);
+            l_vet_id.setForeground(black);
+            l_vet_id.setBounds(353, 288, 265, 20);
+            pTables.add(l_vet_id);
+
+            t_vet_id = new JTextField();
+            t_vet_id.setFont(bodyFont);
+            t_vet_id.setForeground(lockedGray);
+            t_vet_id.setBackground(backgroundGray);
+            t_vet_id.setBorder(border);
+            t_vet_id.setBounds(353, 312, 265, 40);
+            t_vet_id.setEditable(false);
+            pTables.add(t_vet_id);
+
+            JLabel l_date_of_appointment = new JLabel("Appointment's Date");
+            l_date_of_appointment.setFont(labelFont);
+            l_date_of_appointment.setForeground(black);
+            l_date_of_appointment.setBounds(64, 376, 200, 20);
+            pTables.add(l_date_of_appointment);
+
+            t_appointment_date = new JTextField();
+            t_appointment_date.setFont(bodyFont);
+            t_appointment_date.setForeground(lockedGray);
+            t_appointment_date.setBorder(border);
+            t_appointment_date.setBounds(64, 400, 265, 40);
+            t_appointment_date.setBackground(backgroundGray);
+            t_appointment_date.setEditable(false);
+            pTables.add(t_appointment_date);
+
+            JLabel l_appointment_time = new JLabel("Appointment's Time");
+            l_appointment_time.setFont(labelFont);
+            l_appointment_time.setForeground(black);
+            l_appointment_time.setBounds(353, 376, 200, 20);
+            pTables.add(l_appointment_time);
+
+            t_appointment_time = new JTextField();
+            t_appointment_time.setFont(bodyFont);
+            t_appointment_time.setForeground(black);
+            t_appointment_time.setBackground(backgroundGray);
+            t_appointment_time.setBorder(border);
+            t_appointment_time.setBounds(353, 400, 265, 40);
+            t_appointment_time.setEditable(false);
+            pTables.add(t_appointment_time);
+
+            JLabel l_appointment_reason = new JLabel("Appointment's Reason");
+            l_appointment_reason.setFont(labelFont);
+            l_appointment_reason.setForeground(black);
+            l_appointment_reason.setBounds(64, 464, 200, 20);
+            pTables.add(l_appointment_reason);
+
+            t_appointment_reason = new JTextArea();
+            t_appointment_reason.setLineWrap(true);
+            t_appointment_reason.setFont(bodyFont);
+            t_appointment_reason.setForeground(black);
+            t_appointment_reason.setBackground(backgroundGray);
+            t_appointment_reason.setBorder(border);
+            t_appointment_reason.setBounds(64, 488, 554, 139);
+            t_appointment_reason.setEditable(false);
+            pTables.add(t_appointment_reason);
+
+            b_submit.setBounds(62, 657, 554, 40);
+            b_submit.addActionListener(this);
+            pTables.add(b_submit);
+
+            pTables.updateUI();
+        }
+        if (e.getSource() == cbTables) {
             try {
                 table = cbTables.getSelectedItem().toString();
-
                 switch (panel){
                     case "create":
                         switch (table) {
@@ -3766,7 +4111,7 @@ public class MainFrame extends JFrame implements ActionListener {
             } catch (Exception ex) {
             }
         }
-        if (e.getSource() == b_submit){
+        if (e.getSource() == b_submit) {
             try {
                 switch (panel) {
                     case "create":
@@ -4253,6 +4598,35 @@ public class MainFrame extends JFrame implements ActionListener {
                         dog_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
                         if (Update.updateReturned(dog_id)) {
                             t_dog_name.setText(null);
+                        }
+                        break;
+                    case "book_visit":
+                        appointment_id = Integer.parseInt(t_appointment_id.getText());
+                        dog_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
+                        vet_id = Integer.parseInt(cb_vet_id.getSelectedItem().toString());
+                        appointment_date = new java.sql.Date(dc_appointment_date.getDate().getTime());
+                        //no da bien el time
+                        appointment_time = new java.sql.Time(Time.valueOf(cb_appointment_time.getSelectedItem().toString()).getTime());
+                        appointment_reason = pt_appointment_reason.getText();
+                        Create.createAppointment(appointment_id, dog_id, vet_id, appointment_date, appointment_time, appointment_reason);
+                        t_appointment_id.setText("" + Read.getMaxAppointmentID());
+                        cb_vet_id.setSelectedItem(null);
+                        cb_dog_id.setSelectedItem(null);
+                        dc_appointment_date.setDate(null);
+                        cb_appointment_time.setSelectedItem(null);
+                        pt_appointment_reason.setText(null);
+                        break;
+                    case "cancel_visit":
+                        appointment_id = Integer.parseInt(cb_appointment_id.getSelectedItem().toString());
+                        column1 = "appointment_id";
+                        if (Delete.deleteInfo("vet_appointments", column1, appointment_id)) {
+                            t_vet_id.setText(null);
+                            t_dog_id.setText(null);
+                            t_appointment_date.setText(null);
+                            t_appointment_time.setText(null);
+                            t_appointment_reason.setText(null);
+                            cb_appointment_id.removeItem(appointment_id);
+                            cb_appointment_id.setSelectedItem(null);
                         }
                         break;
                 }
