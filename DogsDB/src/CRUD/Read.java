@@ -366,6 +366,8 @@ public class Read {
                 data.add(String.valueOf(rs.getInt("born_in_litter_id")));
                 data.add(rs.getString("gender_mf"));
                 data.add(rs.getString("other_details"));
+                data.add(String.valueOf(rs.getBoolean("adopted")));
+                data.add(rs.getString("owner"));
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -489,11 +491,32 @@ public class Read {
         try {
             connection = DriverManager.getConnection(URL, user, password);
             statement = connection.createStatement();
-            query = "SELECT problem_description FROM common_problems WHERE problem_code = " + problem_code;
+            query = "SELECT health_record_id FROM dog_problems WHERE problem_code = " + problem_code;
             rs = statement.executeQuery(query);
             data = new ArrayList<>();
             while (rs.next()) {
-                data.add(rs.getString("problem_description"));
+                data.add(rs.getString("health_record_id"));
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            connection.close();
+        }
+        return data;
+    }
+
+    public static ArrayList<String> getDogProblems_HealthRecordsIDInfo(int problem_code, int health_record_id) throws SQLException {
+        ArrayList<String> data = new ArrayList<>();
+        try {
+            connection = DriverManager.getConnection(URL, user, password);
+            statement = connection.createStatement();
+            query = "SELECT * FROM dog_problems WHERE problem_code = " + problem_code + " AND health_record_id = " + health_record_id;
+            rs = statement.executeQuery(query);
+            data = new ArrayList<>();
+            while (rs.next()) {
+                data.add(rs.getString("date_of_problem"));
+                data.add(rs.getString("treatment"));
+                data.add(rs.getString("other_details"));
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
