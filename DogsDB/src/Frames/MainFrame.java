@@ -4500,6 +4500,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 vet_id = Integer.parseInt(cb_vet_id.getSelectedItem().toString());
                                 column1 = "vet_id";
                                 if (Delete.deleteInfo(table, column1, vet_id)) {
+                                    cb_vet_id.removeItem(cb_vet_id.getSelectedItem());
                                     cb_vet_id.setSelectedItem(null);
                                     t_vet_name.setText(null);
                                     t_other_details.setText(null);
@@ -4509,6 +4510,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 dog_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
                                 column1 = "dog_id";
                                 if (Delete.deleteInfo(table, column1, dog_id)) {
+                                    cb_dog_id.removeItem(cb_dog_id.getSelectedItem());
                                     t_dog_name.setText(null);
                                     t_dog_place_of_birth.setText(null);
                                     t_date_of_birth.setText(null);
@@ -4523,6 +4525,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 litter_id = Integer.parseInt(cb_litter_id.getSelectedItem().toString());
                                 column1 = "litter_id";
                                 if (Delete.deleteInfo(table, column1, litter_id)) {
+                                    cb_litter_id.removeItem(cb_litter_id.getSelectedItem());
                                     cb_litter_id.setSelectedItem(null);
                                     t_sire_dog_id.setText(null);
                                     t_dam_dog_id.setText(null);
@@ -4535,6 +4538,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 relationship_id = Integer.parseInt(cb_relationship_id.getSelectedItem().toString());
                                 column1 = "relationship_id";
                                 if (Delete.deleteInfo(table, column1, relationship_id)) {
+                                    cb_relationship_id.removeItem(cb_relationship_id.getSelectedItem());
                                     cb_relationship_id.setSelectedItem(null);
                                     t_relationship_code.setText(null);
                                     t_dog_1_id.setText(null);
@@ -4546,6 +4550,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 relationship_code = Integer.parseInt(cb_relationship_code.getSelectedItem().toString());
                                 column1 = "relationship_code";
                                 if (Delete.deleteInfo(table, column1, relationship_code)) {
+                                    cb_relationship_code.removeItem(cb_relationship_code.getSelectedItem());
                                     cb_relationship_code.setSelectedItem(null);
                                     t_relationships_description.setText(null);
                                 }
@@ -4554,6 +4559,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 health_record_id = Integer.parseInt(cb_health_record_id.getSelectedItem().toString());
                                 column1 = "health_record_id";
                                 if (Delete.deleteInfo(table, column1, health_record_id)) {
+                                    cb_health_record_id.removeItem(cb_health_record_id.getSelectedItem());
                                     cb_health_record_id.setSelectedItem(null);
                                     t_vet_id.setText(null);
                                     t_dog_id.setText(null);
@@ -4565,6 +4571,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 problem_code = Integer.parseInt(cb_problem_code.getSelectedItem().toString());
                                 column1 = "problem_code";
                                 if (Delete.deleteInfo(table, column1, problem_code)) {
+                                    cb_problem_code.removeItem(cb_problem_code.getSelectedItem());
                                     cb_problem_code.setSelectedItem(null);
                                     t_problem_description.setText(null);
                                 }
@@ -4605,7 +4612,6 @@ public class MainFrame extends JFrame implements ActionListener {
                         dog_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
                         vet_id = Integer.parseInt(cb_vet_id.getSelectedItem().toString());
                         appointment_date = new java.sql.Date(dc_appointment_date.getDate().getTime());
-                        //no da bien el time
                         appointment_time = new java.sql.Time(Time.valueOf(cb_appointment_time.getSelectedItem().toString()).getTime());
                         appointment_reason = pt_appointment_reason.getText();
                         Create.createAppointment(appointment_id, dog_id, vet_id, appointment_date, appointment_time, appointment_reason);
@@ -4620,12 +4626,12 @@ public class MainFrame extends JFrame implements ActionListener {
                         appointment_id = Integer.parseInt(cb_appointment_id.getSelectedItem().toString());
                         column1 = "appointment_id";
                         if (Delete.deleteInfo("vet_appointments", column1, appointment_id)) {
+                            cb_appointment_id.removeItem(cb_appointment_id.getSelectedItem());
                             t_vet_id.setText(null);
                             t_dog_id.setText(null);
                             t_appointment_date.setText(null);
                             t_appointment_time.setText(null);
                             t_appointment_reason.setText(null);
-                            cb_appointment_id.removeItem(appointment_id);
                             cb_appointment_id.setSelectedItem(null);
                         }
                         break;
