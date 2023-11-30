@@ -6,6 +6,7 @@ import Utileries.RoundedBorder;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -367,6 +368,10 @@ public class MainFrame extends JFrame implements ActionListener {
                     newTable.setEnabled(false);
                     newTable.setSize(newTable.getColumnCount() * 100, 300);
 
+                    DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+                    renderer.setHorizontalAlignment(SwingConstants.CENTER);
+                    newTable.setDefaultRenderer(Object.class, renderer);
+
                     scrollPane = new JScrollPane(newTable);
                     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
                     scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -404,6 +409,10 @@ public class MainFrame extends JFrame implements ActionListener {
                     newTable.setEnabled(false);
                     newTable.setSize(newTable.getColumnCount() * 100, 300);
 
+                    DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+                    renderer.setHorizontalAlignment(SwingConstants.CENTER);
+                    newTable.setDefaultRenderer(Object.class, renderer);
+
                     scrollPane = new JScrollPane(newTable);
                     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
                     scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -440,6 +449,10 @@ public class MainFrame extends JFrame implements ActionListener {
                     newTable.setRowSelectionAllowed(false);
                     newTable.setEnabled(false);
                     newTable.setSize(newTable.getColumnCount() * 100, 300);
+
+                    DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+                    renderer.setHorizontalAlignment(SwingConstants.CENTER);
+                    newTable.setDefaultRenderer(Object.class, renderer);
 
                     scrollPane = new JScrollPane(newTable);
                     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -1877,10 +1890,74 @@ public class MainFrame extends JFrame implements ActionListener {
                         newTable.setShowGrid(true);
                         newTable.setShowVerticalLines(true);
                         newTable.setShowHorizontalLines(true);
-                        newTable.setFillsViewportHeight(false);
                         newTable.setRowSelectionAllowed(false);
                         newTable.setEnabled(false);
-                        newTable.setSize(newTable.getColumnCount() * 100, 300);
+                        newTable.setAutoResizeMode(0);
+                        if (table.equals("vets")) {
+                            newTable.getColumnModel().getColumn(0).setPreferredWidth(80);
+                            newTable.getColumnModel().getColumn(1).setPreferredWidth(300);
+                            newTable.getColumnModel().getColumn(2).setPreferredWidth(400);
+                        }
+                        if (table.equals("dogs")) {
+                            newTable.getColumnModel().getColumn(0).setPreferredWidth(80);
+                            newTable.getColumnModel().getColumn(1).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(2).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(3).setPreferredWidth(120);
+                            newTable.getColumnModel().getColumn(4).setPreferredWidth(120);
+                            newTable.getColumnModel().getColumn(5).setPreferredWidth(200);
+                            newTable.getColumnModel().getColumn(6).setPreferredWidth(500);
+                            newTable.getColumnModel().getColumn(7).setPreferredWidth(80);
+                            newTable.getColumnModel().getColumn(8).setPreferredWidth(200);
+                        }
+                        if (table.equals("litters")) {
+                            newTable.getColumnModel().getColumn(0).setPreferredWidth(80);
+                            newTable.getColumnModel().getColumn(1).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(2).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(3).setPreferredWidth(180);
+                            newTable.getColumnModel().getColumn(4).setPreferredWidth(200);
+                            newTable.getColumnModel().getColumn(5).setPreferredWidth(500);
+                        }
+                        if (table.equals("relationships")) {
+                            newTable.getColumnModel().getColumn(0).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(1).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(2).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(3).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(4).setPreferredWidth(500);
+                        }
+                        if (table.equals("relationship_types")) {
+                            newTable.getColumnModel().getColumn(0).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(1).setPreferredWidth(500);
+                        }
+                        if (table.equals("health_records")) {
+                            newTable.getColumnModel().getColumn(0).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(1).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(2).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(3).setPreferredWidth(500);
+                            newTable.getColumnModel().getColumn(4).setPreferredWidth(500);
+                        }
+                        if (table.equals("common_problems")) {
+                            newTable.getColumnModel().getColumn(0).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(1).setPreferredWidth(500);
+                        }
+                        if (table.equals("dog_problems")) {
+                            newTable.getColumnModel().getColumn(0).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(1).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(2).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(3).setPreferredWidth(500);
+                            newTable.getColumnModel().getColumn(4).setPreferredWidth(500);
+                        }
+                        if (table.equals("vet_appointments")) {
+                            newTable.getColumnModel().getColumn(0).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(1).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(2).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(3).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(4).setPreferredWidth(160);
+                            newTable.getColumnModel().getColumn(5).setPreferredWidth(500);
+                        }
+
+                        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+                        renderer.setHorizontalAlignment(SwingConstants.CENTER);
+                        newTable.setDefaultRenderer(Object.class, renderer);
 
                         scrollPane = new JScrollPane(newTable);
                         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
