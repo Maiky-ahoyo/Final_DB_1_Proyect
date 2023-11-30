@@ -2,6 +2,8 @@ package CRUD;
 
 import Utileries.Connect;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -11,6 +13,32 @@ public class Read {
     private static Connection connection;
     private static Statement statement;
     private static ResultSet rs;
+
+    public static JTable fillTable(String table) {
+        DefaultTableModel myTable = new DefaultTableModel();
+        try {
+            connection = DriverManager.getConnection(URL, user, password);
+            statement = connection.createStatement();
+            query = "SELECT * FROM " + table;
+            rs = statement.executeQuery(query);
+            int columns = rs.getMetaData().getColumnCount();
+            for (int i = 1; i <= columns ; i++) {
+                myTable.addColumn(rs.getMetaData().getColumnLabel(i));
+            }
+            while(rs.next()) {
+                Object[] fila = new Object[columns];
+                for (int i = 1; i <= columns; i++) {
+                    fila[i-1] = rs.getObject(i);
+                }
+                myTable.addRow(fila);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        JTable newTable = new JTable(myTable);
+        return newTable;
+    }
 
     public static ArrayList<String> getVetID() {
         ArrayList<String> data = new ArrayList<>();

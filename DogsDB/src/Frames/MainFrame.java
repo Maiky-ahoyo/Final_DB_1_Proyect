@@ -27,7 +27,6 @@ public class MainFrame extends JFrame implements ActionListener {
     private Font Inter_Regular = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Inter-Regular.ttf"));
     private JComboBox cbTables;
     private JLabel lTables, lIcon, lWelcome, lOptions, lTitle, lDescription, lWelcomeMessage, lBrunoGif;
-    protected JTable tTables;
     private static String panel, table;
     private Color backgroundGray = new Color(241, 245, 249);
     private Color buttonGray = new Color(195, 205, 224);
@@ -227,14 +226,6 @@ public class MainFrame extends JFrame implements ActionListener {
         cbTables.setBackground(backgroundGray);
         cbTables.setFont(bodyFont);
         cbTables.setForeground(black);
-        cbTables.addItem("vets");
-        cbTables.addItem("dogs");
-        cbTables.addItem("litters");
-        cbTables.addItem("relationships");
-        cbTables.addItem("relationship_types");
-        cbTables.addItem("health_records");
-        cbTables.addItem("common_problems");
-        cbTables.addItem("dog_problems");
         cbTables.addActionListener(this);
 
         b_submit.setFont(buttonFont);
@@ -302,7 +293,15 @@ public class MainFrame extends JFrame implements ActionListener {
             pTables.add(lTables);
 
             cbTables.setBounds(64,230,554,40);
-            cbTables.setSelectedItem(null);
+            cbTables.removeAllItems();
+            cbTables.addItem("vets");
+            cbTables.addItem("dogs");
+            cbTables.addItem("litters");
+            cbTables.addItem("relationships");
+            cbTables.addItem("relationship_types");
+            cbTables.addItem("health_records");
+            cbTables.addItem("common_problems");
+            cbTables.addItem("dog_problems");
             pTables.add(cbTables);
 
             pTables.updateUI();
@@ -341,12 +340,17 @@ public class MainFrame extends JFrame implements ActionListener {
             pTables.add(lTables);
 
             cbTables.setBounds(64,230,554,40);
-            cbTables.setSelectedItem(null);
+            cbTables.removeAllItems();
+            cbTables.addItem("vets");
+            cbTables.addItem("dogs");
+            cbTables.addItem("litters");
+            cbTables.addItem("relationships");
+            cbTables.addItem("relationship_types");
+            cbTables.addItem("health_records");
+            cbTables.addItem("common_problems");
+            cbTables.addItem("dog_problems");
+            cbTables.addItem("vet_appointments");
             pTables.add(cbTables);
-
-            tTables = new JTable();
-            tTables.setBounds(45,100,900,555);
-            pTables.add(tTables);
 
             pTables.updateUI();
             pTables.setVisible(true);
@@ -385,8 +389,15 @@ public class MainFrame extends JFrame implements ActionListener {
             pTables.add(lTables);
 
             cbTables.setBounds(64,230,554,40);
-            cbTables.setSelectedItem(null);
-            cbTables.setBorder(null);
+            cbTables.removeAllItems();
+            cbTables.addItem("vets");
+            cbTables.addItem("dogs");
+            cbTables.addItem("litters");
+            cbTables.addItem("relationships");
+            cbTables.addItem("relationship_types");
+            cbTables.addItem("health_records");
+            cbTables.addItem("common_problems");
+            cbTables.addItem("dog_problems");
             pTables.add(cbTables);
 
             pTables.updateUI();
@@ -426,8 +437,15 @@ public class MainFrame extends JFrame implements ActionListener {
             pTables.add(lTables);
 
             cbTables.setBounds(64,230,554,40);
-            cbTables.setSelectedItem(null);
-            cbTables.setBorder(null);
+            cbTables.removeAllItems();
+            cbTables.addItem("vets");
+            cbTables.addItem("dogs");
+            cbTables.addItem("litters");
+            cbTables.addItem("relationships");
+            cbTables.addItem("relationship_types");
+            cbTables.addItem("health_records");
+            cbTables.addItem("common_problems");
+            cbTables.addItem("dog_problems");
             pTables.add(cbTables);
 
             pTables.updateUI();
@@ -1696,6 +1714,52 @@ public class MainFrame extends JFrame implements ActionListener {
                         }
                         break;
                     case "read":
+                        pTables.removeAll();
+
+                        lTitle = new JLabel("Read");
+                        lTitle.setFont(titleFont);
+                        lTitle.setForeground(black);
+                        lTitle.setBounds(64,64,100,38);
+                        pTables.add(lTitle);
+
+                        lDescription = new JLabel("Select a table and read information from the database");
+                        lDescription.setFont(bodyFont);
+                        lDescription.setForeground(textGray);
+                        lDescription.setBounds(64,108,430,28);
+                        pTables.add(lDescription);
+
+                        lTables.setBounds(64,160,40 ,20);
+                        pTables.add(lTables);
+
+                        cbTables.setBounds(64,184,554,40);
+                        pTables.add(cbTables);
+
+                        JTable newTable = Read.fillTable(table);
+                        newTable.setFont(bodyFont);
+                        newTable.setForeground(black);
+                        newTable.setRowHeight(40);
+                        newTable.getTableHeader().setFont(bodyFont);
+                        newTable.getTableHeader().setForeground(black);
+                        newTable.getTableHeader().setBackground(backgroundGray);
+                        newTable.getTableHeader().setReorderingAllowed(false);
+                        newTable.getTableHeader().setResizingAllowed(false);
+                        newTable.setGridColor(Color.WHITE);
+                        newTable.setShowGrid(true);
+                        newTable.setShowVerticalLines(true);
+                        newTable.setShowHorizontalLines(true);
+                        newTable.setFillsViewportHeight(false);
+                        newTable.setRowSelectionAllowed(false);
+                        newTable.setEnabled(false);
+                        newTable.setPreferredScrollableViewportSize(new Dimension(554, 350));
+
+                        JScrollPane scrollPane = new JScrollPane(newTable);
+                        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                        scrollPane.setBounds(64, 260, 554, 350);
+                        scrollPane.setVisible(true);
+                        pTables.add(scrollPane);
+
+                        pTables.updateUI();
                         break;
                     case "update":
                         switch (table) {
