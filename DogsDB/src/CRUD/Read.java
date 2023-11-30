@@ -4,6 +4,9 @@ import Utileries.Connect;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
+import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -37,6 +40,161 @@ public class Read {
             throw new RuntimeException(e);
         }
         JTable newTable = new JTable(myTable);
+        final TableColumnModel columnModel = newTable.getColumnModel();
+        for (int column = 0; column < newTable.getColumnCount(); column++) {
+            int width = 25; // Min width
+            for (int row = 0; row < newTable.getRowCount(); row++) {
+                TableCellRenderer renderer = newTable.getCellRenderer(row, column);
+                Component comp = newTable.prepareRenderer(renderer, row, column);
+
+                width = Math.max(comp.getPreferredSize().width-3, width);
+            }
+            if(width > 300)
+                width = 300;
+            columnModel.getColumn(column).setPreferredWidth(width);
+        }
+        return newTable;
+    }
+
+    public static JTable fillTable_vet_most_patients() {
+        DefaultTableModel myTable = new DefaultTableModel();
+        try {
+            connection = DriverManager.getConnection(URL, user, password);
+            statement = connection.createStatement();
+            query = "SELECT vets.vet_name, health_records.vet_id, COUNT(health_records.vet_id) AS num_patients " +
+                    "FROM health_records " +
+                    "JOIN vets ON health_records.vet_id = vets.vet_id " +
+                    "GROUP BY health_records.vet_id, vets.vet_name " +
+                    "HAVING COUNT(health_records.vet_id) = ( " +
+                    "SELECT MAX(cnt) " +
+                    "FROM ( " +
+                    "SELECT COUNT(vet_id) AS cnt " +
+                    "FROM health_records " +
+                    "GROUP BY vet_id " +
+                    ") AS counts);";
+            rs = statement.executeQuery(query);
+            int columns = rs.getMetaData().getColumnCount();
+            for (int i = 1; i <= columns ; i++) {
+                myTable.addColumn(rs.getMetaData().getColumnLabel(i));
+            }
+            while(rs.next()) {
+                Object[] fila = new Object[columns];
+                for (int i = 1; i <= columns; i++) {
+                    fila[i-1] = rs.getObject(i);
+                }
+                myTable.addRow(fila);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        JTable newTable = new JTable(myTable);
+        final TableColumnModel columnModel = newTable.getColumnModel();
+        for (int column = 0; column < newTable.getColumnCount(); column++) {
+            int width = 25; // Min width
+            for (int row = 0; row < newTable.getRowCount(); row++) {
+                TableCellRenderer renderer = newTable.getCellRenderer(row, column);
+                Component comp = newTable.prepareRenderer(renderer, row, column);
+
+                width = Math.max(comp.getPreferredSize().width-3, width);
+            }
+            if(width > 300)
+                width = 300;
+            columnModel.getColumn(column).setPreferredWidth(width);
+        }
+        return newTable;
+    }
+
+    public static JTable fillTable_most_common_problem() {
+        DefaultTableModel myTable = new DefaultTableModel();
+        try {
+            connection = DriverManager.getConnection(URL, user, password);
+            statement = connection.createStatement();
+            query = "SELECT common_problems.problem_description, dog_problems.problem_code, COUNT(dog_problems.problem_code) AS num_patients " +
+                    "FROM dog_problems " +
+                    "JOIN common_problems ON dog_problems.problem_code = common_problems.problem_code " +
+                    "GROUP BY dog_problems.problem_code, common_problems.problem_description " +
+                    "HAVING COUNT(dog_problems.problem_code) = ( " +
+                    "SELECT MAX(cnt) " +
+                    "FROM ( " +
+                    "SELECT COUNT(problem_code) AS cnt " +
+                    "FROM dog_problems " +
+                    "GROUP BY problem_code " +
+                    ") AS counts);";
+            rs = statement.executeQuery(query);
+            int columns = rs.getMetaData().getColumnCount();
+            for (int i = 1; i <= columns ; i++) {
+                myTable.addColumn(rs.getMetaData().getColumnLabel(i));
+            }
+            while(rs.next()) {
+                Object[] fila = new Object[columns];
+                for (int i = 1; i <= columns; i++) {
+                    fila[i-1] = rs.getObject(i);
+                }
+                myTable.addRow(fila);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        JTable newTable = new JTable(myTable);
+        final TableColumnModel columnModel = newTable.getColumnModel();
+        for (int column = 0; column < newTable.getColumnCount(); column++) {
+            int width = 25; // Min width
+            for (int row = 0; row < newTable.getRowCount(); row++) {
+                TableCellRenderer renderer = newTable.getCellRenderer(row, column);
+                Component comp = newTable.prepareRenderer(renderer, row, column);
+
+                width = Math.max(comp.getPreferredSize().width-3, width);
+            }
+            if(width > 300)
+                width = 300;
+            columnModel.getColumn(column).setPreferredWidth(width);
+        }
+        return newTable;
+    }
+
+    public static JTable fillTable_number_girls_boys() {
+        DefaultTableModel myTable = new DefaultTableModel();
+        try {
+            connection = DriverManager.getConnection(URL, user, password);
+            statement = connection.createStatement();
+            query = "SELECT gender_mf, COUNT(gender_mf) AS count " +
+                    "FROM dogs " +
+                    "GROUP BY gender_mf " +
+                    "UNION ALL " +
+                    "SELECT 'Total', COUNT(*) AS number " +
+                    "FROM dogs;";
+            rs = statement.executeQuery(query);
+            int columns = rs.getMetaData().getColumnCount();
+            for (int i = 1; i <= columns ; i++) {
+                myTable.addColumn(rs.getMetaData().getColumnLabel(i));
+            }
+            while(rs.next()) {
+                Object[] fila = new Object[columns];
+                for (int i = 1; i <= columns; i++) {
+                    fila[i-1] = rs.getObject(i);
+                }
+                myTable.addRow(fila);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        JTable newTable = new JTable(myTable);
+        final TableColumnModel columnModel = newTable.getColumnModel();
+        for (int column = 0; column < newTable.getColumnCount(); column++) {
+            int width = 25; // Min width
+            for (int row = 0; row < newTable.getRowCount(); row++) {
+                TableCellRenderer renderer = newTable.getCellRenderer(row, column);
+                Component comp = newTable.prepareRenderer(renderer, row, column);
+
+                width = Math.max(comp.getPreferredSize().width-3, width);
+            }
+            if(width > 300)
+                width = 300;
+            columnModel.getColumn(column).setPreferredWidth(width);
+        }
         return newTable;
     }
 

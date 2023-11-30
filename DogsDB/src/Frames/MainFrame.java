@@ -19,45 +19,33 @@ import CRUD.*;
 
 public class MainFrame extends JFrame implements ActionListener {
     private JPanel pMain, pTables;
-    private JScrollPane spTables;
+    private JScrollPane spTables, scrollPane;
     private JScrollBar scrollBar;
-    private JButton bCreate, bRead, bUpdate, bDelete, bAdopt, bReturn, bBook, bBookAppointment, bCancelAppointment;
-    private JButton b_submit = new JButton("Submit");
-    private Font Inter_Semibold = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Inter-SemiBold.ttf"));
-    private Font Inter_Regular = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Inter-Regular.ttf"));
-    private JComboBox cbTables;
+    private JButton bCreate, bRead, bUpdate, bDelete, bAdopt, bReturn, bBook, bBookAppointment, bCancelAppointment,
+            bVet_most_patients, bMost_common_problem, bN_girls_boys, b_submit = new JButton("Submit");
+    private Font Inter_Semibold = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Inter-SemiBold.ttf")),
+            Inter_Regular = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Inter-Regular.ttf")),
+            titleFont = Inter_Semibold.deriveFont(30f), subtitleFont = Inter_Semibold.deriveFont(24f),
+            welcomeFont = Inter_Semibold.deriveFont(20f), buttonFont = Inter_Semibold.deriveFont(16f),
+            bodyFont = Inter_Regular.deriveFont(16f), labelFont = Inter_Semibold.deriveFont(14f);
     private JLabel lTables, lIcon, lWelcome, lOptions, lTitle, lDescription, lWelcomeMessage, lBrunoGif;
     private static String panel, table;
-    private Color backgroundGray = new Color(241, 245, 249);
-    private Color buttonGray = new Color(195, 205, 224);
-    private Color orange = new Color(248, 127, 39);
-    private Color darkOrange = new Color(185, 90, 8);
-    private Color black = new Color(15, 23, 42);
-    private Color textGray = new Color(71, 85, 105);
-    private Color lockedGray = new Color(30, 36, 44);
-    private Color borderGray = new Color(119, 141, 170);
-    private Font titleFont = Inter_Semibold.deriveFont(30f);
-    private Font subtitleFont = Inter_Semibold.deriveFont(24f);
-    private Font welcomeFont = Inter_Semibold.deriveFont(20f);
-    private Font buttonFont = Inter_Semibold.deriveFont(16f);
-    private Font bodyFont = Inter_Regular.deriveFont(16f);
-    private Font labelFont = Inter_Semibold.deriveFont(14f);
+    private Color backgroundGray = new Color(241, 245, 249), buttonGray = new Color(195, 205, 224),
+            orange = new Color(248, 127, 39), darkOrange = new Color(185, 90, 8),
+            black = new Color(15, 23, 42), textGray = new Color(71, 85, 105),
+            lockedGray = new Color(30, 36, 44), borderGray = new Color(119, 141, 170);
     private Border border = BorderFactory.createLineBorder(borderGray, 1);
-    private Icon iCreate = new ImageIcon("Icons/Create.png");
-    private Icon iRead = new ImageIcon("Icons/Read.png");
-    private Icon iUpdate = new ImageIcon("Icons/Update.png");
-    private Icon iDelete = new ImageIcon("Icons/Delete.png");
-    private Icon brunoGif = new ImageIcon("Icons/Bruno_happy_dance.gif");
-    private Icon iAdopt = new ImageIcon("Icons/Adopt.png");
-    private Icon iBookAppointment = new ImageIcon("Icons/BookAppointment.png");
-    private Icon iSadFace = new ImageIcon("Icons/SadFace.png");
-    private Icon iBone = new ImageIcon("Icons/Bone.png");
-    private Icon iDog = new ImageIcon("Icons/Dog.png");
-    private Icon iSick = new ImageIcon("Icons/Sick.png");
-    private Icon iVet = new ImageIcon("Icons/Vet.png");
-    private ImageIcon iLogo = new ImageIcon("Icons/Logo.png");
-
-    private ImageIcon iMainLogo = new ImageIcon("Icons/MainLogo.png");
+    private Icon iCreate = new ImageIcon("Icons/Create.png"),
+            iRead = new ImageIcon("Icons/Read.png"), iUpdate = new ImageIcon("Icons/Update.png"),
+            iDelete = new ImageIcon("Icons/Delete.png"),
+            brunoGif = new ImageIcon("Icons/Bruno_happy_dance.gif"),
+            iAdopt = new ImageIcon("Icons/Adopt.png"),
+            iBookAppointment = new ImageIcon("Icons/BookAppointment.png"),
+            iSadFace = new ImageIcon("Icons/SadFace.png"),
+            iBone = new ImageIcon("Icons/Bone.png"), iDog = new ImageIcon("Icons/Dog.png"),
+            iSick = new ImageIcon("Icons/Sick.png"), iVet = new ImageIcon("Icons/Vet.png");
+    private ImageIcon iLogo = new ImageIcon("Icons/Logo.png"),
+            iMainLogo = new ImageIcon("Icons/MainLogo.png");
     private JTextField t_vet_id, t_vet_name, t_dog_id, t_dog_name, t_dog_place_of_birth, t_litter_id,
             t_litter_place_of_birth, t_relationship_id, t_relationship_code, t_health_record_id, t_problem_code,
             t_vet_name_update, t_dog_born_in_litter, t_date_of_birth, t_dogs_name_update, t_dog_place_of_birth_update,
@@ -72,11 +60,12 @@ public class MainFrame extends JFrame implements ActionListener {
             dc_appointment_date;
     private ButtonGroup bg_group, bg_group_update;
     private JRadioButton rb_dog_female, rb_dog_male, rb_dog_female_update, rb_dog_male_update;
-    private JComboBox cb_dog_born_in_litter, cb_sire_dog_id, cb_dam_dog_id, cb_vet_id, cb_dog_id, cb_health_record_id,
-            cb_problem_code, cb_dog_born_in_litter_update, cb_litter_id, cb_sire_dog_id_update, cb_dam_dog_id_update,
-            cb_relationship_id, cb_relationship_code, cb_relationship_code_update, cb_vet_id_update, cb_dog_id_update,
-            cb_health_record_id_update, cb_dog_1_id, cb_dog_2_id, cb_dog_1_id_update, cb_dog_2_id_update,
-            cb_appointment_time, cb_appointment_id;
+    private JComboBox cbTables, cb_dog_born_in_litter, cb_sire_dog_id, cb_dam_dog_id, cb_vet_id, cb_dog_id,
+            cb_health_record_id, cb_problem_code, cb_dog_born_in_litter_update, cb_litter_id, cb_sire_dog_id_update,
+            cb_dam_dog_id_update, cb_relationship_id, cb_relationship_code, cb_relationship_code_update,
+            cb_vet_id_update, cb_dog_id_update, cb_health_record_id_update, cb_dog_1_id, cb_dog_2_id,
+            cb_dog_1_id_update, cb_dog_2_id_update, cb_appointment_time, cb_appointment_id;
+    private JTable newTable;
     private String dogs_name, place_of_birth, dogs_gender, other_details, vet_name, relationship_description, treatment,
             summary, problem_description, owner_name, column1, column2, appointment_reason;
     private ArrayList<String> cb_data;
@@ -351,6 +340,117 @@ public class MainFrame extends JFrame implements ActionListener {
             cbTables.addItem("dog_problems");
             cbTables.addItem("vet_appointments");
             pTables.add(cbTables);
+
+            bVet_most_patients = new JButton();
+            bVet_most_patients.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    scrollPane.remove(newTable);
+
+                    pTables.remove(scrollPane);
+
+                    newTable = Read.fillTable_vet_most_patients();
+                    newTable.setFont(bodyFont);
+                    newTable.setForeground(black);
+                    newTable.setRowHeight(40);
+                    newTable.getTableHeader().setFont(bodyFont);
+                    newTable.getTableHeader().setForeground(black);
+                    newTable.getTableHeader().setBackground(backgroundGray);
+                    newTable.getTableHeader().setReorderingAllowed(false);
+                    newTable.getTableHeader().setResizingAllowed(false);
+                    newTable.setGridColor(Color.WHITE);
+                    newTable.setShowGrid(true);
+                    newTable.setShowVerticalLines(true);
+                    newTable.setShowHorizontalLines(true);
+                    newTable.setFillsViewportHeight(false);
+                    newTable.setRowSelectionAllowed(false);
+                    newTable.setEnabled(false);
+                    newTable.setSize(newTable.getColumnCount() * 100, 300);
+
+                    scrollPane = new JScrollPane(newTable);
+                    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                    scrollPane.setBounds(64, 312, 554, 300);
+                    scrollPane.setVisible(true);
+                    pTables.add(scrollPane);
+
+                    pTables.updateUI();
+                }
+            });
+
+            bMost_common_problem = new JButton();
+            bMost_common_problem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    scrollPane.remove(newTable);
+
+                    pTables.remove(scrollPane);
+
+                    newTable = Read.fillTable_most_common_problem();
+                    newTable.setFont(bodyFont);
+                    newTable.setForeground(black);
+                    newTable.setRowHeight(40);
+                    newTable.getTableHeader().setFont(bodyFont);
+                    newTable.getTableHeader().setForeground(black);
+                    newTable.getTableHeader().setBackground(backgroundGray);
+                    newTable.getTableHeader().setReorderingAllowed(false);
+                    newTable.getTableHeader().setResizingAllowed(false);
+                    newTable.setGridColor(Color.WHITE);
+                    newTable.setShowGrid(true);
+                    newTable.setShowVerticalLines(true);
+                    newTable.setShowHorizontalLines(true);
+                    newTable.setFillsViewportHeight(false);
+                    newTable.setRowSelectionAllowed(false);
+                    newTable.setEnabled(false);
+                    newTable.setSize(newTable.getColumnCount() * 100, 300);
+
+                    scrollPane = new JScrollPane(newTable);
+                    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                    scrollPane.setBounds(64, 312, 554, 300);
+                    scrollPane.setVisible(true);
+                    pTables.add(scrollPane);
+
+                    pTables.updateUI();
+                }
+            });
+
+            bN_girls_boys = new JButton();
+            bN_girls_boys.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    scrollPane.remove(newTable);
+
+                    pTables.remove(scrollPane);
+
+                    newTable = Read.fillTable_number_girls_boys();
+                    newTable.setFont(bodyFont);
+                    newTable.setForeground(black);
+                    newTable.setRowHeight(40);
+                    newTable.getTableHeader().setFont(bodyFont);
+                    newTable.getTableHeader().setForeground(black);
+                    newTable.getTableHeader().setBackground(backgroundGray);
+                    newTable.getTableHeader().setReorderingAllowed(false);
+                    newTable.getTableHeader().setResizingAllowed(false);
+                    newTable.setGridColor(Color.WHITE);
+                    newTable.setShowGrid(true);
+                    newTable.setShowVerticalLines(true);
+                    newTable.setShowHorizontalLines(true);
+                    newTable.setFillsViewportHeight(false);
+                    newTable.setRowSelectionAllowed(false);
+                    newTable.setEnabled(false);
+                    newTable.setSize(newTable.getColumnCount() * 100, 300);
+
+                    scrollPane = new JScrollPane(newTable);
+                    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                    scrollPane.setBounds(64, 312, 554, 300);
+                    scrollPane.setVisible(true);
+                    pTables.add(scrollPane);
+
+                    pTables.updateUI();
+                }
+            });
 
             pTables.updateUI();
             pTables.setVisible(true);
@@ -1734,7 +1834,37 @@ public class MainFrame extends JFrame implements ActionListener {
                         cbTables.setBounds(64,184,554,40);
                         pTables.add(cbTables);
 
-                        JTable newTable = Read.fillTable(table);
+                        bVet_most_patients.setText("Most Patients");
+                        bVet_most_patients.setIcon(iVet);
+                        bVet_most_patients.setIconTextGap(10);
+                        bVet_most_patients.setBounds(64, 244, 164, 48);
+                        bVet_most_patients.setBackground(Color.white);
+                        bVet_most_patients.setBorder(new RoundedBorder(Color.WHITE, 2, 12));
+                        bVet_most_patients.setFont(buttonFont);
+                        bVet_most_patients.setForeground(black);
+                        pTables.add(bVet_most_patients);
+
+                        bMost_common_problem.setText("Most Affections");
+                        bMost_common_problem.setIcon(iSick);
+                        bMost_common_problem.setIconTextGap(10);
+                        bMost_common_problem.setBounds(246, 244, 184, 48);
+                        bMost_common_problem.setBackground(Color.white);
+                        bMost_common_problem.setBorder(new RoundedBorder(Color.WHITE, 2, 12));
+                        bMost_common_problem.setFont(buttonFont);
+                        bMost_common_problem.setForeground(black);
+                        pTables.add(bMost_common_problem);
+
+                        bN_girls_boys.setText("# of girls/boys");
+                        bN_girls_boys.setIcon(iBone);
+                        bN_girls_boys.setIconTextGap(10);
+                        bN_girls_boys.setBounds(449, 244, 164, 48);
+                        bN_girls_boys.setBackground(Color.white);
+                        bN_girls_boys.setBorder(new RoundedBorder(Color.WHITE, 2, 12));
+                        bN_girls_boys.setFont(buttonFont);
+                        bN_girls_boys.setForeground(black);
+                        pTables.add(bN_girls_boys);
+
+                        newTable = Read.fillTable(table);
                         newTable.setFont(bodyFont);
                         newTable.setForeground(black);
                         newTable.setRowHeight(40);
@@ -1750,12 +1880,12 @@ public class MainFrame extends JFrame implements ActionListener {
                         newTable.setFillsViewportHeight(false);
                         newTable.setRowSelectionAllowed(false);
                         newTable.setEnabled(false);
-                        newTable.setPreferredScrollableViewportSize(new Dimension(554, 350));
+                        newTable.setSize(newTable.getColumnCount() * 100, 300);
 
-                        JScrollPane scrollPane = new JScrollPane(newTable);
+                        scrollPane = new JScrollPane(newTable);
                         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
                         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-                        scrollPane.setBounds(64, 260, 554, 350);
+                        scrollPane.setBounds(64, 312, 554, 300);
                         scrollPane.setVisible(true);
                         pTables.add(scrollPane);
 
@@ -4193,7 +4323,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 dog_id = Integer.parseInt(t_dog_id.getText());
                                 dogs_name = t_dog_name.getText();
                                 place_of_birth = t_dog_place_of_birth.getText();
-                                date_of_birth = new java.sql.Date(dc_date_of_birth.getDate().getTime());
+                                date_of_birth = new Date(dc_date_of_birth.getDate().getTime());
                                 litter_id = Integer.parseInt(cb_dog_born_in_litter.getSelectedItem().toString());
                                 if (rb_dog_female.isSelected()) {
                                     dogs_gender = "F";
@@ -4218,7 +4348,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                 sire_dog_id = Integer.parseInt(cb_sire_dog_id.getSelectedItem().toString());
                                 dam_dog_id = Integer.parseInt(cb_dam_dog_id.getSelectedItem().toString());
                                 place_of_birth = t_litter_place_of_birth.getText();
-                                date_of_birth = new java.sql.Date(dc_date_of_birth.getDate().getTime());
+                                date_of_birth = new Date(dc_date_of_birth.getDate().getTime());
                                 other_details = pt_other_details.getText();
                                 Create.createLitter(litter_id, sire_dog_id, dam_dog_id, place_of_birth,
                                         date_of_birth, other_details);
@@ -4272,7 +4402,7 @@ public class MainFrame extends JFrame implements ActionListener {
                             case "dog_problems":
                                 problem_code = Integer.parseInt(cb_problem_code.getSelectedItem().toString());
                                 health_record_id = Integer.parseInt(cb_health_record_id.getSelectedItem().toString());
-                                date_of_problem = new java.sql.Date(dc_date_of_problem.getDate().getTime());
+                                date_of_problem = new Date(dc_date_of_problem.getDate().getTime());
                                 treatment = pt_problem_treatment.getText();
                                 other_details = pt_other_details.getText();
                                 Create.createDogProblems(problem_code, health_record_id, date_of_problem, treatment, other_details);
@@ -4327,7 +4457,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                     date_of_birth = Date.valueOf(t_date_of_birth.getText());
                                 }
                                 else {
-                                    date_of_birth = new java.sql.Date(dc_date_of_birth_update.getDate().getTime());
+                                    date_of_birth = new Date(dc_date_of_birth_update.getDate().getTime());
                                 }
                                 if (cb_dog_born_in_litter_update.getSelectedItem() == null) {
                                     litter_id = Integer.parseInt(t_dog_born_in_litter.getText());
@@ -4397,7 +4527,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                     date_of_birth = Date.valueOf(t_date_of_birth.getText());
                                 }
                                 else {
-                                    date_of_birth = new java.sql.Date(dc_date_of_birth_update.getDate().getTime());
+                                    date_of_birth = new Date(dc_date_of_birth_update.getDate().getTime());
                                 }
                                 if (pt_other_details_update.getText().equals("e.g. All puppies are healthy, Five puppies in total")) {
                                     other_details = t_other_details.getText();
@@ -4530,7 +4660,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                     date_of_problem = Date.valueOf(t_date_of_problem.getText());
                                 }
                                 else {
-                                    date_of_problem = new java.sql.Date(dc_date_of_problem_update.getDate().getTime());
+                                    date_of_problem = new Date(dc_date_of_problem_update.getDate().getTime());
                                 }
                                 if (pt_problem_treatment_update.getText().equals("e.g. The dog was given antibiotics")) {
                                     treatment = t_problem_treatment.getText();
@@ -4675,8 +4805,8 @@ public class MainFrame extends JFrame implements ActionListener {
                         appointment_id = Integer.parseInt(t_appointment_id.getText());
                         dog_id = Integer.parseInt(cb_dog_id.getSelectedItem().toString());
                         vet_id = Integer.parseInt(cb_vet_id.getSelectedItem().toString());
-                        appointment_date = new java.sql.Date(dc_appointment_date.getDate().getTime());
-                        appointment_time = new java.sql.Time(Time.valueOf(cb_appointment_time.getSelectedItem().toString()).getTime());
+                        appointment_date = new Date(dc_appointment_date.getDate().getTime());
+                        appointment_time = new Time(Time.valueOf(cb_appointment_time.getSelectedItem().toString()).getTime());
                         appointment_reason = pt_appointment_reason.getText();
                         Create.createAppointment(appointment_id, dog_id, vet_id, appointment_date, appointment_time, appointment_reason);
                         t_appointment_id.setText("" + Read.getMaxAppointmentID());
